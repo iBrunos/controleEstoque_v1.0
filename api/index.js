@@ -1,16 +1,21 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
+const connection = require("./connection/connection");
+const Tabelas = require("./sql/table");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '1234',
-  database: 'controleestoque2'
-});
+Tabelas.init(connection);
+console.log("tables created successfully!");
+
+//const connection = mysql.createConnection({
+  //host: 'localhost',
+  //user: 'root',
+  //password: '1234',
+  //database: 'controleestoque2'
+//});
 
 connection.connect((err) => {
   if (err) {
@@ -23,8 +28,8 @@ connection.connect((err) => {
 app.use(cors());
 app.use(express.json());
 
-app.get('/items', (req, res) => {
-  const sql = 'SELECT * FROM items';
+app.get('/product', (req, res) => {
+  const sql = 'SELECT * FROM product';
   connection.query(sql, (err, results) => {
     if (err) {
       console.error('Error querying database:', err);
@@ -33,9 +38,9 @@ app.get('/items', (req, res) => {
     res.json(results);
   });
 });
-app.delete('/items/:id', (req, res) => {
+app.delete('/product/:id', (req, res) => {
   const id = req.params.id;
-  const sql = `DELETE FROM items WHERE id = ?`;
+  const sql = `DELETE FROM product WHERE id = ?`;
 
   connection.query(sql, [id], (error, results, fields) => {
     if (error) throw error;
@@ -43,23 +48,23 @@ app.delete('/items/:id', (req, res) => {
   });
 });
 
-app.post('/items', (req, res) => {
-  const { name, description } = req.body;
-  const sql = 'INSERT INTO items (name, description) VALUES (?, ?)';
-  connection.query(sql, [name, description], (err, result) => {
+app.post('/product', (req, res) => {
+  const { product, price, brand, description, amount } = req.body;
+  const sql = 'INSERT INTO product (product, price, brand, description, amount) VALUES (?, ?, ?, ?, ?)';
+  connection.query(sql, [product, price, brand, description, amount], (err, result) => {
     if (err) {
       console.error('Error inserting into database:', err);
       return res.status(500).json({ error: 'Error inserting into database' });
     }
-    res.json({ id: result.insertId, name, description });
+    res.json({ id: result.insertId, product, price, brand, description, amount });
   });
 });
-app.put('/items/:id', (req, res) => {
+app.put('/product/:id', (req, res) => {
   const id = req.params.id;
-  const { name, description } = req.body;
-  const sql = `UPDATE items SET name = ?, description = ? WHERE id = ?`;
+  const { product, price, brand, description, amount } = req.body;
+  const sql = `UPDATE product SET product = ?, price = ?, brand = ?, description = ?, amount = ? WHERE id = ?`;
 
-  connection.query(sql, [name, description, id], (error, results, fields) => {
+  connection.query(sql, [product, price, brand, description, amount, id], (error, results, fields) => {
     if (error) throw error;
     res.send(`Item with ID ${id} has been updated`);
   });
