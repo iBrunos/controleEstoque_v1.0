@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function ItemList() {
+export default function Form() {
   const [items, setItems] = useState([]);
   const [product, setProduct] = useState('');
   const [price, setPrice] = useState('');
@@ -75,6 +75,3 @@ function ItemList() {
       </div>
   );
 }
-
-
-export default ItemList;
