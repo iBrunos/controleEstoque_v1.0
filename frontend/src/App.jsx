@@ -1,10 +1,9 @@
-import './scss/app.scss';
-import Form from './components/form/form';
+import FormProduct from './components/formProducts/FormProducts';
 
 function App() {
   return (
-    <div className="app">
-    <Form/>
+    <div>
+      <FormProduct/>
     </div>
   );
 }
