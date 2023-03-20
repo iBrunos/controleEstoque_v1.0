@@ -99,7 +99,7 @@ app.post('/user', (req, res) => {
 app.put('/user/:id', (req, res) => {
   const id = req.params.id;
   const { user, password, level } = req.body;
-  const sql = `UPDATE user SET users = ?, password = ?, level = ? WHERE id = ?`;
+  const sql = `UPDATE users SET user = ?, password = ?, level = ? WHERE id = ?`;
 
   connection.query(sql, [user, password, level, id], (error, results, fields) => {
     if (error) throw error;

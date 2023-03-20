@@ -9,6 +9,7 @@ class Tables {
       this.createExits();
       this.createUsers();
       this.insertProdutcs();
+      this.insertUsers(); 
     }
   
     createProduct() {
@@ -19,20 +20,20 @@ class Tables {
         if (erro) {
           console.log(erro);
         } else {
-          console.log("Table product was successfully created");
+          //console.log("Table product was successfully created");
         }
       });
     }
   
   createStock() {
     const sql =
-      "CREATE TABLE IF NOT EXISTS stock (id int NOT NULL AUTO_INCREMENT, product varchar(30) NOT NULL, price varchar(20) NOT NULL, brand varchar(20) NOT NULL, description text NOT NULL, amount int NOT NULL, PRIMARY KEY(id))";
+      "CREATE TABLE IF NOT EXISTS stock (id int NOT NULL AUTO_INCREMENT, product varchar(30) NOT NULL, price varchar(20) NOT NULL, brand varchar(20) NOT NULL, description text NOT NULL, amount text NOT NULL, PRIMARY KEY(id))";
   
     this.connection.query(sql, (erro) => {
       if (erro) {
         console.log(erro);
       } else {
-        console.log("Table stock was successfully created");
+        //console.log("Table stock was successfully created");
       }
     });
   }
@@ -44,7 +45,7 @@ class Tables {
       if (erro) {
         console.log(erro);
       } else {
-        console.log("Table exits was successfully created");
+        //console.log("Table exits was successfully created");
       }
     });
   }
@@ -56,7 +57,7 @@ class Tables {
       if (erro) {
         console.log(erro);
       } else {
-        console.log("Table entrys was successfully created");
+        //console.log("Table entrys was successfully created");
       }
     });
   }
@@ -68,7 +69,7 @@ class Tables {
       if (erro) {
         console.log(erro);
       } else {
-        console.log("Table users was successfully created");
+        //console.log("Table users was successfully created");
       }
     });
   }
@@ -79,7 +80,18 @@ class Tables {
       if (erro) {
         console.log(erro);
       } else {
-        console.log("Products inserted successfully");
+        //console.log("Products inserted successfully");
+      }
+    });
+  }
+  insertUsers() {
+    const sql = "REPLACE INTO users (id, user, password, level) VALUES ('1', 'admin', 'admin', '1') , ('2', 'bruno', 'admin', '2') , ('3', 'victor', 'admin', '3')";
+  
+    this.connection.query(sql, (erro) => {
+      if (erro) {
+        console.log(erro);
+      } else {
+        //console.log("Users inserted successfully");
       }
     });
   }
