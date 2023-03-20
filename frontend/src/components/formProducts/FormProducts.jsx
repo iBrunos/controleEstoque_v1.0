@@ -40,6 +40,9 @@ export default function Form() {
     setEditingItem(id);
     const response = await axios.get(`http://localhost:3000/product/${id}`);
     const item = response.data;
+    console.log(item);
+    //let productInput = item.product.value;
+    //productInput = document.getElementById("input__product").innerHTML;
     setProduct(item.product);
     setPrice(item.price);
     setBrand(item.brand);
@@ -59,7 +62,6 @@ export default function Form() {
     setBrand('');
     setDescription('');
     setAmount('');
-    
     setEditingItem(null);
     fetchItems();
   };
@@ -67,7 +69,7 @@ export default function Form() {
   return (
     <div className='flex flex-col'>
       <form onSubmit={editingItem !== null ? updateItem : addItem} className='flex flex-row mb-4 bg-white border-b-gray-100 border-2 pl-32 pt-1 pb-2'>
-      <input type="text" value={product} placeholder='Produto' onChange={e => setProduct(e.target.value)} className='mr-2 border-black border-2 rounded-md pl-1 '/>
+        <input type="text" value={product} placeholder='Produto' onChange={e => setProduct(e.target.value)} className='mr-2 border-black border-2 rounded-md pl-1 ' id='input__product'/>
         <input type="text" value={price} placeholder='Preço' onChange={e => setPrice(e.target.value)} className='mr-2 border-black border-2 rounded-md pl-1'/>
         <input type="text" value={brand} placeholder='Marca' onChange={e => setBrand(e.target.value)} className='mr-2 border-black border-2 rounded-md pl-1'/>
         <input type="text" value={description} placeholder='Descrição' onChange={e => setDescription(e.target.value)} className='mr-2 border-black border-2 rounded-md pl-1'/>
