@@ -10,13 +10,6 @@ const PORT = process.env.PORT || 3000;
 Tabelas.init(connection);
 console.log("tables created successfully!");
 
-//const connection = mysql.createConnection({
-  //host: 'localhost',
-  //user: 'root',
-  //password: '1234',
-  //database: 'controleestoque2'
-//});
-
 connection.connect((err) => {
   if (err) {
     console.error('Error connecting to database:', err);
@@ -27,7 +20,7 @@ connection.connect((err) => {
 
 app.use(cors());
 app.use(express.json());
-
+// CRUD DO PRODUCT
 app.get('/product', (req, res) => {
   const sql = 'SELECT * FROM product';
   connection.query(sql, (err, results) => {
@@ -69,7 +62,50 @@ app.put('/product/:id', (req, res) => {
     res.send(`Item with ID ${id} has been updated`);
   });
 });
-// Define other CRUD operations here (PUT, DELETE)
+
+// CRUD DO USER
+
+app.get('/user', (req, res) => {
+  const sql = 'SELECT * FROM users';
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.error('Error querying database:', err);
+      return res.status(500).json({ error: 'Error querying database' });
+    }
+    res.json(results);
+  });
+});
+app.delete('/user/:id', (req, res) => {
+  const id = req.params.id;
+  const sql = `DELETE FROM users WHERE id = ?`;
+
+  connection.query(sql, [id], (error, results, fields) => {
+    if (error) throw error;
+    res.send(`Item with ID ${id} has been deleted`);
+  });
+});
+
+app.post('/user', (req, res) => {
+  const { user, password, level } = req.body;
+  const sql = 'INSERT INTO users (user, password, level) VALUES (?, ?, ?)';
+  connection.query(sql, [user, password, level], (err, result) => {
+    if (err) {
+      console.error('Error inserting into database:', err);
+      return res.status(500).json({ error: 'Error inserting into database' });
+    }
+    res.json({ id: result.insertId, user, password, level });
+  });
+});
+app.put('/user/:id', (req, res) => {
+  const id = req.params.id;
+  const { user, password, level } = req.body;
+  const sql = `UPDATE user SET users = ?, password = ?, level = ? WHERE id = ?`;
+
+  connection.query(sql, [user, password, level, id], (error, results, fields) => {
+    if (error) throw error;
+    res.send(`Item with ID ${id} has been updated`);
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
