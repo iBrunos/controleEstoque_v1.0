@@ -1,7 +1,7 @@
 const express = require('express');
-const mysql = require('mysql2');
 const cors = require('cors');
 const connection = require("./connection/connection");
+const session = require('express-session');
 const Tabelas = require("./sql/table");
 
 const app = express();
@@ -17,6 +17,13 @@ connection.connect((err) => {
   }
   console.log('Connected to database!');
 });
+
+app.use(session({
+  secret: 'mysecretkey',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // Marque como true se estiver usando HTTPS
+}));
 
 app.use(cors());
 app.use(express.json());
@@ -105,6 +112,37 @@ app.put('/user/:id', (req, res) => {
     if (error) throw error;
     res.send(`Item with ID ${id} has been updated`);
   });
+});
+
+//CRUD LOGIN
+
+// Verifica se o usuário e a senha são válidos
+app.post('/login', (req, res) => {
+  const { user, password } = req.body;
+// ENCRIPTAR A SENHA
+  connection.query(
+    'SELECT * FROM users WHERE user = ? AND password = ?',
+    [user, password],
+    (error, results) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).send('Erro no servidor');
+      }
+
+      if (results.length === 0) {
+        return res.status(401).send('Usuário ou senha inválidos');
+      }
+
+      // Se a validação for bem-sucedida, armazenamos as informações do usuário na sessão
+      req.session.user = req.body.user;
+      req.session.isAuthenticated = true;
+
+
+      return res.status(200).send('Usuário e senha logados');
+      // Redirecionamos o usuário para a próxima página
+      //res.redirect('/nextpage');
+    }
+  );
 });
 
 app.listen(PORT, () => {
