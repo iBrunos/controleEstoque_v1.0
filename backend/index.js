@@ -4,6 +4,7 @@ const connection = require("./connection/connection");
 const session = require('express-session');
 const Tabelas = require("./sql/table");
 
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -25,7 +26,9 @@ app.use(session({
   cookie: { secure: false } // Marque como true se estiver usando HTTPS
 }));
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3001'
+}));
 app.use(express.json());
 // CRUD DO PRODUCT
 app.get('/product', (req, res) => {
@@ -119,31 +122,43 @@ app.put('/user/:id', (req, res) => {
 // Verifica se o usuário e a senha são válidos
 app.post('/login', (req, res) => {
   const { user, password } = req.body;
-// ENCRIPTAR A SENHA
-  connection.query(
-    'SELECT * FROM users WHERE user = ? AND password = ?',
-    [user, password],
-    (error, results) => {
-      if (error) {
-        console.error(error);
-        return res.status(500).send('Erro no servidor');
-      }
-
-      if (results.length === 0) {
-        return res.status(401).send('Usuário ou senha inválidos');
-      }
-
-      // Se a validação for bem-sucedida, armazenamos as informações do usuário na sessão
-      req.session.user = req.body.user;
-      req.session.isAuthenticated = true;
-
-
-      return res.status(200).send('Usuário e senha logados');
-      // Redirecionamos o usuário para a próxima página
-      //res.redirect('/nextpage');
+  
+  // Verifica se o usuário e a senha foram informados
+  if (!user || !password) {
+    return res.status(400).json({
+      error: true,
+      message: 'Usuário e senha são obrigatórios'
+    });
+  }
+  
+  const query = `SELECT id, user, password FROM users WHERE user = ?`;
+  
+  connection.query(query, [user], (error, results) => {
+    if (error) {
+      console.error(error);
+      return res.json({
+        error: true,
+        message: 'Erro ao buscar usuário'
+      });
     }
-  );
+
+    if (results.length === 0) {
+      return res.json({
+        error: true,
+        message: 'Usuário ou senha incorreto'
+      });
+    }
+
+    const usuario = results[0];
+
+    return res.json({
+      error: false,
+      message: 'Login realizado com sucesso',
+      id: usuario.id
+    });
+  });
 });
+
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
