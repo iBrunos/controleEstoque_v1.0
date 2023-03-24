@@ -1,4 +1,4 @@
-import FormProduct from './components/formProducts/FormProducts';
+import FormProduct from './components/formProducts/FormProducts2';
 import FormUser from './components/formUsers/FormUsers';
 import Login from './components/login/Login';
 import Home from './components/home/Home';
@@ -12,7 +12,7 @@ function App() {
           </Route>
           <Route path="/home"  element={<Home />}>
           </Route>
-          <Route path="/formUser"  element={<FormUser />}>
+          <Route path="/Produtos"  element={<FormProduct />}>
           </Route>
         </Routes>
     </Router>

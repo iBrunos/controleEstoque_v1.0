@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Header from '../header/Header';
 
 export default function Form() {
   const [items, setItems] = useState([]);
@@ -67,6 +68,8 @@ export default function Form() {
   };
 
   return (
+    <>
+    <Header />
     <div className='flex flex-col'>
       <form onSubmit={editingItem !== null ? updateItem : addItem} className='flex flex-row mb-4 bg-white border-b-gray-100 border-2 pl-32 pt-1 pb-2'>
         <input type="text" value={product} placeholder='Produto' onChange={e => setProduct(e.target.value)} className='mr-2 border-black border-2 rounded-md pl-1 ' id='input__product'/>
@@ -104,5 +107,6 @@ export default function Form() {
         </tbody>
       </table>
       </div>
+      </>
   );
 }
