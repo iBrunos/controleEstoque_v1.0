@@ -122,7 +122,7 @@ app.put('/user/:id', (req, res) => {
 // Verifica se o usuário e a senha são válidos
 app.post('/login', (req, res) => {
   const { user, password } = req.body;
-  
+
   // Verifica se o usuário e a senha foram informados
   if (!user || !password) {
     return res.status(400).json({
@@ -130,15 +130,15 @@ app.post('/login', (req, res) => {
       message: 'Usuário e senha são obrigatórios'
     });
   }
-  
-  const query = `SELECT id, user, password FROM users WHERE user = ?`;
-  
-  connection.query(query, [user], (error, results) => {
+
+  const query = 'SELECT id, user, password FROM users WHERE user = ? AND password = ?';
+
+  connection.query(query, [user, password], (error, results) => {
     if (error) {
       console.error(error);
       return res.json({
         error: true,
-        message: 'Erro ao buscar usuário'
+        message: 'Erro ao buscar usuário/senha'
       });
     }
 

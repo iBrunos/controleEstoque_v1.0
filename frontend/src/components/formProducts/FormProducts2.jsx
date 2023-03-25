@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from '../header/Header';
-import Footer from '../footer/Footer';
 export default function FormProducts2() {
 
     const [items, setItems] = useState([]);
@@ -77,10 +76,10 @@ export default function FormProducts2() {
         <input type="text" value={brand} placeholder='Marca' onChange={e => setBrand(e.target.value)} className='mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto'/>
         <input type="text" value={description} placeholder='Descrição' onChange={e => setDescription(e.target.value)} className='mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto'/>
         <input type="text" value={amount} placeholder='Quantidade' onChange={e => setAmount(e.target.value)} className='mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto'/>
-        <button type="submit" className='mr-2 border rounded-md p-2 bg-pink-500 text-white font-medium'>{editingItem !== null ? 'Update Item' : 'Add Item'}</button>
+        <button type="submit" className='mr-2 border rounded-md p-2 bg-pink-500 text-white font-medium'>{editingItem !== null ? 'Editar Produto' : 'Adicionar Produto'}</button>
       </form>
         <div className="max-w-screen-xl mx-auto px-4 md:px-8">
-            <div className="mt-3 shadow-sm border rounded-lg overflow-x-auto overflow-y-scroll max-h-[40rem]">
+            <div className="mt-3 shadow-sm border rounded-lg overflow-x-auto overflow-y-scroll max-h-[47rem]">
                 <table className="w-full table-auto text-sm text-left">
                     <thead className="bg-gray-50 text-gray-600 font-medium border-b">
                         <tr>
@@ -116,7 +115,6 @@ export default function FormProducts2() {
                 </table>
             </div>
         </div>
-        <Footer />
         </>
     )
 }

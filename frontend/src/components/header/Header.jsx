@@ -1,4 +1,3 @@
-import logo from './../../assets/imgs/Logo0.jpeg';
 import { useState, useRef, useEffect } from "react"
 
 // Profile Dropdown
@@ -60,8 +59,8 @@ export default function Header() {
   const navigation = [
       { title: "Produtos", path: "#" },
       { title: "Usuários", path: "#" },
-      { title: "Null", path: "#" },
-      { title: "Null", path: "#" },
+      { title: "Entradas", path: "#" },
+      { title: "Saidas", path: "#" },
   ]
     return (
         <nav className="bg-white border-b">
@@ -97,6 +96,7 @@ export default function Header() {
                                 className="w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto"
                                 type="text"
                                 placeholder="Pesquisar"
+                                id="input__pesquisar"
                             />
                         </form>
                         <ProfileDropDown 
