@@ -70,7 +70,7 @@ export default function FormProducts2() {
     return (
         <>
         <Header />
-        <form onSubmit={editingItem !== null ? updateItem : addItem} className='flex flex-row mb-4 mt-1 bg-white border-b-gray-200 border-b pl-32 pt-1 pb-2'>
+        <form onSubmit={editingItem !== null ? updateItem : addItem} className='flex flex-row mb-4 mt-1 bg-white border-b-gray-200 border-b pl-96 pt-1 pb-2 ml-0'>
         <input type="text" value={product} placeholder='Produto' onChange={e => setProduct(e.target.value)} className='mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto ' id='input__product'/>
         <input type="text" value={price} placeholder='Preço' onChange={e => setPrice(e.target.value)} className='mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto'/>
         <input type="text" value={brand} placeholder='Marca' onChange={e => setBrand(e.target.value)} className='mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto'/>
@@ -86,7 +86,7 @@ export default function FormProducts2() {
                             <th className="py-3 px-6">Produto</th>
                             <th className="py-3 px-6">Preço</th>
                             <th className="py-3 px-6">Marca</th>
-                            <th className="py-6 px-3 whitespace-normal break-normal w-9 ">Descrição</th>
+                            <th className="py-6 px-3 pl-64">Descrição</th>
                             <th className="py-3 px-6">Quantidade</th>
                             <th className="py-3 px-6"></th>
                         </tr>

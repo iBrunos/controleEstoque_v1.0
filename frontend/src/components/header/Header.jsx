@@ -1,23 +1,32 @@
 import { useState, useRef, useEffect } from "react"
+import { useNavigate } from "react-router-dom";
+import StoreIcon from '@mui/icons-material/Store';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
+import SettingsIcon from '@mui/icons-material/Settings';
+
+
 
 // Profile Dropdown
 const ProfileDropDown = (props) => {
-
+    const navigate = useNavigate();
+    const navigateTo = () => navigate('/');
     const [state, setState] = useState(false)
-    const profileRef = useRef()
+    const profileRef = useRef(null);
 
-    const navigation = [
-        { title: "Configurações", path: "#" },
-        { title: "Sair", path: "#" },
-    ]
-
-    
     useEffect(() => {
-        const handleDropDown = (e) => {
-            if (!profileRef.current.contains(e.target)) setState(false)
+      const handleDropDown = (e) => {
+        if (profileRef.current && !profileRef.current.contains(e.target)) {
+          setState(false);
         }
-        document.addEventListener('click', handleDropDown)
-    }, [])
+      };
+      document.addEventListener('click', handleDropDown);
+      return () => {
+        document.removeEventListener('click', handleDropDown);
+      };
+    }, []);
 
     return (
         <div className={`relative ${props.class}`}>
@@ -31,40 +40,34 @@ const ProfileDropDown = (props) => {
                         alt="#"
                     />
                 </button>
-                <div className="lg:hidden">
+                <div className="">
                     <span className="block">Micheal John</span>
                     <span className="block text-sm text-gray-500">john@gmail.com</span>
                 </div>
             </div>
             <ul className={`bg-white top-12 right-0 mt-5 space-y-5 lg:absolute lg:border lg:rounded-md lg:text-sm lg:w-52 lg:shadow-md lg:space-y-0 lg:mt-0 ${state ? '' : 'lg:hidden'}`}>
-                {
-                    navigation.map((item, idx) => (
                         <li>
-                            <a key={idx} className="block text-gray-600 lg:hover:bg-gray-50 lg:p-2.5" href={item.path}>
-                                {item.title}
-                            </a>
+                            <button className="block text-gray-600  lg:p-2.5 hover:text-gray-900" onClick={navigateTo}>
+                                <LogoutIcon className="mr-3"/>
+                                Sair
+                            </button>
+                            <button className="block text-gray-600 lg:p-2.5 hover:text-gray-900" href="#">
+                                <SettingsIcon className="mr-3" />
+                                Configurações
+                            </button>
                         </li>
-                    ))
-                }
             </ul>
         </div>
     )
 }
 
 export default function Header() {
+    
 
     const [menuState, setMenuState] = useState(false)
-
-  // Replace # path with your path
-  const navigation = [
-      { title: "Produtos", path: "#" },
-      { title: "Usuários", path: "#" },
-      { title: "Entradas", path: "#" },
-      { title: "Saidas", path: "#" },
-  ]
     return (
         <nav className="bg-white border-b">
-            <div className="flex items-center space-x-8 py-3 px-4 max-w-screen-xl mx-auto md:px-8">
+            <div className="flex items-center space-x-8 py-3 px-4 max-w-screen-2xl mx-auto md:px-8">
                 <div className="flex-none lg:flex-initial">
                     <a href="Home" className='text-4xl font-bold text-gray-900'>
                         HAPPY MAKEUP
@@ -73,19 +76,25 @@ export default function Header() {
                 <div className="flex-1 flex items-center justify-between">
                     <div className={`bg-white absolute z-20 w-full top-16 left-0 p-4 border-b lg:static lg:block lg:border-none ${menuState ? '' : 'hidden'}`}>
                         <ul className="mt-12 space-y-5 lg:flex lg:space-x-6 lg:space-y-0 lg:mt-0">
-                            {
-                                navigation.map((item, idx) => (
-                                    <li key={idx} className="text-gray-600 hover:text-gray-900">
-                                        <a href={item.path}>
-                                            {item.title}
-                                        </a>
-                                    </li>
-                                ))
-                            }
+                            <li className="text-gray-600 ">
+                                <a href="#" className="mr-6 hover:text-gray-900">
+                                    <StoreIcon className="mr-3"/>
+                                    Produtos
+                                </a>
+                                <a href="#" className="mr-6 hover:text-gray-900">
+                                    <AccountCircleIcon className="mr-3"/>
+                                    Usuários
+                                </a>
+                                <a href="#" className="mr-6 hover:text-gray-900">
+                                    <AddShoppingCartIcon className="mr-3"/>
+                                    Entradas
+                                </a>
+                                <a href="#" className="mr-6 hover:text-gray-900">
+                                    <RemoveShoppingCartIcon className="mr-3"/>
+                                    Saidas
+                                </a>
+                            </li>
                         </ul>
-                        <ProfileDropDown 
-                            class="mt-5 pt-5 border-t lg:hidden"
-                        />
                     </div>
                     <div className="flex-1 flex items-center justify-end space-x-2 sm:space-x-6">
                         <form className="flex items-center space-x-2 border rounded-md p-2">
@@ -100,7 +109,7 @@ export default function Header() {
                             />
                         </form>
                         <ProfileDropDown 
-                            class="hidden lg:block"
+                            class="lg:block"
                         />
                         <button 
                             className="outline-none text-gray-400 block lg:hidden"
