@@ -49,7 +49,7 @@ createEntrys() {
     }
   });
 }
-createEntrys() {
+createExits() {
   const sql =
     "CREATE TABLE IF NOT EXISTS entrys (id int NOT NULL AUTO_INCREMENT, product varchar(30) NOT NULL, price varchar(20) NOT NULL, brand varchar(20) NOT NULL, description text NOT NULL, amount int NOT NULL, inserted_by varchar(30) ,PRIMARY KEY(id))";
 
