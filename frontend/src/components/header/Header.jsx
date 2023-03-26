@@ -6,13 +6,16 @@ import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
+import StickyNote2Icon from '@mui/icons-material/StickyNote2';
 
 
 
 // Profile Dropdown
 const ProfileDropDown = (props) => {
     const navigate = useNavigate();
-    const navigateTo = () => navigate('/');
+    const navigateToLogout = () => navigate('/');
+    const navigateToRelatorios = () => navigate('/Relatórios');
+    const navigateToUsuarios = () => navigate('/Usuários');
     const [state, setState] = useState(false)
     const profileRef = useRef(null);
 
@@ -41,19 +44,27 @@ const ProfileDropDown = (props) => {
                     />
                 </button>
                 <div className="">
-                    <span className="block">Micheal John</span>
-                    <span className="block text-sm text-gray-500">john@gmail.com</span>
+                    <span className="block">Victor Manoel</span>
+                    <span className="block text-sm text-gray-500">victormssalves@gmail.com</span>
                 </div>
             </div>
             <ul className={`bg-white top-12 right-0 mt-5 space-y-5 lg:absolute lg:border lg:rounded-md lg:text-sm lg:w-52 lg:shadow-md lg:space-y-0 lg:mt-0 ${state ? '' : 'lg:hidden'}`}>
                         <li>
-                            <button className="block text-gray-600  lg:p-2.5 hover:text-gray-900" onClick={navigateTo}>
-                                <LogoutIcon className="mr-3"/>
-                                Sair
+                            <button className="block text-gray-600  lg:p-2.5 hover:text-gray-900" onClick={navigateToUsuarios}>
+                                <AccountCircleIcon className="mr-3"/>
+                                Usuários
+                            </button>
+                            <button className="block text-gray-600  lg:p-2.5 hover:text-gray-900" onClick={navigateToRelatorios}>
+                                <StickyNote2Icon className="mr-3"/>
+                                Relatórios
                             </button>
                             <button className="block text-gray-600 lg:p-2.5 hover:text-gray-900" href="#">
                                 <SettingsIcon className="mr-3" />
                                 Configurações
+                            </button>
+                            <button className="block text-gray-600  lg:p-2.5 hover:text-gray-900" onClick={navigateToLogout}>
+                                <LogoutIcon className="mr-3"/>
+                                Sair
                             </button>
                         </li>
             </ul>
@@ -79,11 +90,7 @@ export default function Header() {
                             <li className="text-gray-600 ">
                                 <a href="#" className="mr-6 hover:text-gray-900">
                                     <StoreIcon className="mr-3"/>
-                                    Produtos
-                                </a>
-                                <a href="#" className="mr-6 hover:text-gray-900">
-                                    <AccountCircleIcon className="mr-3"/>
-                                    Usuários
+                                    Estoque
                                 </a>
                                 <a href="#" className="mr-6 hover:text-gray-900">
                                     <AddShoppingCartIcon className="mr-3"/>

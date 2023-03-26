@@ -1,4 +1,5 @@
-module.exports = (app, connection) => {
+module.exports = (app) => {
+    const connection = require("../connection/connection");
     app.get('/user', (req, res) => {
         const sql = 'SELECT * FROM users';
         connection.query(sql, (err, results) => {

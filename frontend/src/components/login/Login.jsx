@@ -46,7 +46,7 @@ export default function Login() {
                     placeholder="Usuário"
                     onChange={(e) => setUser(e.target.value)}
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                    id="input__product"
+                    id="input__login"
                   />
                   <input
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
@@ -54,6 +54,7 @@ export default function Login() {
                     value={password}
                     placeholder="Senha"
                     onChange={(e) => setPassword(e.target.value)}
+                    id="input__password"
                   />
                   <div className="flex items-center justify-between">
                     <div className="flex items-start">
