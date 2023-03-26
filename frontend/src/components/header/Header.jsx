@@ -20,15 +20,15 @@ const ProfileDropDown = (props) => {
     const profileRef = useRef(null);
 
     useEffect(() => {
-      const handleDropDown = (e) => {
-        if (profileRef.current && !profileRef.current.contains(e.target)) {
-          setState(false);
-        }
-      };
-      document.addEventListener('click', handleDropDown);
-      return () => {
-        document.removeEventListener('click', handleDropDown);
-      };
+        const handleDropDown = (e) => {
+            if (profileRef.current && !profileRef.current.contains(e.target)) {
+                setState(false);
+            }
+        };
+        document.addEventListener('click', handleDropDown);
+        return () => {
+            document.removeEventListener('click', handleDropDown);
+        };
     }, []);
 
     return (
@@ -49,31 +49,31 @@ const ProfileDropDown = (props) => {
                 </div>
             </div>
             <ul className={`bg-white top-12 right-0 mt-5 space-y-5 lg:absolute lg:border lg:rounded-md lg:text-sm lg:w-52 lg:shadow-md lg:space-y-0 lg:mt-0 ${state ? '' : 'lg:hidden'}`}>
-                        <li>
-                            <button className="block text-gray-600  lg:p-2.5 hover:text-gray-900" onClick={navigateToUsuarios}>
-                                <AccountCircleIcon className="mr-3"/>
-                                Usuários
-                            </button>
-                            <button className="block text-gray-600  lg:p-2.5 hover:text-gray-900" onClick={navigateToRelatorios}>
-                                <StickyNote2Icon className="mr-3"/>
-                                Relatórios
-                            </button>
-                            <button className="block text-gray-600 lg:p-2.5 hover:text-gray-900" href="#">
-                                <SettingsIcon className="mr-3" />
-                                Configurações
-                            </button>
-                            <button className="block text-gray-600  lg:p-2.5 hover:text-gray-900" onClick={navigateToLogout}>
-                                <LogoutIcon className="mr-3"/>
-                                Sair
-                            </button>
-                        </li>
+                <li>
+                    <button className="block text-gray-600  lg:p-2.5 hover:text-gray-900" onClick={navigateToUsuarios}>
+                        <AccountCircleIcon className="mr-3" />
+                        Usuários
+                    </button>
+                    <button className="block text-gray-600  lg:p-2.5 hover:text-gray-900" onClick={navigateToRelatorios}>
+                        <StickyNote2Icon className="mr-3" />
+                        Relatórios
+                    </button>
+                    <button className="block text-gray-600 lg:p-2.5 hover:text-gray-900" href="#">
+                        <SettingsIcon className="mr-3" />
+                        Configurações
+                    </button>
+                    <button className="block text-gray-600  lg:p-2.5 hover:text-gray-900" onClick={navigateToLogout}>
+                        <LogoutIcon className="mr-3" />
+                        Sair
+                    </button>
+                </li>
             </ul>
         </div>
     )
 }
 
 export default function Header() {
-    
+
 
     const [menuState, setMenuState] = useState(false)
     return (
@@ -89,36 +89,25 @@ export default function Header() {
                         <ul className="mt-12 space-y-5 lg:flex lg:space-x-6 lg:space-y-0 lg:mt-0">
                             <li className="text-gray-600 ">
                                 <a href="#" className="mr-6 hover:text-gray-900">
-                                    <StoreIcon className="mr-3"/>
+                                    <StoreIcon className="mr-3" />
                                     Estoque
                                 </a>
                                 <a href="#" className="mr-6 hover:text-gray-900">
-                                    <AddShoppingCartIcon className="mr-3"/>
+                                    <AddShoppingCartIcon className="mr-3" />
                                     Entradas
                                 </a>
                                 <a href="#" className="mr-6 hover:text-gray-900">
-                                    <RemoveShoppingCartIcon className="mr-3"/>
+                                    <RemoveShoppingCartIcon className="mr-3" />
                                     Saidas
                                 </a>
                             </li>
                         </ul>
                     </div>
                     <div className="flex-1 flex items-center justify-end space-x-2 sm:space-x-6">
-                        <form className="flex items-center space-x-2 border rounded-md p-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-none text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                            <input
-                                className="w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto"
-                                type="text"
-                                placeholder="Pesquisar"
-                                id="input__pesquisar"
-                            />
-                        </form>
-                        <ProfileDropDown 
+                        <ProfileDropDown
                             class="lg:block"
                         />
-                        <button 
+                        <button
                             className="outline-none text-gray-400 block lg:hidden"
                             onClick={() => setMenuState(!menuState)}
                         >
