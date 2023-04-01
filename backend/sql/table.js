@@ -20,7 +20,7 @@ class Tables {
       if (erro) {
         console.log(erro);
       } else {
-        console.log("Table product was successfully created");
+        //console.log("Table product was successfully created");
       }
     });
   }
@@ -33,7 +33,7 @@ createStock() {
     if (erro) {
       console.log(erro);
     } else {
-      console.log("Table stock was successfully created");
+      //console.log("Table stock was successfully created");
     }
   });
 }
@@ -45,7 +45,7 @@ createEntrys() {
     if (erro) {
       console.log(erro);
     } else {
-      console.log("Table entrys was successfully created");
+      //console.log("Table entrys was successfully created");
     }
   });
 }
@@ -57,7 +57,7 @@ createExits() {
     if (erro) {
       console.log(erro);
     } else {
-      console.log("Table entrys was successfully created");
+      //console.log("Table entrys was successfully created");
     }
   });
 }
@@ -69,7 +69,7 @@ createUsers() {
     if (erro) {
       console.log(erro);
     } else {
-      console.log("Table users was successfully created");
+      //console.log("Table users was successfully created");
     }
   });
 }
@@ -80,7 +80,7 @@ insertProdutcs() {
     if (erro) {
       console.log(erro);
     } else {
-      console.log("Products inserted successfully");
+      //console.log("Products inserted successfully");
     }
   });
 }
@@ -91,7 +91,7 @@ insertUsers() {
     if (erro) {
       console.log(erro);
     } else {
-      console.log("Users inserted successfully");
+      //console.log("Users inserted successfully");
     }
   });
 }

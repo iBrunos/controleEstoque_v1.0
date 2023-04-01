@@ -6,6 +6,8 @@ export default function Form() {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
   const [level, setLevel] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [editingItem, setEditingItem] = useState(null);
 
   useEffect(() => {
@@ -19,12 +21,14 @@ export default function Form() {
 
   const addItem = async (e) => {
     e.preventDefault();
-    const newItem = { user, password, level };
+    const newItem = { user, password, level, email, phone };
     const response = await axios.post('http://localhost:3000/user', newItem);
     setItems([...items, response.data]);
     setUser('');
     setPassword('');
     setLevel('');
+    setEmail('');
+    setPhone('');
   };
 
   const deleteItem = async (id) => {
@@ -39,17 +43,21 @@ export default function Form() {
     setUser(item.user);
     setPassword(item.password);
     setLevel(item.level);
+    setEmail(item.email);
+    setPhone(item.phone);
     fetchItems();
   };
 
   const updateItem = async (e) => {
     e.preventDefault();
-    const updatedItem = { user, password, level };
+    const updatedItem = { user, password, level, email, phone };
     const response = await axios.put(`http://localhost:3000/user/${editingItem}`, updatedItem);
     setItems(items.map(item => item.id === editingItem ? response.data : item));
     setUser('');
     setPassword('');
     setLevel('');
+    setEmail('');
+    setPhone('');
     setEditingItem(null);
     fetchItems();
   };
@@ -60,6 +68,8 @@ export default function Form() {
         <input type="text" value={user} placeholder='Usuário' onChange={e => setUser(e.target.value)} className='mr-2 border-black border-2 rounded-md pl-1 '/>
         <input type="password" value={password} placeholder='Senha' onChange={e =>  setPassword(e.target.value)} className='mr-2 border-black border-2 rounded-md pl-1'/>
         <input type="number" value={level} placeholder='Level' onChange={e => setLevel(e.target.value)} className='mr-2 border-black border-2 rounded-md pl-1'/>
+        <input type="text" value={email} placeholder='Email' onChange={e => setEmail(e.target.value)} className='mr-2 border-black border-2 rounded-md pl-1'/>
+        <input type="text" value={phone} placeholder='Telefone' onChange={e => setPhone(e.target.value)} className='mr-2 border-black border-2 rounded-md pl-1'/>
         <button type="submit" className='border-black border-2 rounded-md p-1'>{editingItem !== null ? 'Update Item' : 'Add Item'}</button>
       </form>
       <table>
@@ -67,6 +77,8 @@ export default function Form() {
           <tr className=''>
             <th>User</th>
             <th>Senha</th>
+            <th>Level</th>
+            <th>Level</th>
             <th>Level</th>
             <th>Actions</th>
           </tr>

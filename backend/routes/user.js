@@ -21,22 +21,22 @@ module.exports = (app) => {
       });
       
       app.post('/user', (req, res) => {
-        const { user, password, level } = req.body;
-        const sql = 'INSERT INTO users (user, password, level) VALUES (?, ?, ?)';
-        connection.query(sql, [user, password, level], (err, result) => {
+        const { user, password, level, email, phone } = req.body;
+        const sql = 'INSERT INTO users (user, password, level, email, phone) VALUES (?, ?, ?, ?, ?)';
+        connection.query(sql, [user, password, level, email, phone], (err, result) => {
           if (err) {
             console.error('Error inserting into database:', err);
             return res.status(500).json({ error: 'Error inserting into database' });
           }
-          res.json({ id: result.insertId, user, password, level });
+          res.json({ id: result.insertId, user, password, level, email, phone });
         });
       });
       app.put('/user/:id', (req, res) => {
         const id = req.params.id;
-        const { user, password, level } = req.body;
-        const sql = `UPDATE users SET user = ?, password = ?, level = ? WHERE id = ?`;
+        const { user, password, level, email, phone} = req.body;
+        const sql = `UPDATE users SET user = ?, password = ?, level = ?, email = ?, phone = ? WHERE id = ?`;
       
-        connection.query(sql, [user, password, level, id], (error, results, fields) => {
+        connection.query(sql, [user, password, level, email, phone, id], (error, results, fields) => {
           if (error) throw error;
           res.send(`Item with ID ${id} has been updated`);
         });
