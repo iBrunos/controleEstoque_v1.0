@@ -20,7 +20,7 @@ class Tables {
       if (erro) {
         console.log(erro);
       } else {
-        //console.log("Table product was successfully created");
+        console.log("Table product was successfully created");
       }
     });
   }
@@ -33,7 +33,7 @@ createStock() {
     if (erro) {
       console.log(erro);
     } else {
-      //console.log("Table stock was successfully created");
+      console.log("Table stock was successfully created");
     }
   });
 }
@@ -45,7 +45,7 @@ createEntrys() {
     if (erro) {
       console.log(erro);
     } else {
-      //console.log("Table entrys was successfully created");
+      console.log("Table entrys was successfully created");
     }
   });
 }
@@ -57,19 +57,19 @@ createExits() {
     if (erro) {
       console.log(erro);
     } else {
-      //console.log("Table entrys was successfully created");
+      console.log("Table entrys was successfully created");
     }
   });
 }
 createUsers() {
   const sql =
-    "CREATE TABLE IF NOT EXISTS users (id int NOT NULL AUTO_INCREMENT, user varchar(30) NOT NULL, password varchar(8) NOT NULL, level int(1) NOT NULL, PRIMARY KEY(id))";
+    "CREATE TABLE IF NOT EXISTS users (id int NOT NULL AUTO_INCREMENT, user varchar(30) NOT NULL, password varchar(8) NOT NULL, level int(1) NOT NULL, email text NOT NULL, phone text NOT NULL, PRIMARY KEY(id))";
 
   this.connection.query(sql, (erro) => {
     if (erro) {
       console.log(erro);
     } else {
-      //console.log("Table users was successfully created");
+      console.log("Table users was successfully created");
     }
   });
 }
@@ -80,18 +80,18 @@ insertProdutcs() {
     if (erro) {
       console.log(erro);
     } else {
-      //console.log("Products inserted successfully");
+      console.log("Products inserted successfully");
     }
   });
 }
 insertUsers() {
-  const sql = "REPLACE INTO users (id, user, password, level) VALUES ('1', 'admin', 'admin', '1') , ('2', 'bruno', 'admin', '2') , ('3', 'victor', 'admin', '3')";
+  const sql = "REPLACE INTO users (id, user, password, level, email, phone) VALUES ('1', 'admin', 'admin', '1', 'admin@gmail.com', '(71) 93999-8888') , ('2', 'bruno', 'admin', '2', 'bruno@gmail.com', '(71) 93999-8888') , ('3', 'victor', 'admin', '3', 'victor@gmail.com', '(71) 93999-8888')";
 
   this.connection.query(sql, (erro) => {
     if (erro) {
       console.log(erro);
     } else {
-      //console.log("Users inserted successfully");
+      console.log("Users inserted successfully");
     }
   });
 }
