@@ -1,7 +1,6 @@
 import FormProduct from './components/formProducts/FormProducts';
-import FormUser from './components/formUsers/FormUsers';
+import FormUser from './components/formUsers/FormUsers2';
 import Login from './components/login/Login';
-import Home from './components/home/Home';
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 function App() {
   return (
@@ -9,8 +8,6 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Login/>}>
-          </Route>
-          <Route path="/Home"  element={<Home />}>
           </Route>
           <Route path="/Produtos"  element={<FormProduct />}>
           </Route>

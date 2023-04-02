@@ -4,123 +4,122 @@ import Header from "../header/Header";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-export default function FormProducts2() {
-  const [items, setItems] = useState([]);
-  const [product, setProduct] = useState("");
-  const [price, setPrice] = useState("");
-  const [brand, setBrand] = useState("");
-  const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState("");
-  const [editingItem, setEditingItem] = useState(null);
+export default function FormUsers() {
+  const [users, setUsers] = useState([]);
+  const [user, setUser] = useState("");
+  const [password, setPassword] = useState("");
+  const [level, setLevel] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [editingUser, setEditingUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    fetchItems();
+    fetchUsers();
   }, []);
 
-  const fetchItems = async () => {
-    const response = await axios.get("http://localhost:3000/product");
-    setItems(response.data);
+  const fetchUsers = async () => {
+    const response = await axios.get("http://localhost:3000/user");
+    setUsers(response.data);
   };
 
-  const addItem = async (e) => {
+  const addUser = async (e) => {
     e.preventDefault();
-    const newItem = { product, price, brand, description, amount };
-    const response = await axios.post("http://localhost:3000/product", newItem);
-    setItems([...items, response.data]);
-    setProduct("");
-    setPrice("");
-    setBrand("");
-    setDescription("");
-    setAmount("");
+    const newUser = { user, password, level, email, phone };
+    const response = await axios.post("http://localhost:3000/user", newUser);
+    setUsers([...user, response.data]);
+    setUser("");
+    setPassword("");
+    setLevel("");
+    setEmail("");
+    setPhone("");
   };
 
-  const deleteItem = async (id) => {
-    await axios.delete(`http://localhost:3000/product/${id}`);
-    setItems(items.filter((item) => item.id !== id));
+  const deleteUser = async (id) => {
+    await axios.delete(`http://localhost:3000/user/${id}`);
+    setUsers(users.filter((user) => user.id !== id));
   };
 
-  const editItem = async (id) => {
-    setEditingItem(id);
-    const response = await axios.get(`http://localhost:3000/product/${id}`);
-    const item = response.data;
-    console.log(item);
-    setProduct(item.product);
-    setPrice(item.price);
-    setBrand(item.brand);
-    setDescription(item.description);
-    setAmount(item.amount);
-    setEditingItem(null);
-    fetchItems();
+  const editUser = async (id) => {
+    setEditingUser(id);
+    const response = await axios.get(`http://localhost:3000/user/${id}`);
+    const User = response.data;
+    setUser(User.user);
+    setPassword(User.password);
+    setLevel(User.level);
+    setEmail(User.email);
+    setPhone(User.phone);
+    setEditingUser(null);
+    fetchUsers();
   };
 
-  const updateItem = async (e) => {
+  const updateUser = async (e) => {
     e.preventDefault();
-    const updatedItem = { product, price, brand, description, amount };
+    const updatedUser = { user, password, level, email, phone };
     const response = await axios.put(
-      `http://localhost:3000/product/${editingItem}`,
-      updatedItem
+      `http://localhost:3000/User/${editingUser}`,
+      updatedUser
     );
-    setItems(
-      items.map((item) => (item.id === editingItem ? response.data : item))
+    setUsers(
+      users.map((user) => (user.id === editingUser ? response.data : user))
     );
-    setProduct("");
-    setPrice("");
-    setBrand("");
-    setDescription("");
-    setAmount("");
-    setEditingItem(null);
-    fetchItems();
+    setUser("");
+    setPassword("");
+    setLevel("");
+    setEmail("");
+    setPhone("");
+    setEditingUser(null);
+    fetchUsers();
   };
 
   return (
     <>
       <Header />
       <form
-        onSubmit={editingItem !== null ? updateItem : addItem}
+        onSubmit={editingUser !== null ? updateUser : addUser}
         className="flex flex-row mb-0 mt-1 bg-white border-b-gray-200 border-b pl-32 pt-1 pb-2 ml-0"
       >
         <input
           type="text"
-          value={product}
-          placeholder="Produto"
-          onChange={(e) => setProduct(e.target.value)}
+          value={user}
+          placeholder="Usuário"
+          onChange={(e) => setUser(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto "
           id="input__product"
         />
         <input
-          type="text"
-          value={price}
-          placeholder="Preço"
-          onChange={(e) => setPrice(e.target.value)}
+          type="password"
+          value={password}
+          placeholder="Senha"
+          onChange={(e) => setPassword(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto"
         />
         <input
-          type="text"
-          value={brand}
-          placeholder="Marca"
-          onChange={(e) => setBrand(e.target.value)}
+          type="number"
+          value={level}
+          placeholder="Nível"
+          onChange={(e) => setLevel(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto"
         />
         <input
-          type="text"
-          value={description}
-          placeholder="Descrição"
-          onChange={(e) => setDescription(e.target.value)}
+          type="email"
+          value={email}
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
         />
         <input
-          type="text"
-          value={amount}
-          placeholder="Quantidade"
-          onChange={(e) => setAmount(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[6.5rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
+          type="tel"
+          value={phone}
+          placeholder="Telefone"
+          onChange={(e) => setPhone(e.target.value)}
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[8.5rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
         />
         <button
           type="submit"
           className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium"
         >
-          {editingItem !== null ? "Editar Produto" : "Adicionar Produto"}
+          {editingUser !== null ? "Editar Usuário" : "Adicionar Usuário"}
         </button>
         <section className="flex items-center space-x-2 border rounded-md p-2">
           <svg
@@ -149,57 +148,55 @@ export default function FormProducts2() {
       <div className="bg-white mx-auto px-4 md:px-8">
         <div className="mt-12 shadow-sm border rounded-lg overflow-x-auto">
           <table className="w-full table-auto text-sm text-left">
-          <thead className="bg-gray-50 text-gray-600 font-medium border-b">
+            <thead className="bg-gray-50 text-gray-600 font-medium border-b">
               <tr>
-                <th className="py-3 px-6">Produto</th>
-                <th className="py-3 px-6">Preço</th>
-                <th className="py-3 px-6">Marca</th>
-                <th className="text-center py-3 px-6">Descrição</th>
-                <th className="py-3 px-6">Quantidade</th>
+                <th className="py-3 px-6">Usuário</th>
+                <th className="py-3 px-6">Senha</th>
+                <th className="py-3 px-6">Nível de Acesso</th>
+                <th className="py-3 px-6">Email</th>
+                <th className="py-3 px-6">Telefone</th>
                 <th className="py-3 px-6">Ações</th>
               </tr>
             </thead>
             <tbody className="text-gray-600 divide-y">
-              {items
-                .filter((item) => {
+              {users
+                .filter((user) => {
                   if (searchTerm === "") {
-                    return item;
+                    return user;
                   } else if (
-                    item.product
+                    user.product
                       .toLowerCase()
                       .includes(searchTerm.toLowerCase())
                   ) {
-                    return item;
+                    return user;
                   }
                   return null;
                 })
-                .map((item) => (
-                  <tr key={item.id}>
+                .map((user) => (
+                  <tr key={user.id}>
+                    <td className="px-6 py-4 whitespace-nowrap">{user.user}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {item.product}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item.price}
+                      {user.password}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {item.brand}
+                      {user.level}
                     </td>
-                    <td className="px-6 py-4 whitespace-normal break-words w-[50rem]">
-                      {item.description}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {user.email}
                     </td>
-                    <td className="px-8 py-4 whitespace-nowrap">
-                      {item.amount}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {user.phone}
                     </td>
-                    <td className=" px-6 whitespace-nowrap">
+                    <td className="px-6 whitespace-nowrap">
                       <button
-                        onClick={() => editItem(item.id)}
+                        onClick={() => editUser(user.id)}
                         className="py-2 px-3 font-medium text-indigo-600 hover:text-indigo-500 duration-150 hover:bg-gray-50 rounded-lg"
                       >
                         <EditIcon className="mr-2" />
                         Editar
                       </button>
                       <button
-                        onClick={() => deleteItem(item.id)}
+                        onClick={() => deleteUser(user.id)}
                         className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg"
                       >
                         <DeleteForeverIcon className="mr-2" />
@@ -210,8 +207,8 @@ export default function FormProducts2() {
                 ))}
             </tbody>
           </table>
-          </div>
-          </div>
+        </div>
+      </div>
     </>
   );
 }
