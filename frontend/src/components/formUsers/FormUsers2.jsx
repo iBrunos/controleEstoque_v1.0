@@ -3,31 +3,32 @@ import axios from "axios";
 import Header from "../header/Header";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import unidecode from "unidecode";
 
-export default function FormUsers() {
-  const [users, setUsers] = useState([]);
+export default function FormProducts2() {
+  const [items, setItems] = useState([]);
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [level, setLevel] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [editingUser, setEditingUser] = useState(null);
+  const [editingItem, setEditingItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    fetchUsers();
+    fetchItems();
   }, []);
 
-  const fetchUsers = async () => {
+  const fetchItems = async () => {
     const response = await axios.get("http://localhost:3000/user");
-    setUsers(response.data);
+    setItems(response.data);
   };
 
-  const addUser = async (e) => {
+  const addItem = async (e) => {
     e.preventDefault();
-    const newUser = { user, password, level, email, phone };
-    const response = await axios.post("http://localhost:3000/user", newUser);
-    setUsers([...user, response.data]);
+    const newItem = { user, password, level, email, phone };
+    const response = await axios.post("http://localhost:3000/user", newItem);
+    setItems([...items, response.data]);
     setUser("");
     setPassword("");
     setLevel("");
@@ -35,48 +36,49 @@ export default function FormUsers() {
     setPhone("");
   };
 
-  const deleteUser = async (id) => {
+  const deleteItem = async (id) => {
     await axios.delete(`http://localhost:3000/user/${id}`);
-    setUsers(users.filter((user) => user.id !== id));
+    setItems(items.filter((item) => item.id !== id));
   };
 
-  const editUser = async (id) => {
-    setEditingUser(id);
-    const response = await axios.get(`http://localhost:3000/user/${id}`);
-    const User = response.data;
-    setUser(User.user);
-    setPassword(User.password);
-    setLevel(User.level);
-    setEmail(User.email);
-    setPhone(User.phone);
-    setEditingUser(null);
-    fetchUsers();
+  const editItem = async (id) => {
+    setEditingItem(id);
+    const response = await axios.get(`http://localhost:3000/product/${id}`);
+    const item = response.data;
+    console.log(item);
+    setUser(item.user);
+    setPassword(item.password);
+    setLevel(item.level);
+    setEmail(item.email);
+    setPhone(item.phone);
+    setEditingItem(null);
+    fetchItems();
   };
 
-  const updateUser = async (e) => {
+  const updateItem = async (e) => {
     e.preventDefault();
-    const updatedUser = { user, password, level, email, phone };
+    const updatedItem = { user, password, level, email, phone };
     const response = await axios.put(
-      `http://localhost:3000/User/${editingUser}`,
-      updatedUser
+      `http://localhost:3000/user/${editingItem}`,
+      updatedItem
     );
-    setUsers(
-      users.map((user) => (user.id === editingUser ? response.data : user))
+    setItems(
+      items.map((item) => (item.id === editingItem ? response.data : item))
     );
     setUser("");
     setPassword("");
     setLevel("");
     setEmail("");
     setPhone("");
-    setEditingUser(null);
-    fetchUsers();
+    setEditingItem(null);
+    fetchItems();
   };
 
   return (
     <>
       <Header />
       <form
-        onSubmit={editingUser !== null ? updateUser : addUser}
+        onSubmit={editingItem !== null ? updateItem : addItem}
         className="flex flex-row mb-0 mt-1 bg-white border-b-gray-200 border-b pl-32 pt-1 pb-2 ml-0"
       >
         <input
@@ -88,7 +90,7 @@ export default function FormUsers() {
           id="input__product"
         />
         <input
-          type="password"
+          type="text"
           value={password}
           placeholder="Senha"
           onChange={(e) => setPassword(e.target.value)}
@@ -97,7 +99,7 @@ export default function FormUsers() {
         <input
           type="number"
           value={level}
-          placeholder="Nível"
+          placeholder="Level"
           onChange={(e) => setLevel(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto"
         />
@@ -109,17 +111,17 @@ export default function FormUsers() {
           className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
         />
         <input
-          type="tel"
+          type="text"
           value={phone}
           placeholder="Telefone"
           onChange={(e) => setPhone(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[8.5rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[6.5rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
         />
         <button
           type="submit"
           className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium"
         >
-          {editingUser !== null ? "Editar Usuário" : "Adicionar Usuário"}
+          {editingItem !== null ? "Editar Produto" : "Adicionar Produto"}
         </button>
         <section className="flex items-center space-x-2 border rounded-md p-2">
           <svg
@@ -152,51 +154,54 @@ export default function FormUsers() {
               <tr>
                 <th className="py-3 px-6">Usuário</th>
                 <th className="py-3 px-6">Senha</th>
-                <th className="py-3 px-6">Nível de Acesso</th>
-                <th className="py-3 px-6">Email</th>
-                <th className="py-3 px-6">Telefone</th>
+                <th className="py-3 px-6">Level</th>
+                <th className="text-center py-3 px-6">Email</th>
+                <th className="py-3 px-6">Phone</th>
                 <th className="py-3 px-6">Ações</th>
               </tr>
             </thead>
+
             <tbody className="text-gray-600 divide-y">
-              {users
-                .filter((user) => {
+              {items
+                .filter((item) => {
+                  const searchTermUnidecoded = unidecode(searchTerm.toLowerCase());
+                  const itemUserUnidecoded = unidecode(
+                    item.user.toLowerCase()
+                  );
                   if (searchTerm === "") {
-                    return user;
-                  } else if (
-                    user.product
-                      .toLowerCase()
-                      .includes(searchTerm.toLowerCase())
-                  ) {
-                    return user;
+                    return item;
+                  } else if (itemUserUnidecoded.includes(searchTermUnidecoded)) {
+                    return item;
                   }
                   return null;
                 })
-                .map((user) => (
-                  <tr key={user.id}>
-                    <td className="px-6 py-4 whitespace-nowrap">{user.user}</td>
+                .map((item) => (
+                  <tr key={item.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {user.password}
+                      {item.user}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {user.level}
+                      {item.password}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {user.email}
+                      {item.level}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {user.phone}
+                    <td className="px-6 py-4 whitespace-normal break-words w-[50rem]">
+                      {item.email}
                     </td>
-                    <td className="px-6 whitespace-nowrap">
+                    <td className="px-8 py-4 whitespace-nowrap">
+                      {item.phone}
+                    </td>
+                    <td className=" px-6 whitespace-nowrap">
                       <button
-                        onClick={() => editUser(user.id)}
+                        onClick={() => editItem(item.id)}
                         className="py-2 px-3 font-medium text-indigo-600 hover:text-indigo-500 duration-150 hover:bg-gray-50 rounded-lg"
                       >
                         <EditIcon className="mr-2" />
                         Editar
                       </button>
                       <button
-                        onClick={() => deleteUser(user.id)}
+                        onClick={() => deleteItem(item.id)}
                         className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg"
                       >
                         <DeleteForeverIcon className="mr-2" />
