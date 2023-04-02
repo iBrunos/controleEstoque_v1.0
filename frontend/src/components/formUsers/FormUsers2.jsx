@@ -14,7 +14,6 @@ export default function FormProducts2() {
   const [phone, setPhone] = useState("");
   const [editingItem, setEditingItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-
   useEffect(() => {
     fetchItems();
   }, []);
@@ -155,7 +154,7 @@ export default function FormProducts2() {
                 <th className="py-3 px-6">Usuário</th>
                 <th className="py-3 px-6">Senha</th>
                 <th className="py-3 px-6">Level</th>
-                <th className="text-center py-3 px-6">Email</th>
+                <th className=" py-3 px-6">Email</th>
                 <th className="py-3 px-6">Phone</th>
                 <th className="py-3 px-6">Ações</th>
               </tr>
@@ -186,7 +185,7 @@ export default function FormProducts2() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       {item.level}
                     </td>
-                    <td className="px-6 py-4 whitespace-normal break-words w-[50rem]">
+                    <td className="px-6 py-4 whitespace-normal">
                       {item.email}
                     </td>
                     <td className="px-8 py-4 whitespace-nowrap">

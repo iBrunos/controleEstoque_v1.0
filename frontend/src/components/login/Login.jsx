@@ -1,10 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 export default function Login() {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const handleRememberMe = () => {
+    setRememberMe(!rememberMe);
+    if (!rememberMe) {
+      const credentials = { user, password };
+      localStorage.setItem("credentials", JSON.stringify(credentials));
+    } else {
+      localStorage.removeItem("credentials");
+    }
+  };
+
+  useEffect(() => {
+    const savedCredentials = JSON.parse(localStorage.getItem("credentials"));
+    if (savedCredentials) {
+      setUser(savedCredentials.user);
+      setPassword(savedCredentials.password);
+      setRememberMe(true);
+    }
+  }, []);
 
   const login = async (e) => {
     e.preventDefault();
@@ -27,12 +47,9 @@ export default function Login() {
     <>
       <section className="bg-gray-50 ">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <a
-            href="www.google.com"
-            className="flex items-center mb-6 text-4xl font-bold text-gray-900 "
-          >
+          <h1 className="flex items-center mb-6 text-4xl font-bold text-gray-900 ">
             HAPPY MAKEUP
-          </a>
+          </h1>
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0  ">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl ">
@@ -64,7 +81,8 @@ export default function Login() {
                           aria-describedby="remember"
                           type="checkbox"
                           className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:bg-pink-400 focus:ring-3 focus:ring-primary-300 accent-pink-500"
-                          required=""
+                          checked={rememberMe}
+                          onChange={handleRememberMe}
                         ></input>
                       </div>
                       <div className="ml-3 text-sm">
@@ -73,12 +91,6 @@ export default function Login() {
                         </label>
                       </div>
                     </div>
-                    <a
-                      href="www.google.com"
-                      className="text-sm font-medium text-primary-600 hover:underline"
-                    >
-                      Esqueceu a senha?
-                    </a>
                   </div>
                   <button
                     type="submit"
@@ -86,15 +98,6 @@ export default function Login() {
                   >
                     Login
                   </button>
-                  <p className="text-sm font-light text-gray-500">
-                    Não possui uma conta?{" "}
-                    <a
-                      href="www.google.com"
-                      className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                    >
-                      Cadastre-se
-                    </a>
-                  </p>
                 </form>
               </div>
             </div>

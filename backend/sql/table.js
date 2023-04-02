@@ -63,7 +63,7 @@ createExits() {
 }
 createUsers() {
   const sql =
-    "CREATE TABLE IF NOT EXISTS users (id int NOT NULL AUTO_INCREMENT, user varchar(30) NOT NULL, password varchar(8) NOT NULL, level int(1) NOT NULL, email text NOT NULL, phone text NOT NULL, PRIMARY KEY(id))";
+    "CREATE TABLE IF NOT EXISTS users (id int NOT NULL AUTO_INCREMENT, user varchar(30) NOT NULL, password varchar(64) NOT NULL, level int(1) NOT NULL, email text NOT NULL, phone text NOT NULL, PRIMARY KEY(id))";
 
   this.connection.query(sql, (erro) => {
     if (erro) {
