@@ -90,7 +90,7 @@ export default function FormProducts2() {
           id="input__product"
         />
         <input
-          type="text"
+          type="password"
           value={password}
           placeholder="Senha"
           onChange={(e) => setPassword(e.target.value)}
