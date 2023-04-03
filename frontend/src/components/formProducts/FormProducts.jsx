@@ -19,14 +19,28 @@ export default function FormProducts2() {
   }, []);
 
   const fetchItems = async () => {
-    const response = await axios.get("http://localhost:3000/product");
-    setItems(response.data);
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjgwNTQwODAzLCJleHAiOjE2ODExNDU2MDN9.j1mfGqwYouLtJVOf4TNgkcZTEqB08Wwfyl9nxs-ynuk';
+    // definir o cabeçalho `Authorization` com o token JWT
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+
+    // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
+    axios.get('http://localhost:3000/product', config)
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
 
   const addItem = async (e) => {
     e.preventDefault();
     const newItem = { product, price, brand, description, amount };
-    const response = await axios.post("http://localhost:3000/product", newItem);
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjgwNTQwODAzLCJleHAiOjE2ODExNDU2MDN9.j1mfGqwYouLtJVOf4TNgkcZTEqB08Wwfyl9nxs-ynuk';
+
+    const response = await axios.post("http://localhost:3000/product", newItem, { headers: { Authorization: `Bearer ${token}` } });
     setItems([...items, response.data]);
     setProduct("");
     setPrice("");
@@ -34,15 +48,18 @@ export default function FormProducts2() {
     setDescription("");
     setAmount("");
   };
-
+  
   const deleteItem = async (id) => {
-    await axios.delete(`http://localhost:3000/product/${id}`);
+    const token = localStorage.getItem('token');
+    await axios.delete(`http://localhost:3000/product/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     setItems(items.filter((item) => item.id !== id));
   };
-
+  
   const editItem = async (id) => {
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjgwNTQwODAzLCJleHAiOjE2ODExNDU2MDN9.j1mfGqwYouLtJVOf4TNgkcZTEqB08Wwfyl9nxs-ynuk';
+
     setEditingItem(id);
-    const response = await axios.get(`http://localhost:3000/product/${id}`);
+    const response = await axios.get(`http://localhost:3000/product/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     const item = response.data;
     console.log(item);
     setProduct(item.product);
@@ -53,14 +70,13 @@ export default function FormProducts2() {
     setEditingItem(null);
     fetchItems();
   };
-
+  
   const updateItem = async (e) => {
     e.preventDefault();
     const updatedItem = { product, price, brand, description, amount };
-    const response = await axios.put(
-      `http://localhost:3000/product/${editingItem}`,
-      updatedItem
-    );
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjgwNTQwODAzLCJleHAiOjE2ODExNDU2MDN9.j1mfGqwYouLtJVOf4TNgkcZTEqB08Wwfyl9nxs-ynuk';
+
+    const response = await axios.put(`http://localhost:3000/product/${editingItem}`, updatedItem, { headers: { Authorization: `Bearer ${token}` } });
     setItems(
       items.map((item) => (item.id === editingItem ? response.data : item))
     );
@@ -72,6 +88,7 @@ export default function FormProducts2() {
     setEditingItem(null);
     fetchItems();
   };
+  
 
   return (
     <>
@@ -147,14 +164,14 @@ export default function FormProducts2() {
         </section>
       </form>
       <div className="p-0 m-0">
-                    <h3 className="text-gray-800 text-4xl font-bold text-center ">
-                        ESTOQUE
-                    </h3>
-                </div>
+        <h3 className="text-gray-800 text-4xl font-bold text-center ">
+          ESTOQUE
+        </h3>
+      </div>
       <div className="bg-white mx-auto px-4 md:px-8">
         <div className="mt-12 shadow-sm border rounded-lg overflow-x-auto">
           <table className="w-full table-auto text-sm text-left">
-          <thead className="bg-gray-50 text-gray-600 font-medium border-b">
+            <thead className="bg-gray-50 text-gray-600 font-medium border-b">
               <tr>
                 <th className="py-3 px-6">Produto</th>
                 <th className="py-3 px-6">Preço</th>
@@ -215,8 +232,8 @@ export default function FormProducts2() {
                 ))}
             </tbody>
           </table>
-          </div>
-          </div>
+        </div>
+      </div>
     </>
   );
 }

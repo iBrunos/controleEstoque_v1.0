@@ -87,7 +87,7 @@ class Tables {
     });
   }
   insertUsers() {
-    const sql = "REPLACE INTO users (id, user, password, level, email, phone) VALUES ('1', 'admin', 'admin', '1', 'admin@gmail.com', '(71) 93999-8888') , ('2', 'bruno', 'admin', '2', 'bruno@gmail.com', '(71) 93999-8888') , ('3', 'victor', 'admin', '3', 'victor@gmail.com', '(71) 93999-8888')";
+    const sql = "REPLACE INTO users (id, user, password, level, email, phone) VALUES ('1', 'admin', '$2b$08$pZ7Cg1IOgCzSnw.yhmM2bueJ0bvepWL8oYFmNIE..wXQBvsWW0feO', '1', 'admin@gmail.com', '(71) 93999-8888')";
 
     this.connection.query(sql, (erro) => {
       if (erro) {

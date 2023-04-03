@@ -1,7 +1,9 @@
+const { eAdmin } = require("../middleware/auth");
+
 module.exports = (app) => {
     // CRUD DO PRODUCT
 const connection = require("../connection/connection");
-app.get('/product', (req, res) => {
+app.get('/product', eAdmin, (req, res) => {
     const sql = 'SELECT * FROM product';
     connection.query(sql, (err, results) => {
       if (err) {
@@ -11,7 +13,7 @@ app.get('/product', (req, res) => {
       res.json(results);
     });
   });
-  app.delete('/product/:id', (req, res) => {
+  app.delete('/product/:id', eAdmin, (req, res) => {
     const id = req.params.id;
     const sql = `DELETE FROM product WHERE id = ?`;
   
@@ -21,7 +23,7 @@ app.get('/product', (req, res) => {
     });
   });
   
-  app.post('/product', (req, res) => {
+  app.post('/product', eAdmin,(req, res) => {
     const { product, price, brand, description, amount } = req.body;
     const sql = 'INSERT INTO product (product, price, brand, description, amount) VALUES (?, ?, ?, ?, ?)';
     connection.query(sql, [product, price, brand, description, amount], (err, result) => {
@@ -32,7 +34,7 @@ app.get('/product', (req, res) => {
       res.json({ id: result.insertId, product, price, brand, description, amount });
     });
   });
-  app.put('/product/:id', (req, res) => {
+  app.put('/product/:id', eAdmin,(req, res) => {
     const id = req.params.id;
     const { product, price, brand, description, amount } = req.body;
     const sql = `UPDATE product SET product = ?, price = ?, brand = ?, description = ?, amount = ? WHERE id = ?`;
