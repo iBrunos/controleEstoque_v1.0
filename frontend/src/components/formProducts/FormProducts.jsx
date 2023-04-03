@@ -16,7 +16,7 @@ export default function FormProducts2() {
 
   useEffect(() => {
     fetchItems();
-  }, []);
+  }, [items]);
 
   const fetchItems = async () => {
     const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjgwNTQwODAzLCJleHAiOjE2ODExNDU2MDN9.j1mfGqwYouLtJVOf4TNgkcZTEqB08Wwfyl9nxs-ynuk';
@@ -24,16 +24,16 @@ export default function FormProducts2() {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-
+  
     // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
-    axios.get('http://localhost:3000/product', config)
-      .then(response => {
-        console.log(response.data);
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    try {
+      const response = await axios.get('http://localhost:3000/product', config);
+      setItems(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
+  
 
   const addItem = async (e) => {
     e.preventDefault();
