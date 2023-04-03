@@ -16,6 +16,7 @@ const ProfileDropDown = (props) => {
     const navigateToLogout = () => navigate('/');
     const navigateToRelatorios = () => navigate('/Relatórios');
     const navigateToUsuarios = () => navigate('/Usuários');
+
     const [state, setState] = useState(false)
     const profileRef = useRef(null);
 
@@ -76,7 +77,12 @@ export default function Header() {
 
 
     const [menuState, setMenuState] = useState(false)
+    const navigate = useNavigate();
+    const navigateToEstoques = () => navigate('/Produtos');
+    const navigateToEntradas = () => navigate('/Entradas');
+    const navigateToSaidas = () => navigate('/Saídas');
     return (
+    
         <nav className="bg-white border-b">
             <div className="flex items-center space-x-8 py-3 px-4 max-w-screen-2xl mx-auto md:px-8">
                 <div className="flex-none lg:flex-initial">
@@ -88,18 +94,19 @@ export default function Header() {
                     <div className={`bg-white absolute z-20 w-full top-16 left-0 p-4 border-b lg:static lg:block lg:border-none ${menuState ? '' : 'hidden'}`}>
                         <ul className="mt-12 space-y-5 lg:flex lg:space-x-6 lg:space-y-0 lg:mt-0">
                             <li className="text-gray-600 ">
-                                <a href="#" className="mr-6 hover:text-gray-900">
+                                <button className="mr-6 hover:text-gray-900" onClick={navigateToEstoques}>
                                     <StoreIcon className="mr-3" />
                                     Estoque
-                                </a>
-                                <a href="#" className="mr-6 hover:text-gray-900">
+                                    
+                                </button>
+                                <button className="mr-6 hover:text-gray-900" onClick={navigateToEntradas}>
                                     <AddShoppingCartIcon className="mr-3" />
                                     Entradas
-                                </a>
-                                <a href="#" className="mr-6 hover:text-gray-900">
+                                </button>
+                                <button className="mr-6 hover:text-gray-900" onClick={navigateToSaidas}>
                                     <RemoveShoppingCartIcon className="mr-3" />
                                     Saidas
-                                </a>
+                                </button>
                             </li>
                         </ul>
                     </div>
