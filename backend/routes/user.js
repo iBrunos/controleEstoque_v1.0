@@ -1,5 +1,7 @@
 module.exports = (app) => {
-    const connection = require("../connection/connection");
+  const bcrypt = require('bcrypt');
+  const connection = require("../connection/connection");
+
     app.get('/user', (req, res) => {
         const sql = 'SELECT * FROM users';
         connection.query(sql, (err, results) => {
@@ -20,10 +22,12 @@ module.exports = (app) => {
         });
       });
       
-      app.post('/user', (req, res) => {
+      app.post('/user', async (req, res) => {
         const { user, password, level, email, phone } = req.body;
+        // Hash da senha
+        const hashedPassword = await bcrypt.hash(password, 8);
         const sql = 'INSERT INTO users (user, password, level, email, phone) VALUES (?, ?, ?, ?, ?)';
-        connection.query(sql, [user, password, level, email, phone], (err, result) => {
+        connection.query(sql, [user, hashedPassword, level, email, phone], (err, result) => {
           if (err) {
             console.error('Error inserting into database:', err);
             return res.status(500).json({ error: 'Error inserting into database' });
@@ -31,6 +35,8 @@ module.exports = (app) => {
           res.json({ id: result.insertId, user, password, level, email, phone });
         });
       });
+
+
       app.put('/user/:id', (req, res) => {
         const id = req.params.id;
         const { user, password, level, email, phone} = req.body;
