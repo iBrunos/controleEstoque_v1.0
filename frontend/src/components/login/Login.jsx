@@ -35,6 +35,8 @@ export default function Login() {
 
     if (data.message === "Login realizado com sucesso") {
       localStorage.setItem("token", data.token);
+      localStorage.setItem("email", data.email);
+      localStorage.setItem("user", data.user);
       navigate("/Produtos"); // substitua '/nextpage' pelo caminho do formulário desejado
     } else {
       setPassword("");

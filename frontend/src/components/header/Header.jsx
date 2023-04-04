@@ -9,7 +9,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
 
 
-
+const user = localStorage.getItem('user');
+const email = localStorage.getItem('email');
 // Profile Dropdown
 const ProfileDropDown = (props) => {
     const navigate = useNavigate();
@@ -45,8 +46,8 @@ const ProfileDropDown = (props) => {
                     />
                 </button>
                 <div className="">
-                    <span className="block">Victor Manoel</span>
-                    <span className="block text-sm text-gray-500">victormssalves@gmail.com</span>
+                    <span className="block">{user}</span>
+                    <span className="block text-sm text-gray-500">{email}</span>
                 </div>
             </div>
             <ul className={`bg-white top-12 right-0 mt-5 space-y-5 lg:absolute lg:border lg:rounded-md lg:text-sm lg:w-52 lg:shadow-md lg:space-y-0 lg:mt-0 ${state ? '' : 'lg:hidden'}`}>
