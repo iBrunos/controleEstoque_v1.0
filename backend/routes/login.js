@@ -48,7 +48,6 @@ module.exports = (app) => {
           //expiresIn: 60 //1 min
           expiresIn: '7d' // 7 dia
         });
-        console.log(token);
         if (result !== true) {
           return res.json({
             error: true,
