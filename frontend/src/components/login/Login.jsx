@@ -32,9 +32,9 @@ export default function Login() {
     const response = await axios.post("http://localhost:3000/login", newItem);
 
     const data = response.data;
-    console.log(data);
 
     if (data.message === "Login realizado com sucesso") {
+      localStorage.setItem("token", data.token);
       navigate("/Produtos"); // substitua '/nextpage' pelo caminho do formulário desejado
     } else {
       setPassword("");

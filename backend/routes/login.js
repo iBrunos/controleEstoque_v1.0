@@ -15,7 +15,7 @@ module.exports = (app) => {
       });
     }
 
-    const query = "SELECT id, user, password FROM users WHERE user = ?";
+    const query = "SELECT id, user, password, level, email, phone FROM users WHERE user = ?";
 
     connection.query(query, [user], (error, results) => {
       if (error) {
@@ -49,7 +49,6 @@ module.exports = (app) => {
           expiresIn: '7d' // 7 dia
         });
         console.log(token);
-
         if (result !== true) {
           return res.json({
             error: true,
@@ -57,10 +56,11 @@ module.exports = (app) => {
           });
         } else {
           return res.json({
-            error: false,
             message: "Login realizado com sucesso",
             token,
             id: usuario.id,
+            user: usuario.user,
+            email: usuario.email
           });
         }
       });

@@ -3,6 +3,7 @@ import axios from "axios";
 import Header from "../header/Header";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import unidecode from "unidecode";
 
 export default function FormProducts2() {
   const [items, setItems] = useState([]);
@@ -14,17 +15,18 @@ export default function FormProducts2() {
   const [editingItem, setEditingItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
+      
   useEffect(() => {
     fetchItems();
   }, [items]);
 
   const fetchItems = async () => {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjgwNTQwODAzLCJleHAiOjE2ODExNDU2MDN9.j1mfGqwYouLtJVOf4TNgkcZTEqB08Wwfyl9nxs-ynuk';
+    const token = localStorage.getItem('token');
     // definir o cabeçalho `Authorization` com o token JWT
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-  
+
     // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
     try {
       const response = await axios.get('http://localhost:3000/product', config);
@@ -33,12 +35,13 @@ export default function FormProducts2() {
       console.error(error);
     }
   };
-  
+
 
   const addItem = async (e) => {
     e.preventDefault();
     const newItem = { product, price, brand, description, amount };
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjgwNTQwODAzLCJleHAiOjE2ODExNDU2MDN9.j1mfGqwYouLtJVOf4TNgkcZTEqB08Wwfyl9nxs-ynuk';
+    const token = localStorage.getItem('token');
+
 
     const response = await axios.post("http://localhost:3000/product", newItem, { headers: { Authorization: `Bearer ${token}` } });
     setItems([...items, response.data]);
@@ -48,20 +51,20 @@ export default function FormProducts2() {
     setDescription("");
     setAmount("");
   };
-  
+
   const deleteItem = async (id) => {
     const token = localStorage.getItem('token');
     await axios.delete(`http://localhost:3000/product/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     setItems(items.filter((item) => item.id !== id));
   };
-  
+
   const editItem = async (id) => {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjgwNTQwODAzLCJleHAiOjE2ODExNDU2MDN9.j1mfGqwYouLtJVOf4TNgkcZTEqB08Wwfyl9nxs-ynuk';
+    const token = localStorage.getItem('token');
+
 
     setEditingItem(id);
     const response = await axios.get(`http://localhost:3000/product/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     const item = response.data;
-    console.log(item);
     setProduct(item.product);
     setPrice(item.price);
     setBrand(item.brand);
@@ -70,11 +73,12 @@ export default function FormProducts2() {
     setEditingItem(null);
     fetchItems();
   };
-  
+
   const updateItem = async (e) => {
     e.preventDefault();
     const updatedItem = { product, price, brand, description, amount };
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjgwNTQwODAzLCJleHAiOjE2ODExNDU2MDN9.j1mfGqwYouLtJVOf4TNgkcZTEqB08Wwfyl9nxs-ynuk';
+    const token = localStorage.getItem('token');
+
 
     const response = await axios.put(`http://localhost:3000/product/${editingItem}`, updatedItem, { headers: { Authorization: `Bearer ${token}` } });
     setItems(
@@ -88,7 +92,7 @@ export default function FormProducts2() {
     setEditingItem(null);
     fetchItems();
   };
-  
+
 
   return (
     <>
@@ -184,13 +188,13 @@ export default function FormProducts2() {
             <tbody className="text-gray-600 divide-y">
               {items
                 .filter((item) => {
+                  const searchTermUnidecoded = unidecode(searchTerm.toLowerCase());
+                  const itemUserUnidecoded = unidecode(
+                    item.product.toLowerCase()
+                  );
                   if (searchTerm === "") {
                     return item;
-                  } else if (
-                    item.product
-                      .toLowerCase()
-                      .includes(searchTerm.toLowerCase())
-                  ) {
+                  } else if (itemUserUnidecoded.includes(searchTermUnidecoded)) {
                     return item;
                   }
                   return null;
