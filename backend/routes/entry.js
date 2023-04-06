@@ -35,7 +35,7 @@ app.get('/entry', (req, res) => {
   app.put('/entry/:id', (req, res) => {
     const id = req.params.id;
     const { product, price, brand, description, amount, inserted_by } = req.body;
-    const sql = `UPDATE entry SET product = ?, price = ?, brand = ?, description = ?, amount = ?, inserted_by = ? WHERE id = ?`;
+    const sql = `UPDATE entrys SET product = ?, price = ?, brand = ?, description = ?, amount = ?, inserted_by = ? WHERE id = ?`;
   
     connection.query(sql, [product, price, brand, description, amount, inserted_by, id], (error, results, fields) => {
       if (error) throw error;

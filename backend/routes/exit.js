@@ -35,7 +35,7 @@ app.get('/exit', (req, res) => {
   app.put('/exit/:id', (req, res) => {
     const id = req.params.id;
     const { product, price, brand, description, amount, inserted_by } = req.body;
-    const sql = `UPDATE exit SET product = ?, price = ?, brand = ?, description = ?, amount = ?, inserted_by = ? WHERE id = ?`;
+    const sql = `UPDATE exits SET product = ?, price = ?, brand = ?, description = ?, amount = ?, inserted_by = ? WHERE id = ?`;
   
     connection.query(sql, [product, price, brand, description, amount, inserted_by, id], (error, results, fields) => {
       if (error) throw error;

@@ -97,7 +97,7 @@ export default function Header() {
                             <li className="text-gray-600 ">
                                 <button className="mr-6 hover:text-gray-900" onClick={navigateToEstoques}>
                                     <StoreIcon className="mr-3" />
-                                    Estoque
+                                    Cadastro
                                     
                                 </button>
                                 <button className="mr-6 hover:text-gray-900" onClick={navigateToEntradas}>

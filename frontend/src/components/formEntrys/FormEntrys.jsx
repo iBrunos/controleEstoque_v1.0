@@ -12,65 +12,105 @@ export default function FormProducts2() {
   const [brand, setBrand] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
-  const [insertedBy, setInsertedBy] = useState("");
+  const [inserted_by, setInserted_by] = useState("");
   const [editingItem, setEditingItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+
+
   useEffect(() => {
     fetchItems();
-  }, []);
+  }, [items]);
 
   const fetchItems = async () => {
-    const response = await axios.get("http://localhost:3000/entry");
-    setItems(response.data);
+    const token = localStorage.getItem('token');
+    // definir o cabeçalho `Authorization` com o token JWT
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+
+    // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
+    try {
+      const response = await axios.get('http://localhost:3000/entry', config);
+      setItems(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const addItem = async (e) => {
     e.preventDefault();
-    const newItem = { product, price, brand, description, amount, insertedBy };
-    const response = await axios.post("http://localhost:3000/entry", newItem);
+
+    const user = localStorage.getItem('user');
+
+    const token = localStorage.getItem('token');
+
+    const newItem = {
+      product,
+      price,
+      brand,
+      description,
+      amount,
+      inserted_by
+    };
+    newItem.inserted_by = user;
+    const response = await axios.post(
+      "http://localhost:3000/entry",
+      newItem,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
     setItems([...items, response.data]);
     setProduct("");
     setPrice("");
     setBrand("");
     setDescription("");
     setAmount("");
-    setInsertedBy("");
   };
 
   const deleteItem = async (id) => {
-    await axios.delete(`http://localhost:3000/entry/${id}`);
-    setItems(items.filter((item) => item.id !== id));
+    const token = localStorage.getItem('token');
+    try {
+      await axios.delete(`http://localhost:3000/entry/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      setItems(items.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
+
   const editItem = async (id) => {
+    const token = localStorage.getItem('token');
+
+
     setEditingItem(id);
-    const response = await axios.get(`http://localhost:3000/entry/${id}`);
+    const response = await axios.get(`http://localhost:3000/entry/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     const item = response.data;
-    console.log(item);
     setProduct(item.product);
     setPrice(item.price);
     setBrand(item.brand);
     setDescription(item.description);
     setAmount(item.amount);
-    setInsertedBy(item.insertedBy);
+    setInserted_by(item.inserted_by);
     setEditingItem(null);
     fetchItems();
   };
 
   const updateItem = async (e) => {
     e.preventDefault();
+    const user = localStorage.getItem('user');
     const updatedItem = {
       product,
       price,
       brand,
       description,
       amount,
-      insertedBy,
+      inserted_by
     };
-    const response = await axios.put(
-      `http://localhost:3000/entry/${editingItem}`,
-      updatedItem
-    );
+    updatedItem.inserted_by = user;
+    const token = localStorage.getItem('token');
+
+
+    const response = await axios.put(`http://localhost:3000/entry/${editingItem}`, updatedItem, { headers: { Authorization: `Bearer ${token}` } });
     setItems(
       items.map((item) => (item.id === editingItem ? response.data : item))
     );
@@ -79,17 +119,18 @@ export default function FormProducts2() {
     setBrand("");
     setDescription("");
     setAmount("");
-    setInsertedBy("");
+    setInserted_by("");
     setEditingItem(null);
     fetchItems();
   };
+
 
   return (
     <>
       <Header />
       <form
         onSubmit={editingItem !== null ? updateItem : addItem}
-        className="flex flex-row mb-4 mt-1 bg-white border-b-gray-200 border-b pl-32 pt-1 pb-2 ml-0"
+        className="flex flex-row mb-0 mt-1 bg-white border-b-gray-200 border-b pl-32 pt-1 pb-2 ml-0"
       >
         <input
           type="text"
@@ -100,7 +141,7 @@ export default function FormProducts2() {
           id="input__product"
         />
         <input
-          type="number"
+          type="text"
           value={price}
           placeholder="Preço"
           onChange={(e) => setPrice(e.target.value)}
@@ -121,17 +162,17 @@ export default function FormProducts2() {
           className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
         />
         <input
-          type="number"
+          type="text"
           value={amount}
           placeholder="Quantidade"
           onChange={(e) => setAmount(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[6.5rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
+          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto"
         />
         <button
           type="submit"
           className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium"
         >
-          {editingItem !== null ? "Editar Produto" : "Adicionar Produto"}
+          {editingItem !== null ? "Editar Entrada" : "Adicionar Entrada"}
         </button>
         <section className="flex items-center space-x-2 border rounded-md p-2">
           <svg
@@ -157,7 +198,7 @@ export default function FormProducts2() {
           />
         </section>
       </form>
-      <div className="p-0 m-0">
+      <div className="p-0 m-0 text-center">
         <h3 className="text-gray-800 text-4xl font-bold text-center ">
           ENTRADAS
         </h3>
@@ -170,27 +211,20 @@ export default function FormProducts2() {
                 <th className="py-3 px-6">Produto</th>
                 <th className="py-3 px-6">Preço</th>
                 <th className="py-3 px-6">Marca</th>
-                <th className="py-3 px-6">Descrição</th>
+                <th className="text-center py-3 px-6">Descrição</th>
                 <th className="py-3 px-6">Quantidade</th>
                 <th className="py-3 px-6">Funcionário</th>
                 <th className="py-3 px-6">Ações</th>
               </tr>
             </thead>
-
             <tbody className="text-gray-600 divide-y">
               {items
                 .filter((item) => {
-                  const searchTermUnidecoded = unidecode(
-                    searchTerm.toLowerCase()
-                  );
-                  const itemUserUnidecoded = unidecode(
-                    item.product.toLowerCase()
-                  );
-                  if (searchTerm === "") {
+                  const searchTermUnidecoded = unidecode(searchTerm?.toLowerCase() || '');
+                  const itemUserUnidecoded = unidecode(item.product?.toLowerCase() || ''); // aqui foi adicionado o teste para item.product ser nulo ou indefinido
+                  if (searchTermUnidecoded === "") {
                     return item;
-                  } else if (
-                    itemUserUnidecoded.includes(searchTermUnidecoded)
-                  ) {
+                  } else if (itemUserUnidecoded.includes(searchTermUnidecoded)) {
                     return item;
                   }
                   return null;
@@ -206,14 +240,14 @@ export default function FormProducts2() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       {item.brand}
                     </td>
-                    <td className="px-6 py-4 whitespace-normal">
+                    <td className="px-6 py-4 whitespace-normal break-words w-[50rem]">
                       {item.description}
                     </td>
                     <td className="px-8 py-4 whitespace-nowrap">
                       {item.amount}
                     </td>
                     <td className="px-8 py-4 whitespace-nowrap">
-                      {item.insertedBy}
+                      {item.inserted_by}
                     </td>
                     <td className=" px-6 whitespace-nowrap">
                       <button

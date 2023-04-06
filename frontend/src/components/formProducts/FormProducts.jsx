@@ -11,11 +11,11 @@ export default function FormProducts2() {
   const [price, setPrice] = useState("");
   const [brand, setBrand] = useState("");
   const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState("");
+  const [inserted_by, setInserted_by] = useState("");
   const [editingItem, setEditingItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-      
+
   useEffect(() => {
     fetchItems();
   }, [items]);
@@ -39,19 +39,32 @@ export default function FormProducts2() {
 
   const addItem = async (e) => {
     e.preventDefault();
-    const newItem = { product, price, brand, description, amount };
+    
+    const user = localStorage.getItem('user');
+    
     const token = localStorage.getItem('token');
-
-
-    const response = await axios.post("http://localhost:3000/product", newItem, { headers: { Authorization: `Bearer ${token}` } });
+  
+    const newItem = { 
+      product, 
+      price, 
+      brand, 
+      description, 
+      inserted_by 
+    };
+    newItem.inserted_by = user;
+    const response = await axios.post(
+      "http://localhost:3000/product",
+      newItem,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+  
     setItems([...items, response.data]);
     setProduct("");
     setPrice("");
     setBrand("");
     setDescription("");
-    setAmount("");
   };
-
+  
   const deleteItem = async (id) => {
     const token = localStorage.getItem('token');
     await axios.delete(`http://localhost:3000/product/${id}`, { headers: { Authorization: `Bearer ${token}` } });
@@ -69,14 +82,14 @@ export default function FormProducts2() {
     setPrice(item.price);
     setBrand(item.brand);
     setDescription(item.description);
-    setAmount(item.amount);
+    setInserted_by(item.inserted_by);
     setEditingItem(null);
     fetchItems();
   };
 
   const updateItem = async (e) => {
     e.preventDefault();
-    const updatedItem = { product, price, brand, description, amount };
+    const updatedItem = { product, price, brand, description, inserted_by };
     const token = localStorage.getItem('token');
 
 
@@ -88,7 +101,7 @@ export default function FormProducts2() {
     setPrice("");
     setBrand("");
     setDescription("");
-    setAmount("");
+    setInserted_by("");
     setEditingItem(null);
     fetchItems();
   };
@@ -130,13 +143,6 @@ export default function FormProducts2() {
           onChange={(e) => setDescription(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
         />
-        <input
-          type="text"
-          value={amount}
-          placeholder="Quantidade"
-          onChange={(e) => setAmount(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[6.5rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
-        />
         <button
           type="submit"
           className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium"
@@ -167,9 +173,9 @@ export default function FormProducts2() {
           />
         </section>
       </form>
-      <div className="p-0 m-0">
+      <div className="p-0 m-0 text-center">
         <h3 className="text-gray-800 text-4xl font-bold text-center ">
-          ESTOQUE
+          CADASTRO
         </h3>
       </div>
       <div className="bg-white mx-auto px-4 md:px-8">
@@ -181,7 +187,7 @@ export default function FormProducts2() {
                 <th className="py-3 px-6">Preço</th>
                 <th className="py-3 px-6">Marca</th>
                 <th className="text-center py-3 px-6">Descrição</th>
-                <th className="py-3 px-6">Quantidade</th>
+                <th className="py-3 px-6">Funcionário</th>
                 <th className="py-3 px-6">Ações</th>
               </tr>
             </thead>
@@ -214,7 +220,7 @@ export default function FormProducts2() {
                       {item.description}
                     </td>
                     <td className="px-8 py-4 whitespace-nowrap">
-                      {item.amount}
+                      {item.inserted_by}
                     </td>
                     <td className=" px-6 whitespace-nowrap">
                       <button

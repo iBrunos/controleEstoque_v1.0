@@ -24,22 +24,22 @@ app.get('/product', eAdmin, (req, res) => {
   });
   
   app.post('/product', eAdmin,(req, res) => {
-    const { product, price, brand, description, amount } = req.body;
-    const sql = 'INSERT INTO product (product, price, brand, description, amount) VALUES (?, ?, ?, ?, ?)';
-    connection.query(sql, [product, price, brand, description, amount], (err, result) => {
+    const { product, price, brand, description, inserted_by } = req.body;
+    const sql = 'INSERT INTO product (product, price, brand, description, inserted_by) VALUES (?, ?, ?, ?, ?)';
+    connection.query(sql, [product, price, brand, description, inserted_by], (err, result) => {
       if (err) {
         console.error('Error inserting into database:', err);
         return res.status(500).json({ error: 'Error inserting into database' });
       }
-      res.json({ id: result.insertId, product, price, brand, description, amount });
+      res.json({ id: result.insertId, product, price, brand, description, inserted_by });
     });
   });
   app.put('/product/:id', eAdmin,(req, res) => {
     const id = req.params.id;
-    const { product, price, brand, description, amount } = req.body;
-    const sql = `UPDATE product SET product = ?, price = ?, brand = ?, description = ?, amount = ? WHERE id = ?`;
+    const { product, price, brand, description, inserted_by } = req.body;
+    const sql = `UPDATE product SET product = ?, price = ?, brand = ?, description = ?, inserted_by = ? WHERE id = ?`;
   
-    connection.query(sql, [product, price, brand, description, amount, id], (error, results, fields) => {
+    connection.query(sql, [product, price, brand, description, inserted_by, id], (error, results, fields) => {
       if (error) throw error;
       res.send(`Item with ID ${id} has been updated`);
     });
