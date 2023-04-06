@@ -29,54 +29,58 @@ export default function FormProducts2() {
 
     // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
     try {
-      const response = await axios.get('http://localhost:3000/product', config);
+      const response = await axios.get('http://localhost:3000/entry', config);
       setItems(response.data);
     } catch (error) {
       console.error(error);
     }
   };
 
-
   const addItem = async (e) => {
     e.preventDefault();
-    
+
     const user = localStorage.getItem('user');
-    
+
     const token = localStorage.getItem('token');
-  
-    const newItem = { 
-      product, 
-      price, 
-      brand, 
-      description, 
-      inserted_by 
+
+    const newItem = {
+      product,
+      price,
+      brand,
+      description,
+      inserted_by
     };
     newItem.inserted_by = user;
     const response = await axios.post(
-      "http://localhost:3000/product",
+      "http://localhost:3000/entry",
       newItem,
       { headers: { Authorization: `Bearer ${token}` } }
     );
-  
+
     setItems([...items, response.data]);
     setProduct("");
     setPrice("");
     setBrand("");
     setDescription("");
   };
-  
+
   const deleteItem = async (id) => {
     const token = localStorage.getItem('token');
-    await axios.delete(`http://localhost:3000/product/${id}`, { headers: { Authorization: `Bearer ${token}` } });
-    setItems(items.filter((item) => item.id !== id));
+    try {
+      await axios.delete(`http://localhost:3000/entry/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      setItems(items.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error(error);
+    }
   };
+
 
   const editItem = async (id) => {
     const token = localStorage.getItem('token');
 
 
     setEditingItem(id);
-    const response = await axios.get(`http://localhost:3000/product/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+    const response = await axios.get(`http://localhost:3000/entry/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     const item = response.data;
     setProduct(item.product);
     setPrice(item.price);
@@ -89,11 +93,19 @@ export default function FormProducts2() {
 
   const updateItem = async (e) => {
     e.preventDefault();
-    const updatedItem = { product, price, brand, description, inserted_by };
+    const user = localStorage.getItem('user');
+    const updatedItem = {
+      product,
+      price,
+      brand,
+      description,
+      inserted_by
+    };
+    updatedItem.inserted_by = user;
     const token = localStorage.getItem('token');
 
 
-    const response = await axios.put(`http://localhost:3000/product/${editingItem}`, updatedItem, { headers: { Authorization: `Bearer ${token}` } });
+    const response = await axios.put(`http://localhost:3000/entry/${editingItem}`, updatedItem, { headers: { Authorization: `Bearer ${token}` } });
     setItems(
       items.map((item) => (item.id === editingItem ? response.data : item))
     );
@@ -143,6 +155,7 @@ export default function FormProducts2() {
           onChange={(e) => setDescription(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
         />
+
         <button
           type="submit"
           className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium"
@@ -175,7 +188,7 @@ export default function FormProducts2() {
       </form>
       <div className="p-0 m-0 text-center">
         <h3 className="text-gray-800 text-4xl font-bold text-center ">
-          CADASTRO
+          CADASTRO DE PRODUTOS
         </h3>
       </div>
       <div className="bg-white mx-auto px-4 md:px-8">
@@ -187,6 +200,7 @@ export default function FormProducts2() {
                 <th className="py-3 px-6">Preço</th>
                 <th className="py-3 px-6">Marca</th>
                 <th className="text-center py-3 px-6">Descrição</th>
+                <th className="py-3 px-6">Quantidade</th>
                 <th className="py-3 px-6">Funcionário</th>
                 <th className="py-3 px-6">Ações</th>
               </tr>
@@ -194,11 +208,9 @@ export default function FormProducts2() {
             <tbody className="text-gray-600 divide-y">
               {items
                 .filter((item) => {
-                  const searchTermUnidecoded = unidecode(searchTerm.toLowerCase());
-                  const itemUserUnidecoded = unidecode(
-                    item.product.toLowerCase()
-                  );
-                  if (searchTerm === "") {
+                  const searchTermUnidecoded = unidecode(searchTerm?.toLowerCase() || '');
+                  const itemUserUnidecoded = unidecode(item.product?.toLowerCase() || ''); // aqui foi adicionado o teste para item.product ser nulo ou indefinido
+                  if (searchTermUnidecoded === "") {
                     return item;
                   } else if (itemUserUnidecoded.includes(searchTermUnidecoded)) {
                     return item;
