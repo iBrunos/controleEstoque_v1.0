@@ -30,7 +30,7 @@ module.exports = (app) => {
     const id = req.params.id;
     const sql = `DELETE FROM entrys WHERE id = ?`;
 
-    connection.query(sql, [id], eAdmin,(error, results, fields) => {
+    connection.query(sql, [id], (error, results, fields) => {
       if (error) throw error;
       res.send(`Item with ID ${id} has been deleted`);
     });

@@ -5,17 +5,15 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import unidecode from "unidecode";
 
-export default function FormProducts2() {
+export default function FormExits() {
   const [items, setItems] = useState([]);
   const [product, setProduct] = useState("");
   const [price, setPrice] = useState("");
   const [brand, setBrand] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
-  const [inserted_by, setInserted_by] = useState("");
   const [editingItem, setEditingItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-
 
   useEffect(() => {
     fetchItems();
@@ -27,7 +25,6 @@ export default function FormProducts2() {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-
     // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
     try {
       const response = await axios.get('http://localhost:3000/exit', config);
@@ -41,7 +38,6 @@ export default function FormProducts2() {
     e.preventDefault();
 
     const user = localStorage.getItem('user');
-
     const token = localStorage.getItem('token');
 
     const newItem = {
@@ -50,10 +46,14 @@ export default function FormProducts2() {
       brand,
       description,
       amount,
-      inserted_by
+      inserted_by: user
     };
-    newItem.inserted_by = user;
-    const response = await axios.post("http://localhost:3000/exit",newItem,{ headers: { Authorization: `Bearer ${token}` }});
+
+    const response = await axios.post(
+      "http://localhost:3000/exit",
+      newItem,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
     setItems([...items, response.data]);
     setProduct("");
@@ -77,19 +77,14 @@ export default function FormProducts2() {
   const editItem = async (id) => {
     const token = localStorage.getItem('token');
 
-
     setEditingItem(id);
     const response = await axios.get(`http://localhost:3000/exit/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     const item = response.data;
     setProduct(item.product);
-    console.log(item.product)
     setPrice(item.price);
     setBrand(item.brand);
     setDescription(item.description);
     setAmount(item.amount);
-    setInserted_by(item.inserted_by);
-    setEditingItem(null);
-  
   };
 
   const updateItem = async (e) => {
@@ -101,11 +96,10 @@ export default function FormProducts2() {
       brand,
       description,
       amount,
-      inserted_by
+      inserted_by: user
     };
-    updatedItem.inserted_by = user;
-    const token = localStorage.getItem('token');
 
+    const token = localStorage.getItem('token');
 
     const response = await axios.put(`http://localhost:3000/exit/${editingItem}`, updatedItem, { headers: { Authorization: `Bearer ${token}` } });
     setItems(
@@ -116,11 +110,9 @@ export default function FormProducts2() {
     setBrand("");
     setDescription("");
     setAmount("");
-    setInserted_by("");
     setEditingItem(null);
     fetchItems();
   };
-
 
   return (
     <>
@@ -159,11 +151,11 @@ export default function FormProducts2() {
           className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
         />
         <input
-          type="text"
+          type="number"
           value={amount}
           placeholder="Quantidade"
           onChange={(e) => setAmount(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto"
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
         />
         <button
           type="submit"
@@ -197,7 +189,7 @@ export default function FormProducts2() {
       </form>
       <div className="p-0 m-0 text-center">
         <h3 className="text-gray-800 text-4xl font-bold text-center ">
-          SAÍDAS
+         SAÍDAS
         </h3>
       </div>
       <div className="bg-white mx-auto px-4 md:px-8">
