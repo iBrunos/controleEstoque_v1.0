@@ -19,7 +19,7 @@ export default function FormProducts2() {
 
   useEffect(() => {
     fetchItems();
-  }, [items]);
+  }, []);
 
   const fetchItems = async () => {
     const token = localStorage.getItem('token');
@@ -53,11 +53,7 @@ export default function FormProducts2() {
       inserted_by
     };
     newItem.inserted_by = user;
-    const response = await axios.post(
-      "http://localhost:3000/exit",
-      newItem,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    const response = await axios.post("http://localhost:3000/exit",newItem,{ headers: { Authorization: `Bearer ${token}` }});
 
     setItems([...items, response.data]);
     setProduct("");
@@ -86,13 +82,14 @@ export default function FormProducts2() {
     const response = await axios.get(`http://localhost:3000/exit/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     const item = response.data;
     setProduct(item.product);
+    console.log(item.product)
     setPrice(item.price);
     setBrand(item.brand);
     setDescription(item.description);
     setAmount(item.amount);
     setInserted_by(item.inserted_by);
     setEditingItem(null);
-    fetchItems();
+  
   };
 
   const updateItem = async (e) => {

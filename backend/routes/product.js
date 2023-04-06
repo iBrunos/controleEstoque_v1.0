@@ -1,9 +1,8 @@
-const { eAdmin } = require("../middleware/auth");
-
 module.exports = (app) => {
-    // CRUD DO PRODUCT
-const connection = require("../connection/connection");
-app.get('/product', eAdmin, (req, res) => {
+  // CRUD DO PRODUCT
+  const { eAdmin } = require("../middleware/auth");
+  const connection = require("../connection/connection");
+  app.get('/product', eAdmin, (req, res) => {
     const sql = 'SELECT * FROM products';
     connection.query(sql, (err, results) => {
       if (err) {
@@ -13,17 +12,31 @@ app.get('/product', eAdmin, (req, res) => {
       res.json(results);
     });
   });
+  app.get('/product/:id', eAdmin, (req, res) => {
+    const productId = req.params.id;
+    const sql = `SELECT * FROM products WHERE id = ${productId}`;
+    connection.query(sql, (err, results) => {
+      if (err) {
+        console.error('Error querying database:', err);
+        return res.status(500).json({ error: 'Error querying database' });
+      }
+      if (results.length === 0) {
+        return res.status(404).json({ error: 'Product not found' });
+      }
+      res.json(results[0]);
+    });
+  });
   app.delete('/product/:id', eAdmin, (req, res) => {
     const id = req.params.id;
     const sql = `DELETE FROM products WHERE id = ?`;
-  
+
     connection.query(sql, [id], (error, results, fields) => {
       if (error) throw error;
       res.send(`Item with ID ${id} has been deleted`);
     });
   });
-  
-  app.post('/product', eAdmin,(req, res) => {
+
+  app.post('/product', eAdmin, (req, res) => {
     const { product, price, brand, description, inserted_by } = req.body;
     const sql = 'INSERT INTO products (product, price, brand, description, inserted_by) VALUES (?, ?, ?, ?, ?)';
     connection.query(sql, [product, price, brand, description, inserted_by], (err, result) => {
@@ -34,11 +47,11 @@ app.get('/product', eAdmin, (req, res) => {
       res.json({ id: result.insertId, product, price, brand, description, inserted_by });
     });
   });
-  app.put('/product/:id', eAdmin,(req, res) => {
+  app.put('/product/:id', eAdmin, (req, res) => {
     const id = req.params.id;
     const { product, price, brand, description, inserted_by } = req.body;
-    const sql = `UPDATE product SET products = ?, price = ?, brand = ?, description = ?, inserted_by = ? WHERE id = ?`;
-  
+    const sql = `UPDATE products SET product = ?, price = ?, brand = ?, description = ?, inserted_by = ? WHERE id = ?`;
+
     connection.query(sql, [product, price, brand, description, inserted_by, id], (error, results, fields) => {
       if (error) throw error;
       res.send(`Item with ID ${id} has been updated`);

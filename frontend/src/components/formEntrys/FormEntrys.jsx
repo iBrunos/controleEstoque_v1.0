@@ -19,7 +19,7 @@ export default function FormProducts2() {
 
   useEffect(() => {
     fetchItems();
-  }, [items]);
+  }, []);
 
   const fetchItems = async () => {
     const token = localStorage.getItem('token');
@@ -92,7 +92,7 @@ export default function FormProducts2() {
     setAmount(item.amount);
     setInserted_by(item.inserted_by);
     setEditingItem(null);
-    fetchItems();
+    
   };
 
   const updateItem = async (e) => {

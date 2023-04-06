@@ -17,7 +17,7 @@ export default function FormProducts2() {
 
   useEffect(() => {
     fetchItems();
-  }, [items]);
+  }, []);
 
   const fetchItems = async () => {
     const token = localStorage.getItem('token');
@@ -27,7 +27,7 @@ export default function FormProducts2() {
     };
     // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
     try {
-      const response = await axios.get('http://localhost:3000/entry', config);
+      const response = await axios.get('http://localhost:3000/product', config);
       setItems(response.data);
     } catch (error) {
       console.error(error);
@@ -49,7 +49,7 @@ export default function FormProducts2() {
     };
     newItem.inserted_by = user;
     const response = await axios.post(
-      "http://localhost:3000/entry",
+      "http://localhost:3000/product",
       newItem,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -64,7 +64,7 @@ export default function FormProducts2() {
   const deleteItem = async (id) => {
     const token = localStorage.getItem('token');
     try {
-      await axios.delete(`http://localhost:3000/entry/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.delete(`http://localhost:3000/product/${id}`, { headers: { Authorization: `Bearer ${token}` } });
       setItems(items.filter((item) => item.id !== id));
     } catch (error) {
       console.error(error);
@@ -76,15 +76,13 @@ export default function FormProducts2() {
     const token = localStorage.getItem('token');
 
     setEditingItem(id);
-    const response = await axios.get(`http://localhost:3000/entry/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+    const response = await axios.get(`http://localhost:3000/product/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     const item = response.data;
     setProduct(item.product);
     setPrice(item.price);
     setBrand(item.brand);
     setDescription(item.description);
     setInserted_by(item.inserted_by);
-    setEditingItem(null);
-    fetchItems();
   };
 
   const updateItem = async (e) => {
@@ -100,7 +98,7 @@ export default function FormProducts2() {
     updatedItem.inserted_by = user;
     const token = localStorage.getItem('token');
 
-    const response = await axios.put(`http://localhost:3000/entry/${editingItem}`, updatedItem, { headers: { Authorization: `Bearer ${token}` } });
+    const response = await axios.put(`http://localhost:3000/product/${editingItem}`, updatedItem, { headers: { Authorization: `Bearer ${token}` } });
     setItems(
       items.map((item) => (item.id === editingItem ? response.data : item))
     );
@@ -149,12 +147,12 @@ export default function FormProducts2() {
           onChange={(e) => setDescription(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
         />
-        <button
-          type="submit"
-          className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium"
-        >
-          {editingItem !== null ? "Editar Produto" : "Adicionar Produto"}
-        </button>
+<button
+    type="submit"
+    className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium"
+>
+    {editingItem !== null ? "Editar Produto" : "Adicionar Produto"}
+</button>
         <section className="flex items-center space-x-2 border rounded-md p-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -193,7 +191,6 @@ export default function FormProducts2() {
                 <th className="py-3 px-6">Preço</th>
                 <th className="py-3 px-6">Marca</th>
                 <th className="text-center py-3 px-6">Descrição</th>
-                <th className="py-3 px-6">Quantidade</th>
                 <th className="py-3 px-6">Funcionário</th>
                 <th className="py-3 px-6">Ações</th>
               </tr>
