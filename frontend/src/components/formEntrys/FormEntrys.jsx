@@ -7,6 +7,7 @@ import unidecode from "unidecode";
 
 export default function FormEntrys() {
   const [items, setItems] = useState([]);
+  const [items2, setItems2] = useState([]);
   const [product, setProduct] = useState("");
   const [price, setPrice] = useState("");
   const [brand, setBrand] = useState("");
@@ -17,18 +18,34 @@ export default function FormEntrys() {
 
   useEffect(() => {
     fetchItems();
+    fetchItems2()
   }, []);
 
   const fetchItems = async () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     // definir o cabeçalho `Authorization` com o token JWT
     const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+    // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
+    try {
+      const response = await axios.get("http://localhost:3000/entry", config);
+      setItems(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  const fetchItems2 = async () => {
+    const token = localStorage.getItem('token');
+    // definir o cabeçalho `Authorization` com o token JWT
+    const config2 = {
       headers: { Authorization: `Bearer ${token}` }
     };
     // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
     try {
-      const response = await axios.get('http://localhost:3000/entry', config);
-      setItems(response.data);
+      const response2 = await axios.get('http://localhost:3000/product', config2);
+      setItems2(response2.data);
     } catch (error) {
       console.error(error);
     }
@@ -37,8 +54,8 @@ export default function FormEntrys() {
   const addItem = async (e) => {
     e.preventDefault();
 
-    const user = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
+    const user = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
 
     const newItem = {
       product,
@@ -46,14 +63,12 @@ export default function FormEntrys() {
       brand,
       description,
       amount,
-      inserted_by: user
+      inserted_by: user,
     };
 
-    const response = await axios.post(
-      "http://localhost:3000/entry",
-      newItem,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    const response = await axios.post("http://localhost:3000/entry", newItem, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
     setItems([...items, response.data]);
     setProduct("");
@@ -64,21 +79,24 @@ export default function FormEntrys() {
   };
 
   const deleteItem = async (id) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     try {
-      await axios.delete(`http://localhost:3000/entry/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.delete(`http://localhost:3000/entry/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setItems(items.filter((item) => item.id !== id));
     } catch (error) {
       console.error(error);
     }
   };
 
-
   const editItem = async (id) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     setEditingItem(id);
-    const response = await axios.get(`http://localhost:3000/entry/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+    const response = await axios.get(`http://localhost:3000/entry/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     const item = response.data;
     setProduct(item.product);
     setPrice(item.price);
@@ -89,19 +107,23 @@ export default function FormEntrys() {
 
   const updateItem = async (e) => {
     e.preventDefault();
-    const user = localStorage.getItem('user');
+    const user = localStorage.getItem("user");
     const updatedItem = {
       product,
       price,
       brand,
       description,
       amount,
-      inserted_by: user
+      inserted_by: user,
     };
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
-    const response = await axios.put(`http://localhost:3000/entry/${editingItem}`, updatedItem, { headers: { Authorization: `Bearer ${token}` } });
+    const response = await axios.put(
+      `http://localhost:3000/entry/${editingItem}`,
+      updatedItem,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
     setItems(
       items.map((item) => (item.id === editingItem ? response.data : item))
     );
@@ -119,16 +141,34 @@ export default function FormEntrys() {
       <Header />
       <form
         onSubmit={editingItem !== null ? updateItem : addItem}
-        className="flex flex-row mb-0 mt-1 bg-white border-b-gray-200 border-b pl-32 pt-1 pb-2 ml-0"
+        className="flex flex-row mb-0 mt-1 bg-white border-b-gray-200 border-b pl-8 pt-1 pb-2 ml-0"
       >
-        <input
-          type="text"
-          value={product}
-          placeholder="Produto"
-          onChange={(e) => setProduct(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto "
-          id="input__product"
-        />
+        <div className="relative max-w-xs mr-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="absolute top-0 bottom-0 w-6 h-6 my-auto text-gray-400 right-1"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <select
+            className="w-full py-2  pl-2 pr-6 text-gray-500 border-gray-300 bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-pink-500 cursor-pointer"
+            value={product}
+            onChange={(e) => setProduct(e.target.value)}
+          >
+            {items2.map((item2) => (
+              <option key={item2.id} className="hover:text-pink-500 hover:bg-pink-50" value={item2.product}>
+                {item2.product}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <input
           type="text"
           value={price}
@@ -148,22 +188,23 @@ export default function FormEntrys() {
           value={description}
           placeholder="Descrição"
           onChange={(e) => setDescription(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto"
         />
         <input
           type="number"
           value={amount}
           placeholder="Quantidade"
           onChange={(e) => setAmount(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[8rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
         />
+
         <button
           type="submit"
           className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium"
         >
-          {editingItem !== null ? "Editar Entrada" : "Adicionar Entrada"}
+          {editingItem !== null ? "Salvar Entrada" : "Adicionar Entrada"}
         </button>
-        <section className="flex items-center space-x-2 border rounded-md p-2">
+        <section className="flex items-center space-x-2 border rounded-md p-2 ml-60">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 flex-none text-gray-300"
@@ -187,14 +228,14 @@ export default function FormEntrys() {
           />
         </section>
       </form>
-      <div className="p-0 m-0 text-center">
+      <div className="p-0 m-2 text-center">
         <h3 className="text-gray-800 text-4xl font-bold text-center ">
           ENTRADAS
         </h3>
       </div>
       <div className="bg-white mx-auto px-4 md:px-8">
-        <div className="mt-12 shadow-sm border rounded-lg overflow-x-auto">
-          <table className="w-full table-auto text-sm text-left">
+        <div className="mt-1 shadow-sm border rounded-lg overflow-x-auto">
+          <table className="w-full table-auto text-sm text-left ">
             <thead className="bg-gray-50 text-gray-600 font-medium border-b">
               <tr>
                 <th className="py-3 px-6">Produto</th>
@@ -206,14 +247,20 @@ export default function FormEntrys() {
                 <th className="py-3 px-6">Ações</th>
               </tr>
             </thead>
-            <tbody className="text-gray-600 divide-y">
+            <tbody className="text-gray-600 ">
               {items
                 .filter((item) => {
-                  const searchTermUnidecoded = unidecode(searchTerm?.toLowerCase() || '');
-                  const itemUserUnidecoded = unidecode(item.product?.toLowerCase() || ''); // aqui foi adicionado o teste para item.product ser nulo ou indefinido
+                  const searchTermUnidecoded = unidecode(
+                    searchTerm?.toLowerCase() || ""
+                  );
+                  const itemUserUnidecoded = unidecode(
+                    item.product?.toLowerCase() || ""
+                  ); // aqui foi adicionado o teste para item.product ser nulo ou indefinido
                   if (searchTermUnidecoded === "") {
                     return item;
-                  } else if (itemUserUnidecoded.includes(searchTermUnidecoded)) {
+                  } else if (
+                    itemUserUnidecoded.includes(searchTermUnidecoded)
+                  ) {
                     return item;
                   }
                   return null;

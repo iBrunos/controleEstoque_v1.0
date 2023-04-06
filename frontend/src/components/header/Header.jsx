@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import StoreIcon from '@mui/icons-material/Store';
+import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -95,18 +96,17 @@ export default function Header() {
                     <div className={`bg-white absolute z-20 w-full top-16 left-0 p-4 border-b lg:static lg:block lg:border-none ${menuState ? '' : 'hidden'}`}>
                         <ul className="mt-12 space-y-5 lg:flex lg:space-x-6 lg:space-y-0 lg:mt-0">
                             <li className="text-gray-600 ">
-                                <button className="mr-6 hover:text-gray-900" onClick={navigateToEstoques}>
-                                    <StoreIcon className="mr-3" />
-                                    Cadastro
-                                    
+                                <button className="mr-6 hover:text-gray-900 font-bold" onClick={navigateToEstoques}>
+                                    <ProductionQuantityLimitsIcon className="mr-1 font-bold" />
+                                    CADASTRO
                                 </button>
-                                <button className="mr-6 hover:text-gray-900" onClick={navigateToEntradas}>
-                                    <AddShoppingCartIcon className="mr-3" />
-                                    Entradas
+                                <button className="mr-6 hover:text-gray-900 font-bold" onClick={navigateToEntradas}>
+                                    <AddShoppingCartIcon className="mr-1 font-bold" />
+                                    ENTRADAS
                                 </button>
-                                <button className="mr-6 hover:text-gray-900" onClick={navigateToSaidas}>
-                                    <RemoveShoppingCartIcon className="mr-3" />
-                                    Saidas
+                                <button className="mr-6 hover:text-gray-900 font-bold" onClick={navigateToSaidas}>
+                                    <RemoveShoppingCartIcon className="mr-1 font-bold" />
+                                    SAÍDAS
                                 </button>
                             </li>
                         </ul>

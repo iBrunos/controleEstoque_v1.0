@@ -116,7 +116,7 @@ export default function FormProducts2() {
       <Header />
       <form
         onSubmit={editingItem !== null ? updateItem : addItem}
-        className="flex flex-row mb-0 mt-1 bg-white border-b-gray-200 border-b pl-32 pt-1 pb-2 ml-0"
+        className="flex flex-row mb-0 mt-1 bg-white border-b-gray-200 border-b pl-8 pt-1 pb-2 ml-0"
       >
         <input
           type="text"
@@ -151,9 +151,9 @@ export default function FormProducts2() {
     type="submit"
     className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium"
 >
-    {editingItem !== null ? "Editar Produto" : "Adicionar Produto"}
+    {editingItem !== null ? "Salvar Produto" : "Adicionar Produto"}
 </button>
-        <section className="flex items-center space-x-2 border rounded-md p-2">
+        <section className="flex items-center space-x-2 border rounded-md p-2 ml-60">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 flex-none text-gray-300"
@@ -169,7 +169,7 @@ export default function FormProducts2() {
             />
           </svg>
           <input
-            className="w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto"
+            className="w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto "
             onChange={(e) => setSearchTerm(e.target.value)}
             type="text"
             placeholder="Pesquisar"
@@ -177,13 +177,13 @@ export default function FormProducts2() {
           />
         </section>
       </form>
-      <div className="p-0 m-0 text-center">
+      <div className="p-0 m-2 text-center">
         <h3 className="text-gray-800 text-4xl font-bold text-center ">
           CADASTRO DE PRODUTOS
         </h3>
       </div>
       <div className="bg-white mx-auto px-4 md:px-8">
-        <div className="mt-12 shadow-sm border rounded-lg overflow-x-auto">
+        <div className="mt-1 shadow-sm border rounded-lg overflow-x-auto">
           <table className="w-full table-auto text-sm text-left">
             <thead className="bg-gray-50 text-gray-600 font-medium border-b">
               <tr>
@@ -213,7 +213,7 @@ export default function FormProducts2() {
                       {item.product}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {item.price}
+                     R$: {item.price}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {item.brand}
