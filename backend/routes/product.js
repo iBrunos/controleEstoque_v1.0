@@ -4,7 +4,7 @@ module.exports = (app) => {
     // CRUD DO PRODUCT
 const connection = require("../connection/connection");
 app.get('/product', eAdmin, (req, res) => {
-    const sql = 'SELECT * FROM product';
+    const sql = 'SELECT * FROM products';
     connection.query(sql, (err, results) => {
       if (err) {
         console.error('Error querying database:', err);
@@ -15,7 +15,7 @@ app.get('/product', eAdmin, (req, res) => {
   });
   app.delete('/product/:id', eAdmin, (req, res) => {
     const id = req.params.id;
-    const sql = `DELETE FROM product WHERE id = ?`;
+    const sql = `DELETE FROM products WHERE id = ?`;
   
     connection.query(sql, [id], (error, results, fields) => {
       if (error) throw error;
@@ -25,7 +25,7 @@ app.get('/product', eAdmin, (req, res) => {
   
   app.post('/product', eAdmin,(req, res) => {
     const { product, price, brand, description, inserted_by } = req.body;
-    const sql = 'INSERT INTO product (product, price, brand, description, inserted_by) VALUES (?, ?, ?, ?, ?)';
+    const sql = 'INSERT INTO products (product, price, brand, description, inserted_by) VALUES (?, ?, ?, ?, ?)';
     connection.query(sql, [product, price, brand, description, inserted_by], (err, result) => {
       if (err) {
         console.error('Error inserting into database:', err);
@@ -37,7 +37,7 @@ app.get('/product', eAdmin, (req, res) => {
   app.put('/product/:id', eAdmin,(req, res) => {
     const id = req.params.id;
     const { product, price, brand, description, inserted_by } = req.body;
-    const sql = `UPDATE product SET product = ?, price = ?, brand = ?, description = ?, inserted_by = ? WHERE id = ?`;
+    const sql = `UPDATE product SET products = ?, price = ?, brand = ?, description = ?, inserted_by = ? WHERE id = ?`;
   
     connection.query(sql, [product, price, brand, description, inserted_by, id], (error, results, fields) => {
       if (error) throw error;
