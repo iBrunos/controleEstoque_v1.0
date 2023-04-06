@@ -15,7 +15,6 @@ export default function FormProducts2() {
   const [editingItem, setEditingItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-
   useEffect(() => {
     fetchItems();
   }, [items]);
@@ -26,7 +25,6 @@ export default function FormProducts2() {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-
     // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
     try {
       const response = await axios.get('http://localhost:3000/entry', config);
@@ -40,7 +38,6 @@ export default function FormProducts2() {
     e.preventDefault();
 
     const user = localStorage.getItem('user');
-
     const token = localStorage.getItem('token');
 
     const newItem = {
@@ -78,7 +75,6 @@ export default function FormProducts2() {
   const editItem = async (id) => {
     const token = localStorage.getItem('token');
 
-
     setEditingItem(id);
     const response = await axios.get(`http://localhost:3000/entry/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     const item = response.data;
@@ -104,7 +100,6 @@ export default function FormProducts2() {
     updatedItem.inserted_by = user;
     const token = localStorage.getItem('token');
 
-
     const response = await axios.put(`http://localhost:3000/entry/${editingItem}`, updatedItem, { headers: { Authorization: `Bearer ${token}` } });
     setItems(
       items.map((item) => (item.id === editingItem ? response.data : item))
@@ -117,7 +112,6 @@ export default function FormProducts2() {
     setEditingItem(null);
     fetchItems();
   };
-
 
   return (
     <>
@@ -155,7 +149,6 @@ export default function FormProducts2() {
           onChange={(e) => setDescription(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
         />
-
         <button
           type="submit"
           className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium"
