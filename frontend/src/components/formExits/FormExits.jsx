@@ -5,18 +5,19 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import unidecode from "unidecode";
 
-export default function FormExits() {
+export default function FormProducts() {
   const [items, setItems] = useState([]);
+  const [items2, setItems2] = useState([]);
   const [product, setProduct] = useState("");
-  const [price, setPrice] = useState("");
-  const [brand, setBrand] = useState("");
-  const [description, setDescription] = useState("");
+  const [observation, setObservation] = useState("");
+  const [inserted_by, setInserted_by] = useState("");
   const [amount, setAmount] = useState("");
   const [editingItem, setEditingItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchItems();
+    dropDown();
   }, []);
 
   const fetchItems = async () => {
@@ -34,6 +35,20 @@ export default function FormExits() {
     }
   };
 
+  const dropDown = async () => {
+    const token = localStorage.getItem('token');
+    // definir o cabeçalho `Authorization` com o token JWT
+    const config2 = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
+    try {
+      const response2 = await axios.get('http://localhost:3000/product', config2);
+      setItems2(response2.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const addItem = async (e) => {
     e.preventDefault();
 
@@ -42,13 +57,11 @@ export default function FormExits() {
 
     const newItem = {
       product,
-      price,
-      brand,
-      description,
+      observation,
       amount,
-      inserted_by: user
+      inserted_by
     };
-
+    newItem.inserted_by = user;
     const response = await axios.post(
       "http://localhost:3000/exit",
       newItem,
@@ -57,10 +70,9 @@ export default function FormExits() {
 
     setItems([...items, response.data]);
     setProduct("");
-    setPrice("");
-    setBrand("");
-    setDescription("");
+    setObservation("");
     setAmount("");
+    fetchItems();
   };
 
   const deleteItem = async (id) => {
@@ -81,37 +93,38 @@ export default function FormExits() {
     const response = await axios.get(`http://localhost:3000/exit/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     const item = response.data;
     setProduct(item.product);
-    setPrice(item.price);
-    setBrand(item.brand);
-    setDescription(item.description);
+    setObservation(item.observation);
+    setInserted_by(item.inserted_by);
     setAmount(item.amount);
   };
 
   const updateItem = async (e) => {
     e.preventDefault();
     const user = localStorage.getItem('user');
-    const updatedItem = {
+    const newItem = {
       product,
-      price,
-      brand,
-      description,
+      observation,
       amount,
-      inserted_by: user
+      inserted_by
     };
-
+    newItem.inserted_by = user;
     const token = localStorage.getItem('token');
 
-    const response = await axios.put(`http://localhost:3000/exit/${editingItem}`, updatedItem, { headers: { Authorization: `Bearer ${token}` } });
+    const response = await axios.put(
+      `http://localhost:3000/product/${editingItem}`,
+      newItem,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
     setItems(
       items.map((item) => (item.id === editingItem ? response.data : item))
     );
     setProduct("");
-    setPrice("");
-    setBrand("");
-    setDescription("");
+    setObservation("");
     setAmount("");
+    setInserted_by("");
     setEditingItem(null);
     fetchItems();
+    dropDown();
   };
 
   return (
@@ -119,51 +132,55 @@ export default function FormExits() {
       <Header />
       <form
         onSubmit={editingItem !== null ? updateItem : addItem}
-        className="flex flex-row mb-0 mt-1 bg-white border-b-gray-200 border-b pl-32 pt-1 pb-2 ml-0"
+        className="flex flex-row mb-0 mt-1 bg-white border-b-gray-200 border-b pl-8 pt-1 pb-2 ml-0"
       >
+        <div className="relative w-80 mr-2 ">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="absolute top-0 bottom-0 w-6 h-6 my-auto text-gray-400 right-1"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <select
+            className="w-full py-2  pl-2 pr-6 text-gray-500 border-gray-300 bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-pink-500 cursor-pointer"
+            value={product}
+            onChange={(e) => setProduct(e.target.value)}
+          >
+            {items2.map((item2) => (
+              <option key={item2.id} className="hover:text-pink-500 hover:bg-pink-50" value={item2.product}>
+                {item2.product}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <input
           type="text"
-          value={product}
-          placeholder="Produto"
-          onChange={(e) => setProduct(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto "
-          id="input__product"
-        />
-        <input
-          type="text"
-          value={price}
-          placeholder="Preço"
-          onChange={(e) => setPrice(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto"
-        />
-        <input
-          type="text"
-          value={brand}
-          placeholder="Marca"
-          onChange={(e) => setBrand(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto"
-        />
-        <input
-          type="text"
-          value={description}
-          placeholder="Descrição"
-          onChange={(e) => setDescription(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
+          value={observation}
+          placeholder="Observação"
+          onChange={(e) => setObservation(e.target.value)}
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[40rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
         />
         <input
           type="number"
           value={amount}
           placeholder="Quantidade"
           onChange={(e) => setAmount(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[10rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
         />
         <button
           type="submit"
           className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium"
         >
-          {editingItem !== null ? "Editar Saída" : "Adicionar Saída"}
+          {editingItem !== null ? "Salvar Entrada" : "Adicionar Entrada"}
         </button>
-        <section className="flex items-center space-x-2 border rounded-md p-2">
+        <section className="flex items-center space-x-2 border rounded-md p-2 ml-36">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 flex-none text-gray-300"
@@ -179,7 +196,7 @@ export default function FormExits() {
             />
           </svg>
           <input
-            className="w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto"
+            className="outline-none appearance-none placeholder-gray-500 text-gray-500 w-64 "
             onChange={(e) => setSearchTerm(e.target.value)}
             type="text"
             placeholder="Pesquisar"
@@ -187,21 +204,18 @@ export default function FormExits() {
           />
         </section>
       </form>
-      <div className="p-0 m-0 text-center">
+      <div className="p-0 m-2 text-center">
         <h3 className="text-gray-800 text-4xl font-bold text-center ">
-         SAÍDAS
+          SAÍDAS
         </h3>
       </div>
       <div className="bg-white mx-auto px-4 md:px-8">
-        <div className="mt-12 shadow-sm border rounded-lg overflow-x-auto">
+        <div className="mt-1 shadow-sm border rounded-lg overflow-x-auto">
           <table className="w-full table-auto text-sm text-left">
             <thead className="bg-gray-50 text-gray-600 font-medium border-b">
               <tr>
                 <th className="py-3 px-6">Produto</th>
-                <th className="py-3 px-6">Preço</th>
-                <th className="py-3 px-6">Marca</th>
-                <th className="text-center py-3 px-6">Descrição</th>
-                <th className="py-3 px-6">Quantidade</th>
+                <th className="text-center py-3 px-6">Observação</th>
                 <th className="py-3 px-6">Funcionário</th>
                 <th className="py-3 px-6">Ações</th>
               </tr>
@@ -223,17 +237,8 @@ export default function FormExits() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       {item.product}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item.price}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item.brand}
-                    </td>
                     <td className="px-6 py-4 whitespace-normal break-words w-[50rem]">
-                      {item.description}
-                    </td>
-                    <td className="px-8 py-4 whitespace-nowrap">
-                      {item.amount}
+                      {item.observation}
                     </td>
                     <td className="px-8 py-4 whitespace-nowrap">
                       {item.inserted_by}

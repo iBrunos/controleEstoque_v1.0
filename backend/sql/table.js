@@ -11,7 +11,7 @@ class Tables {
     this.insertProdutcs();
     this.insertUsers();
     this.insertExits();
-    this.insertProducts();
+    this.insertEntrys();
   }
 
   createProduct() {
@@ -41,7 +41,8 @@ class Tables {
   }
   createEntrys() {
     const sql =
-      "CREATE TABLE IF NOT EXISTS entrys (id int NOT NULL AUTO_INCREMENT, product varchar(30) NOT NULL, price varchar(20) NOT NULL, brand varchar(20) NOT NULL, description text NOT NULL, amount int NOT NULL, inserted_by varchar(30) NOT NULL, PRIMARY KEY(id))";
+      "CREATE TABLE IF NOT EXISTS entrys (id int NOT NULL AUTO_INCREMENT, product varchar(30) NOT NULL, observation text NOT NULL, amount int NOT NULL, inserted_by varchar(30) NOT NULL,PRIMARY KEY(id)) ";
+
 
     this.connection.query(sql, (erro) => {
       if (erro) {
@@ -53,7 +54,8 @@ class Tables {
   }
   createExits() {
     const sql =
-      "CREATE TABLE IF NOT EXISTS exits (id int NOT NULL AUTO_INCREMENT, product varchar(30) NOT NULL, price varchar(20) NOT NULL, brand varchar(20) NOT NULL, description text NOT NULL, amount int NOT NULL, inserted_by varchar(30) NOT NULL, PRIMARY KEY(id))";
+      "CREATE TABLE IF NOT EXISTS exits (id int NOT NULL AUTO_INCREMENT, product varchar(30) NOT NULL, observation text NOT NULL, amount int NOT NULL, inserted_by varchar(30) NOT NULL,PRIMARY KEY(id)) ";
+
 
     this.connection.query(sql, (erro) => {
       if (erro) {
@@ -98,7 +100,7 @@ class Tables {
     });
   }
   insertExits() {
-    const sql = "REPLACE INTO exits (product, price, brand, description, amount, inserted_by) VALUES ('Product 1', 10.99, 'Brand A', 'Description of Product 1', 100, 'User 1') , ('Product 2', 25.50, 'Brand B', 'Description of Product 2', 50, 'User 2') , ('Product 3', 15.75, 'Brand C', 'Description of Product 3', 75, 'User 3') , ('Product 4', 5.99, 'Brand D', 'Description of Product 4', 200, 'User 4') , ('Product 5', 50.00, 'Brand E', 'Description of Product 5', 25, 'User 5')";
+    const sql = "REPLACE INTO exits (product, observation, amount, inserted_by) VALUES ('Batom Vermelho', 'Observation of Batom Vermelho', 100, 'User 1') , ('Rímel', 'Observation of Rímel', 50, 'User 2') , ('Pó de Banana', 'Observation of Pó de Banana', 75, 'User 3') , ('Blush em bastão', 'Observation of Blush em bastão', 200, 'User 4')";
 
     this.connection.query(sql, (erro) => {
       if (erro) {
@@ -108,8 +110,8 @@ class Tables {
       }
     });
   }
-  insertProducts() {
-    const sql = "REPLACE INTO entrys (product, price, brand, description, amount, inserted_by) VALUES ('Product 1', 10.99, 'Brand A', 'Description of Product 1', 100, 'User 1') , ('Product 2', 25.50, 'Brand B', 'Description of Product 2', 50, 'User 2') , ('Product 3', 15.75, 'Brand C', 'Description of Product 3', 75, 'User 3') , ('Product 4', 5.99, 'Brand D', 'Description of Product 4', 200, 'User 4') , ('Product 5', 50.00, 'Brand E', 'Description of Product 5', 25, 'User 5')";
+  insertEntrys() {
+    const sql = "REPLACE INTO entrys (product, observation, amount, inserted_by) VALUES ('Batom Vermelho', 'Observation of Batom Vermelho', 100, 'User 1') , ('Rímel', 'Observation of Rímel', 50, 'User 2') , ('Pó de Banana', 'Observation of Pó de Banana', 75, 'User 3') , ('Blush em bastão', 'Observation of Blush em bastão', 200, 'User 4')";
 
     this.connection.query(sql, (erro) => {
       if (erro) {

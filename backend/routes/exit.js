@@ -1,7 +1,8 @@
 module.exports = (app) => {
   const { eAdmin } = require("../middleware/auth"); // CRUD DO exits
   const connection = require("../connection/connection");
-  app.get('/exit', eAdmin,(req, res) => {
+  
+  app.get('/exit', eAdmin, (req, res) => {
     const sql = 'SELECT * FROM exits';
     connection.query(sql, (err, results) => {
       if (err) {
@@ -11,6 +12,7 @@ module.exports = (app) => {
       res.json(results);
     });
   });
+  
   app.get('/exit/:id', eAdmin, (req, res) => {
     const productId = req.params.id;
     const sql = `SELECT * FROM exits WHERE id = ${productId}`;
@@ -25,9 +27,10 @@ module.exports = (app) => {
       res.json(results[0]);
     });
   });
-  app.delete('/exit/:id', eAdmin,(req, res) => {
+  
+  app.delete('/exit/:id', eAdmin, (req, res) => {
     const id = req.params.id;
-    const sql = `DELETE FROM exits WHERE id = ?`;
+    const sql = 'DELETE FROM exits WHERE id = ?';
 
     connection.query(sql, [id], (error, results, fields) => {
       if (error) throw error;
@@ -35,23 +38,24 @@ module.exports = (app) => {
     });
   });
 
-  app.post('/exit', eAdmin,(req, res) => {
-    const { product, price, brand, description, amount, inserted_by } = req.body;
-    const sql = 'INSERT INTO exits (product, price, brand, description, amount, inserted_by) VALUES (?, ?, ?, ?, ?, ?)';
-    connection.query(sql, [product, price, brand, description, amount, inserted_by], (err, result) => {
+  app.post('/exit', eAdmin, (req, res) => {
+    const { product, observation, amount, inserted_by } = req.body;
+    const sql = 'INSERT INTO exits (product, observation, amount, inserted_by) VALUES (?, ?, ?, ?)';
+    connection.query(sql, [product, observation, amount, inserted_by], (err, result) => {
       if (err) {
         console.error('Error inserting into database:', err);
         return res.status(500).json({ error: 'Error inserting into database' });
       }
-      res.json({ id: result.insertId, product, price, brand, description, amount });
+      res.json({ id: result.insertId, product, observation, amount });
     });
   });
-  app.put('/exit/:id', eAdmin,(req, res) => {
+  
+  app.put('/exit/:id', eAdmin, (req, res) => {
     const id = req.params.id;
-    const { product, price, brand, description, amount, inserted_by } = req.body;
-    const sql = `UPDATE exits SET product = ?, price = ?, brand = ?, description = ?, amount = ?, inserted_by = ? WHERE id = ?`;
+    const { product, observation, amount, inserted_by } = req.body;
+    const sql = 'UPDATE exits SET product = ?, observation = ?, amount = ?, inserted_by = ? WHERE id = ?';
 
-    connection.query(sql, [product, price, brand, description, amount, inserted_by, id], (error, results, fields) => {
+    connection.query(sql, [product, observation, amount, inserted_by, id], (error, results, fields) => {
       if (error) throw error;
       res.send(`Item with ID ${id} has been updated`);
     });
