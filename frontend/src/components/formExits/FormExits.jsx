@@ -10,7 +10,7 @@ export default function FormExits() {
   const [product, setProduct] = useState("");
   const [price, setPrice] = useState("");
   const [brand, setBrand] = useState("");
-  const [description, setDescription] = useState("");
+  const [observation, setobservation] = useState("");
   const [amount, setAmount] = useState("");
   const [editingItem, setEditingItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -44,7 +44,7 @@ export default function FormExits() {
       product,
       price,
       brand,
-      description,
+      observation,
       amount,
       inserted_by: user
     };
@@ -59,7 +59,7 @@ export default function FormExits() {
     setProduct("");
     setPrice("");
     setBrand("");
-    setDescription("");
+    setobservation("");
     setAmount("");
   };
 
@@ -83,7 +83,7 @@ export default function FormExits() {
     setProduct(item.product);
     setPrice(item.price);
     setBrand(item.brand);
-    setDescription(item.description);
+    setobservation(item.observation);
     setAmount(item.amount);
   };
 
@@ -94,7 +94,7 @@ export default function FormExits() {
       product,
       price,
       brand,
-      description,
+      observation,
       amount,
       inserted_by: user
     };
@@ -108,7 +108,7 @@ export default function FormExits() {
     setProduct("");
     setPrice("");
     setBrand("");
-    setDescription("");
+    setobservation("");
     setAmount("");
     setEditingItem(null);
     fetchItems();
@@ -145,9 +145,9 @@ export default function FormExits() {
         />
         <input
           type="text"
-          value={description}
-          placeholder="Descrição"
-          onChange={(e) => setDescription(e.target.value)}
+          value={observation}
+          placeholder="Observação"
+          onChange={(e) => setobservation(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
         />
         <input
@@ -200,7 +200,7 @@ export default function FormExits() {
                 <th className="py-3 px-6">Produto</th>
                 <th className="py-3 px-6">Preço</th>
                 <th className="py-3 px-6">Marca</th>
-                <th className="text-center py-3 px-6">Descrição</th>
+                <th className="text-center py-3 px-6">Observação</th>
                 <th className="py-3 px-6">Quantidade</th>
                 <th className="py-3 px-6">Funcionário</th>
                 <th className="py-3 px-6">Ações</th>
@@ -230,7 +230,7 @@ export default function FormExits() {
                       {item.brand}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words w-[50rem]">
-                      {item.description}
+                      {item.observation}
                     </td>
                     <td className="px-8 py-4 whitespace-nowrap">
                       {item.amount}

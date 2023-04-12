@@ -11,7 +11,8 @@ export default function FormEntrys() {
   const [product, setProduct] = useState("");
   const [price, setPrice] = useState("");
   const [brand, setBrand] = useState("");
-  const [description, setDescription] = useState("");
+  const [observation, setObservation] = useState("");
+  const [inserted_by, setInserted_by] = useState("");
   const [amount, setAmount] = useState("");
   const [editingItem, setEditingItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -61,11 +62,11 @@ export default function FormEntrys() {
       product,
       price,
       brand,
-      description,
+      observation,
       amount,
-      inserted_by: user,
+      inserted_by
     };
-
+    newItem.inserted_by = user;
     const response = await axios.post("http://localhost:3000/entry", newItem, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -74,7 +75,7 @@ export default function FormEntrys() {
     setProduct("");
     setPrice("");
     setBrand("");
-    setDescription("");
+    setObservation("");
     setAmount("");
   };
 
@@ -101,7 +102,8 @@ export default function FormEntrys() {
     setProduct(item.product);
     setPrice(item.price);
     setBrand(item.brand);
-    setDescription(item.description);
+    setObservation(item.observation);
+    setInserted_by(item.inserted_by);
     setAmount(item.amount);
   };
 
@@ -112,7 +114,7 @@ export default function FormEntrys() {
       product,
       price,
       brand,
-      description,
+      observation,
       amount,
       inserted_by: user,
     };
@@ -130,10 +132,12 @@ export default function FormEntrys() {
     setProduct("");
     setPrice("");
     setBrand("");
-    setDescription("");
+    setObservation("");
     setAmount("");
+    setInserted_by("");
     setEditingItem(null);
     fetchItems();
+    fetchItems2();
   };
 
   return (
@@ -185,9 +189,9 @@ export default function FormEntrys() {
         />
         <input
           type="text"
-          value={description}
-          placeholder="Descrição"
-          onChange={(e) => setDescription(e.target.value)}
+          value={observation}
+          placeholder="Observação"
+          onChange={(e) => setObservation(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto"
         />
         <input
@@ -241,7 +245,7 @@ export default function FormEntrys() {
                 <th className="py-3 px-6">Produto</th>
                 <th className="py-3 px-6">Preço</th>
                 <th className="py-3 px-6">Marca</th>
-                <th className="text-center py-3 px-6">Descrição</th>
+                <th className="text-center py-3 px-6">Observação</th>
                 <th className="py-3 px-6">Quantidade</th>
                 <th className="py-3 px-6">Funcionário</th>
                 <th className="py-3 px-6">Ações</th>
@@ -277,7 +281,7 @@ export default function FormEntrys() {
                       {item.brand}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words w-[50rem]">
-                      {item.description}
+                      {item.observation}
                     </td>
                     <td className="px-8 py-4 whitespace-nowrap">
                       {item.amount}
