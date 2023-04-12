@@ -2,6 +2,8 @@ import FormProduct from './components/formProducts/FormProducts';
 import FormUser from './components/formUsers/FormUsers';
 import FormExit from './components/formExits/FormExits';
 import FormEntry from './components/formEntrys/FormEntrys';
+import FormReports from './components/formReports/FormReports';
+import FormStock from './components/formStock/FormStock';
 import Login from './components/login/Login';
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 const Rotas = () => (
@@ -16,6 +18,10 @@ const Rotas = () => (
           <Route path="/Entradas"  element={<FormEntry />}>
           </Route>
           <Route path="/Saídas"  element={<FormExit />}>
+          </Route>
+          <Route path="/Relatórios"  element={<FormReports />}>
+          </Route>
+          <Route path="/Estoque"  element={<FormStock />}>
           </Route>
         </Routes>
     </Router>

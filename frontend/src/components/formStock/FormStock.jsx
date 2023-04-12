@@ -8,7 +8,7 @@ export default function FormProducts() {
     <>
       <Header />
         <h3 className="text-gray-800 text-4xl font-bold text-center ">
-          RELATÓRIOS
+          ESTOQUE
         </h3>
       
     </>

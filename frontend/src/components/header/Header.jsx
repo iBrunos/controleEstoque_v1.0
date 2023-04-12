@@ -7,14 +7,18 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
-
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 
 const user = localStorage.getItem('user');
 const email = localStorage.getItem('email');
 // Profile Dropdown
 const ProfileDropDown = (props) => {
     const navigate = useNavigate();
-    const navigateToLogout = () => navigate('/');
+    function navigateToLogout() {
+        localStorage.clear();
+        navigate('/');
+    }
+    
     const navigateToRelatorios = () => navigate('/Relatórios');
     const navigateToUsuarios = () => navigate('/Usuários');
 
@@ -79,7 +83,8 @@ export default function Header() {
 
     const [menuState, setMenuState] = useState(false)
     const navigate = useNavigate();
-    const navigateToEstoques = () => navigate('/Produtos');
+    const navigateToEstoque = () => navigate('/Estoque');
+    const navigateToProdutos = () => navigate('/Produtos');
     const navigateToEntradas = () => navigate('/Entradas');
     const navigateToSaidas = () => navigate('/Saídas');
     return (
@@ -95,18 +100,21 @@ export default function Header() {
                     <div className={`bg-white absolute z-20 w-full top-16 left-0 p-4 border-b lg:static lg:block lg:border-none ${menuState ? '' : 'hidden'}`}>
                         <ul className="mt-12 space-y-5 lg:flex lg:space-x-6 lg:space-y-0 lg:mt-0">
                             <li className="text-gray-600 ">
-                                <button className="mr-6 hover:text-gray-900" onClick={navigateToEstoques}>
-                                    <StoreIcon className="mr-3" />
-                                    Cadastro
-                                    
+                            <button className="mr-6 hover:text-gray-900 font-bold" onClick={navigateToEstoque}>
+                                    <StoreIcon className="mr-1 font-bold" />
+                                    ESTOQUE
                                 </button>
-                                <button className="mr-6 hover:text-gray-900" onClick={navigateToEntradas}>
-                                    <AddShoppingCartIcon className="mr-3" />
-                                    Entradas
+                                <button className="mr-6 hover:text-gray-900 font-bold" onClick={navigateToProdutos}>
+                                    <AppRegistrationIcon className="mr-1 font-bold" />
+                                    CADASTRO
                                 </button>
-                                <button className="mr-6 hover:text-gray-900" onClick={navigateToSaidas}>
-                                    <RemoveShoppingCartIcon className="mr-3" />
-                                    Saidas
+                                <button className="mr-6 hover:text-gray-900 font-bold" onClick={navigateToEntradas}>
+                                    <AddShoppingCartIcon className="mr-1 font-bold" />
+                                    ENTRADAS
+                                </button>
+                                <button className="mr-6 hover:text-gray-900 font-bold" onClick={navigateToSaidas}>
+                                    <RemoveShoppingCartIcon className="mr-1 font-bold" />
+                                    SAÍDAS
                                 </button>
                             </li>
                         </ul>
