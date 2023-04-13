@@ -94,25 +94,25 @@ export default function FormProducts() {
     const item = response.data;
     setProduct(item.product);
     setObservation(item.observation);
-    setInserted_by(item.inserted_by);
     setAmount(item.amount);
+    setInserted_by(item.inserted_by);
   };
 
   const updateItem = async (e) => {
     e.preventDefault();
     const user = localStorage.getItem('user');
-    const newItem = {
+    const updatedItem = {
       product,
       observation,
       amount,
       inserted_by
     };
-    newItem.inserted_by = user;
+    updatedItem.inserted_by = user;
     const token = localStorage.getItem('token');
 
     const response = await axios.put(
-      `http://localhost:3000/product/${editingItem}`,
-      newItem,
+      `http://localhost:3000/entry/${editingItem}`,
+      updatedItem,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     setItems(
@@ -124,9 +124,7 @@ export default function FormProducts() {
     setInserted_by("");
     setEditingItem(null);
     fetchItems();
-    dropDown();
   };
-
   return (
     <>
       <Header />
@@ -151,13 +149,17 @@ export default function FormProducts() {
             className="w-full py-2  pl-2 pr-6 text-gray-500 border-gray-300 bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-pink-500 cursor-pointer"
             value={product}
             onChange={(e) => setProduct(e.target.value)}
+            required // adicionado o atributo required
           >
+            <option value="">Selecione um produto</option>
             {items2.map((item2) => (
               <option key={item2.id} className="hover:text-pink-500 hover:bg-pink-50" value={item2.product}>
                 {item2.product}
               </option>
             ))}
           </select>
+
+
         </div>
 
         <input

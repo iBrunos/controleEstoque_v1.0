@@ -39,16 +39,47 @@ module.exports = (app) => {
   });
 
   app.post('/exit', eAdmin, (req, res) => {
-    const { product, observation, amount, inserted_by } = req.body;
-    const sql = 'INSERT INTO exits (product, observation, amount, inserted_by) VALUES (?, ?, ?, ?)';
-    connection.query(sql, [product, observation, amount, inserted_by], (err, result) => {
+    const { product, amount, observation, inserted_by } = req.body;
+    const exitSql = 'INSERT INTO exits (product, amount, observation, inserted_by) VALUES (?, ?, ?, ?)';
+    const stockSql = 'SELECT quantity FROM stock WHERE product = ?';
+    const updateStockSql = 'UPDATE stock SET quantity = ? WHERE product = ?';
+  
+    // 1. Adicionar saída na tabela exits
+    connection.query(exitSql, [product, amount, observation, inserted_by], (err, exitResult) => {
       if (err) {
-        console.error('Error inserting into database:', err);
-        return res.status(500).json({ error: 'Error inserting into database' });
+        console.error('Error inserting exit:', err);
+        return res.status(500).json({ error: 'Error inserting exit' });
       }
-      res.json({ id: result.insertId, product, observation, amount });
+  
+      // 2. Atualizar quantidade na tabela stock
+      connection.query(stockSql, [product], (err, stockResult) => {
+        if (err) {
+          console.error('Error getting stock quantity:', err);
+          return res.status(500).json({ error: 'Error getting stock quantity' });
+        }
+  
+        const currentQuantity = stockResult[0].quantity || 0;
+        const newQuantity = currentQuantity - amount;
+  
+        connection.query(updateStockSql, [newQuantity, product], (err, updateResult) => {
+          if (err) {
+            console.error('Error updating stock quantity:', err);
+            return res.status(500).json({ error: 'Error updating stock quantity' });
+          }
+  
+          res.json({
+            id: exitResult.insertId,
+            product,
+            amount,
+            observation,
+            inserted_by,
+            newStockQuantity: newQuantity
+          });
+        });
+      });
     });
   });
+  
   
   app.put('/exit/:id', eAdmin, (req, res) => {
     const id = req.params.id;

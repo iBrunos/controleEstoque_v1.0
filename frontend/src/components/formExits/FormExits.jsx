@@ -151,13 +151,16 @@ export default function FormProducts() {
             className="w-full py-2  pl-2 pr-6 text-gray-500 border-gray-300 bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-pink-500 cursor-pointer"
             value={product}
             onChange={(e) => setProduct(e.target.value)}
+            required // adicionado o atributo required
           >
+            <option value="">Selecione um produto</option>
             {items2.map((item2) => (
               <option key={item2.id} className="hover:text-pink-500 hover:bg-pink-50" value={item2.product}>
                 {item2.product}
               </option>
             ))}
           </select>
+
         </div>
 
         <input

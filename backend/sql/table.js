@@ -8,10 +8,10 @@ class Tables {
     this.createEntrys();
     this.createExits();
     this.createUsers();
-    this.insertProdutcs();
+    //this.insertProdutcs();
     this.insertUsers();
-    this.insertExits();
-    this.insertEntrys();
+    //this.insertExits();
+    //this.insertEntrys();
   }
 
   createProduct() {
@@ -29,16 +29,18 @@ class Tables {
 
   createStock() {
     const sql =
-      "CREATE TABLE IF NOT EXISTS stock (id int NOT NULL AUTO_INCREMENT, product varchar(30) NOT NULL, price varchar(20) NOT NULL, brand varchar(20) NOT NULL, description text NOT NULL, entrys int NOT NULL, exits int NOT NULL, amount int NOT NULL, PRIMARY KEY(id))";
-
+      "CREATE TABLE IF NOT EXISTS stock (id INT PRIMARY KEY AUTO_INCREMENT,product_id INT NOT NULL,product VARCHAR(255) NOT NULL,quantity INT NOT NULL,created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE)";
+  
     this.connection.query(sql, (erro) => {
       if (erro) {
         console.log(erro);
       } else {
-        //console.log("Table stock was successfully created");
+        console.log("Table stock was successfully created");
       }
     });
   }
+  
+  
   createEntrys() {
     const sql =
       "CREATE TABLE IF NOT EXISTS entrys (id int NOT NULL AUTO_INCREMENT, product varchar(30) NOT NULL, observation text NOT NULL, amount int NOT NULL, inserted_by varchar(30) NOT NULL,PRIMARY KEY(id)) ";

@@ -37,7 +37,7 @@ export default function Login() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("email", data.email);
       localStorage.setItem("user", data.user);
-      navigate("/Produtos"); // substitua '/nextpage' pelo caminho do formulário desejado
+      navigate("/Cadastro"); // substitua '/nextpage' pelo caminho do formulário desejado
     } else {
       setPassword("");
       setUser("");

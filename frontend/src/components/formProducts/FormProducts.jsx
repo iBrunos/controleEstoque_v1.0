@@ -99,10 +99,10 @@ export default function FormProducts() {
     const token = localStorage.getItem('token');
 
     const response = await axios.put(
-      `http://localhost:3000/product/${editingItem}`, 
-      updatedItem, 
+      `http://localhost:3000/product/${editingItem}`,
+      updatedItem,
       { headers: { Authorization: `Bearer ${token}` } }
-      );
+    );
     setItems(
       items.map((item) => (item.id === editingItem ? response.data : item))
     );
@@ -135,6 +135,13 @@ export default function FormProducts() {
           value={price}
           placeholder="Preço"
           onChange={(e) => setPrice(e.target.value)}
+          onKeyPress={(event) => {
+            const allowedChars = /[0-9.,]/;
+            const char = String.fromCharCode(event.which);
+            if (!allowedChars.test(char)) {
+              event.preventDefault();
+            }
+          }}
           className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto focus:border-pink-500"
         />
         <input
@@ -151,13 +158,13 @@ export default function FormProducts() {
           onChange={(e) => setDescription(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500 "
         />
-<button
-    type="submit"
-    className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium transition duration-200 hover:bg-pink-600"
->
-    {editingItem !== null ? "Salvar Produto" : "Adicionar Produto"}
-</button>
-<section className="flex items-center space-x-2 border rounded-md p-2 ml-64">
+        <button
+          type="submit"
+          className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium transition duration-200 hover:bg-pink-600"
+        >
+          {editingItem !== null ? "Salvar Produto" : "Adicionar Produto"}
+        </button>
+        <section className="flex items-center space-x-2 border rounded-md p-2 ml-64">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 flex-none text-gray-300"
@@ -217,7 +224,7 @@ export default function FormProducts() {
                       {item.product}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                     R$: {item.price}
+                      R$: {item.price}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {item.brand}
