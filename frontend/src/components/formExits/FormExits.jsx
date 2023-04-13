@@ -111,7 +111,7 @@ export default function FormProducts() {
     const token = localStorage.getItem('token');
 
     const response = await axios.put(
-      `http://localhost:3000/product/${editingItem}`,
+      `http://localhost:3000/exit/${editingItem}`,
       newItem,
       { headers: { Authorization: `Bearer ${token}` } }
     );

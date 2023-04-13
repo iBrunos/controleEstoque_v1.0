@@ -136,11 +136,81 @@ module.exports = (app) => {
   app.put('/exit/:id', eAdmin, (req, res) => {
     const id = req.params.id;
     const { product, observation, amount, inserted_by } = req.body;
-    const sql = 'UPDATE exits SET product = ?, observation = ?, amount = ?, inserted_by = ? WHERE id = ?';
-
-    connection.query(sql, [product, observation, amount, inserted_by, id], (error, results, fields) => {
-      if (error) throw error;
-      res.send(`Item with ID ${id} has been updated`);
+    const getExitSql = 'SELECT * FROM exits WHERE id = ?';
+    const updateExitSql = 'UPDATE exits SET product = ?, observation = ?, amount = ?, inserted_by = ? WHERE id = ?';
+    const getStockSql = 'SELECT quantity FROM stock WHERE product = ?';
+    const updateStockSql = 'UPDATE stock SET quantity = ? WHERE product = ?';
+  
+    connection.beginTransaction(err => {
+      if (err) {
+        console.error('Error starting transaction:', err);
+        return res.status(500).json({ error: 'Error starting transaction' });
+      }
+  
+      // 1. Buscar a saída que será atualizada
+      connection.query(getExitSql, [id], (err, exitResult) => {
+        if (err) {
+          console.error('Error getting exit:', err);
+          connection.rollback(() => {
+            res.status(500).json({ error: 'Error getting exit' });
+          });
+          return;
+        }
+  
+        const oldAmount = exitResult[0].amount;
+        const product = exitResult[0].product;
+  
+        // 2. Atualizar saída
+        connection.query(updateExitSql, [product, observation, amount, inserted_by, id], (err, updateResult) => {
+          if (err) {
+            console.error('Error updating exit:', err);
+            connection.rollback(() => {
+              res.status(500).json({ error: 'Error updating exit' });
+            });
+            return;
+          }
+  
+          // 3. Calcular a diferença entre a quantidade antiga e a nova quantidade
+          const diff = amount - oldAmount;
+  
+          // 4. Atualizar quantidade em stock
+          connection.query(getStockSql, [product], (err, stockResult) => {
+            if (err) {
+              console.error('Error getting stock quantity:', err);
+              connection.rollback(() => {
+                res.status(500).json({ error: 'Error getting stock quantity' });
+              });
+              return;
+            }
+  
+            const currentQuantity = stockResult[0].quantity || 0;
+            const newQuantity = Math.max(0, currentQuantity - diff);
+  
+            connection.query(updateStockSql, [newQuantity, product], (err, updateResult) => {
+              if (err) {
+                console.error('Error updating stock quantity:', err);
+                connection.rollback(() => {
+                  res.status(500).json({ error: 'Error updating stock quantity' });
+                });
+                return;
+              }
+  
+              connection.commit(err => {
+                if (err) {
+                  console.error('Error committing transaction:', err);
+                  connection.rollback(() => {
+                    res.status(500).json({ error: 'Error committing transaction' });
+                  });
+                  return;
+                }
+  
+                res.send(`Item with ID ${id} has been updated`);
+              });
+            });
+          });
+        });
+      });
     });
   });
+  
 }
