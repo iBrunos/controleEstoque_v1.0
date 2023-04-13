@@ -30,19 +30,90 @@ module.exports = (app) => {
   
   app.delete('/exit/:id', eAdmin, (req, res) => {
     const id = req.params.id;
-    const sql = 'DELETE FROM exits WHERE id = ?';
-
-    connection.query(sql, [id], (error, results, fields) => {
-      if (error) throw error;
-      res.send(`Item with ID ${id} has been deleted`);
+    const getExitSql = 'SELECT product, amount FROM exits WHERE id = ?';
+    const deleteExitSql = 'DELETE FROM exits WHERE id = ?';
+    const getStockSql = 'SELECT quantity FROM stock WHERE product = ?';
+    const updateStockSql = 'UPDATE stock SET quantity = ? WHERE product = ?';
+  
+    connection.beginTransaction(err => {
+      if (err) {
+        console.error('Error starting transaction:', err);
+        return res.status(500).json({ error: 'Error starting transaction' });
+      }
+  
+      // 1. Buscar product e amount da entrada que será excluída
+      connection.query(getExitSql, [id], (err, exitResult) => {
+        if (err) {
+          console.error('Error getting exit:', err);
+          connection.rollback(() => {
+            res.status(500).json({ error: 'Error getting exit' });
+          });
+          return;
+        }
+  
+        const product = exitResult[0].product;
+        const amount = exitResult[0].amount;
+  
+        // 2. Subtrair amount da quantidade atual em stock
+        connection.query(getStockSql, [product], (err, stockResult) => {
+          if (err) {
+            console.error('Error getting stock quantity:', err);
+            connection.rollback(() => {
+              res.status(500).json({ error: 'Error getting stock quantity' });
+            });
+            return;
+          }
+  
+          const currentQuantity = stockResult[0].quantity || 0;
+          const newQuantity = Math.max(0, currentQuantity - amount);
+  
+          // 3. Atualizar quantidade em stock
+          connection.query(updateStockSql, [newQuantity, product], (err, updateResult) => {
+            if (err) {
+              console.error('Error updating stock quantity:', err);
+              connection.rollback(() => {
+                res.status(500).json({ error: 'Error updating stock quantity' });
+              });
+              return;
+            }
+  
+            // 4. Excluir entrada
+            connection.query(deleteExitSql, [id], (err, deleteResult) => {
+              if (err) {
+                console.error('Error deleting exit:', err);
+                connection.rollback(() => {
+                  res.status(500).json({ error: 'Error deleting exit' });
+                });
+                return;
+              }
+  
+              connection.commit(err => {
+                if (err) {
+                  console.error('Error committing transaction:', err);
+                  connection.rollback(() => {
+                    res.status(500).json({ error: 'Error committing transaction' });
+                  });
+                  return;
+                }
+  
+                res.send(`Item with ID ${id} has been deleted`);
+              });
+            });
+          });
+        });
+      });
     });
   });
+  
+
+
+
 
   app.post('/exit', eAdmin, (req, res) => {
     const { product, amount, observation, inserted_by } = req.body;
     const exitSql = 'INSERT INTO exits (product, amount, observation, inserted_by) VALUES (?, ?, ?, ?)';
     const stockSql = 'SELECT quantity FROM stock WHERE product = ?';
-    const updateStockSql = 'UPDATE stock SET quantity = ? WHERE product = ?';
+    const updateStockSql = 'UPDATE stock SET quantity = quantity - ? WHERE product = ?';
   
     // 1. Adicionar saída na tabela exits
     connection.query(exitSql, [product, amount, observation, inserted_by], (err, exitResult) => {

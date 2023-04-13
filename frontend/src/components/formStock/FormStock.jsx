@@ -19,7 +19,7 @@ export default function FormProducts() {
     };
     // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
     try {
-      const response = await axios.get('http://localhost:3000/entry', config);
+      const response = await axios.get('http://localhost:3000/stock', config);
       setItems(response.data);
     } catch (error) {
       console.error(error);
@@ -85,7 +85,7 @@ export default function FormProducts() {
                       {item.product}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words w-[50rem]">
-                      {item.amount}
+                      {item.quantity}
                     </td>
                   </tr>
                 ))}
