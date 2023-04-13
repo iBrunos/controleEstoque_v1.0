@@ -84,7 +84,7 @@ export default function Header() {
     const [menuState, setMenuState] = useState(false)
     const navigate = useNavigate();
     const navigateToEstoque = () => navigate('/Estoque');
-    const navigateToProdutos = () => navigate('/Produtos');
+    const navigateToProdutos = () => navigate('/Cadastro');
     const navigateToEntradas = () => navigate('/Entradas');
     const navigateToSaidas = () => navigate('/Saídas');
     return (
