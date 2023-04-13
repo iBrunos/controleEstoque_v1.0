@@ -165,14 +165,14 @@ export default function FormProducts() {
           value={observation}
           placeholder="Observação"
           onChange={(e) => setObservation(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[40rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[40rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
         />
         <input
           type="number"
           value={amount}
           placeholder="Quantidade"
           onChange={(e) => setAmount(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[10rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[10rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
         />
         <button
           type="submit"
@@ -180,7 +180,7 @@ export default function FormProducts() {
         >
           {editingItem !== null ? "Salvar Entrada" : "Adicionar Entrada"}
         </button>
-        <section className="flex items-center space-x-2 border rounded-md p-2 ml-36">
+        <section className="flex items-center space-x-2 border rounded-md p-2 ml-36 focus:border-pink-500">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 flex-none text-gray-300"
@@ -216,6 +216,7 @@ export default function FormProducts() {
               <tr>
                 <th className="py-3 px-6">Produto</th>
                 <th className="text-center py-3 px-6">Observação</th>
+                <th className="py-3 px-6">Quantidade</th>
                 <th className="py-3 px-6">Funcionário</th>
                 <th className="py-3 px-6">Ações</th>
               </tr>
@@ -239,6 +240,9 @@ export default function FormProducts() {
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words w-[50rem]">
                       {item.observation}
+                    </td>
+                    <td className="px-6 py-4 whitespace-normal break-words">
+                      {item.amount}
                     </td>
                     <td className="px-8 py-4 whitespace-nowrap">
                       {item.inserted_by}

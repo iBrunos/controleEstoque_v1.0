@@ -40,7 +40,7 @@ const ProfileDropDown = (props) => {
     return (
         <div className={`relative ${props.class}`}>
             <div className="flex items-center space-x-4">
-                <button ref={profileRef} className="w-10 h-10 outline-none rounded-full ring-offset-2 ring-gray-200 ring-2 lg:focus:ring-pink-500 ml-1"
+                <button ref={profileRef} className="w-10 h-10 outline-none rounded-full ring-offset-2 ring-gray-200 ring-2 lg:focus:ring-green-500 ml-1"
                     onClick={() => setState(!state)}
                 >
                     <img
@@ -50,11 +50,11 @@ const ProfileDropDown = (props) => {
                     />
                 </button>
                 <div className="">
-                    <span className="block">{user}</span>
-                    <span className="block text-sm text-gray-500">{email}</span>
+                    <span className="block font-semibold text-white">{user}</span>
+                    <span className="block text-sm text-white">{email}</span>
                 </div>
             </div>
-            <ul className={`bg-white top-12 right-0 mt-5 space-y-5 lg:absolute lg:border lg:rounded-md lg:text-sm lg:w-52 lg:shadow-md lg:space-y-0 lg:mt-0 ${state ? '' : 'lg:hidden'}`}>
+            <ul className={`bg-white top-12 right-0 mt-5 space-y-5 lg:absolute lg:border lg:rounded-md lg:text-sm lg:w-52 lg:shadow-md lg:space-y-0 lg:mt-1 ${state ? '' : 'lg:hidden'}`}>
                 <li>
                     <button className="block text-gray-600  lg:p-2.5 hover:text-gray-900" onClick={navigateToUsuarios}>
                         <AccountCircleIcon className="mr-3" />
@@ -89,30 +89,30 @@ export default function Header() {
     const navigateToSaidas = () => navigate('/Saídas');
     return (
     
-        <nav className="bg-white border-b">
+        <nav className="bg-pink-500 border-b">
             <div className="flex items-center space-x-8 py-3 px-4 max-w-screen-2xl mx-auto md:px-8">
                 <div className="flex-none lg:flex-initial">
-                    <a href="Home" className='text-4xl font-bold text-gray-900'>
+                    <a href="Home" className='text-4xl font-bold text-white'>
                         HAPPY MAKEUP
                     </a>
                 </div>
                 <div className="flex-1 flex items-center justify-between">
-                    <div className={`bg-white absolute z-20 w-full top-16 left-0 p-4 border-b lg:static lg:block lg:border-none ${menuState ? '' : 'hidden'}`}>
+                    <div className={`bg-pink-500 absolute z-20 w-full top-16 left-0 p-4 border-b lg:static lg:block lg:border-none ${menuState ? '' : 'hidden'}`}>
                         <ul className="mt-12 space-y-5 lg:flex lg:space-x-6 lg:space-y-0 lg:mt-0">
-                            <li className="text-gray-600 ">
-                            <button className="mr-6 hover:text-gray-900 font-bold" onClick={navigateToEstoque}>
+                            <li className="text-white ">
+                            <button className="mr-6 hover:font-bold font-semibold " onClick={navigateToEstoque}>
                                     <StoreIcon className="mr-1 font-bold" />
                                     ESTOQUE
                                 </button>
-                                <button className="mr-6 hover:text-gray-900 font-bold" onClick={navigateToProdutos}>
-                                    <AppRegistrationIcon className="mr-1 font-bold" />
+                                <button className="mr-6 hover:font-bold font-semibold" onClick={navigateToProdutos}>
+                                    <AppRegistrationIcon className="hover:font-bold font-semibold" />
                                     CADASTRO
                                 </button>
-                                <button className="mr-6 hover:text-gray-900 font-bold" onClick={navigateToEntradas}>
+                                <button className="mr-6 hover:font-bold font-semibold" onClick={navigateToEntradas}>
                                     <AddShoppingCartIcon className="mr-1 font-bold" />
                                     ENTRADAS
                                 </button>
-                                <button className="mr-6 hover:text-gray-900 font-bold" onClick={navigateToSaidas}>
+                                <button className="mr-6 hover:font-bold font-semibold" onClick={navigateToSaidas}>
                                     <RemoveShoppingCartIcon className="mr-1 font-bold" />
                                     SAÍDAS
                                 </button>

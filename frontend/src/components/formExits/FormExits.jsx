@@ -165,20 +165,20 @@ export default function FormProducts() {
           value={observation}
           placeholder="Observação"
           onChange={(e) => setObservation(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[40rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[40rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
         />
         <input
           type="number"
           value={amount}
           placeholder="Quantidade"
           onChange={(e) => setAmount(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[10rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[10rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
         />
         <button
           type="submit"
           className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium"
         >
-          {editingItem !== null ? "Salvar Entrada" : "Adicionar Entrada"}
+          {editingItem !== null ? "Salvar Saída" : "Adicionar Saída"}
         </button>
         <section className="flex items-center space-x-2 border rounded-md p-2 ml-36">
           <svg
@@ -196,7 +196,7 @@ export default function FormProducts() {
             />
           </svg>
           <input
-            className="outline-none appearance-none placeholder-gray-500 text-gray-500 w-64 "
+            className="outline-none appearance-none placeholder-gray-500 text-gray-500 w-64 focus:border-pink-500"
             onChange={(e) => setSearchTerm(e.target.value)}
             type="text"
             placeholder="Pesquisar"
@@ -216,6 +216,7 @@ export default function FormProducts() {
               <tr>
                 <th className="py-3 px-6">Produto</th>
                 <th className="text-center py-3 px-6">Observação</th>
+                <th className="py-3 px-6">Quantidade</th>
                 <th className="py-3 px-6">Funcionário</th>
                 <th className="py-3 px-6">Ações</th>
               </tr>
@@ -239,6 +240,9 @@ export default function FormProducts() {
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words w-[50rem]">
                       {item.observation}
+                    </td>
+                    <td className="px-6 py-4 whitespace-normal break-words">
+                      {item.amount}
                     </td>
                     <td className="px-8 py-4 whitespace-nowrap">
                       {item.inserted_by}

@@ -85,7 +85,7 @@ export default function FormProducts2() {
           value={user}
           placeholder="Usuário"
           onChange={(e) => setUser(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto "
+          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto focus:border-pink-500"
           id="input__product"
         />
         <input
@@ -93,28 +93,47 @@ export default function FormProducts2() {
           value={password}
           placeholder="Senha"
           onChange={(e) => setPassword(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto"
+          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto focus:border-pink-500"
         />
-        <input
-          type="number"
-          value={level}
-          placeholder="Level"
-          onChange={(e) => setLevel(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto"
-        />
+        <div className="relative w-80 mr-2 ">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="absolute top-0 bottom-0 w-6 h-6 my-auto text-gray-400 right-1"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <select
+            className="w-full py-2  pl-2 pr-6 text-gray-500 border-gray-300 bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-pink-500 cursor-pointer"
+            value={level}
+            onChange={(e) => setLevel(e.target.value)}
+          >
+              <option  className="hover:text-pink-500 hover:bg-pink-50" >
+              Funcionário
+              </option>
+              <option  className="hover:text-pink-500 hover:bg-pink-50" >
+              Gerente
+              </option>
+          </select>
+        </div>
         <input
           type="email"
           value={email}
           placeholder="Email"
           onChange={(e) => setEmail(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
         />
         <input
           type="text"
           value={phone}
           placeholder="Telefone"
           onChange={(e) => setPhone(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[6.5rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[6.5rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
         />
         <button
           type="submit"
