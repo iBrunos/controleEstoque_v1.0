@@ -106,7 +106,6 @@ module.exports = (app) => {
     });
   });
   
-
   app.post('/entry', eAdmin, (req, res) => {
     const { product, observation, amount, inserted_by } = req.body;
     const entrySql = 'INSERT INTO entrys (product, observation, amount, inserted_by) VALUES (?, ?, ?, ?)';
