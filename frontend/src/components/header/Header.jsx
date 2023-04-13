@@ -44,7 +44,7 @@ const ProfileDropDown = (props) => {
                     onClick={() => setState(!state)}
                 >
                     <img
-                        src="https://randomuser.me/api/portraits/men/46.jpg"
+                        src="https://as2.ftcdn.net/jpg/02/04/77/31/220_F_204773130_IUJbxD8fjrGBBOU6ypGm2r1X1PN2pqiy.jpg"
                         className="w-full h-full rounded-full"
                         alt="#"
                     />

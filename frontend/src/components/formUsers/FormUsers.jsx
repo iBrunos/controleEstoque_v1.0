@@ -95,10 +95,10 @@ export default function FormProducts2() {
           onChange={(e) => setPassword(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto focus:border-pink-500"
         />
-        <div className="relative w-80 mr-2 ">
+        <div className="relative w-40 mr-2 text-pink-500">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="absolute top-0 bottom-0 w-6 h-6 my-auto text-gray-400 right-1"
+            className="absolute top-0 bottom-0 w-6 h-6 my-auto text-pink-500 right-1"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -137,7 +137,7 @@ export default function FormProducts2() {
         />
         <button
           type="submit"
-          className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium"
+          className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium hover:bg-pink-600"
         >
           {editingItem !== null ? "Editar Produto" : "Adicionar Produto"}
         </button>
@@ -166,7 +166,7 @@ export default function FormProducts2() {
         </section>
       </form>
       <div className="bg-white mx-auto px-4 md:px-8">
-        <div className="mt-12 shadow-sm border rounded-lg overflow-x-auto">
+        <div className="mt-12 shadow-sm border rounded-lg overflow-x-auto max-h-[44rem]">
           <table className="w-full table-auto text-sm text-left">
             <thead className="bg-gray-50 text-gray-600 font-medium border-b">
               <tr>

@@ -137,7 +137,7 @@ export default function FormProducts() {
         <div className="relative w-80 mr-2 ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="absolute top-0 bottom-0 w-6 h-6 my-auto text-gray-400 right-1"
+            className="absolute top-0 bottom-0 w-6 h-6 my-auto text-pink-500 right-1"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -176,7 +176,7 @@ export default function FormProducts() {
         />
         <button
           type="submit"
-          className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium"
+          className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium hover:bg-pink-600"
         >
           {editingItem !== null ? "Salvar Entrada" : "Adicionar Entrada"}
         </button>
@@ -210,7 +210,7 @@ export default function FormProducts() {
         </h3>
       </div>
       <div className="bg-white mx-auto px-4 md:px-8">
-        <div className="mt-1 shadow-sm border rounded-lg overflow-x-auto">
+        <div className="mt-1 shadow-sm border rounded-lg overflow-x-auto max-h-[44rem]">
           <table className="w-full table-auto text-sm text-left">
             <thead className="bg-gray-50 text-gray-600 font-medium border-b">
               <tr>

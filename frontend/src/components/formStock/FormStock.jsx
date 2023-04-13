@@ -53,7 +53,7 @@ export default function FormProducts() {
           />
         </section>
       <div className="bg-white mx-auto px-4 md:px-8">
-        <div className="mt-1 shadow-sm border rounded-lg overflow-x-auto">
+        <div className="mt-1 shadow-sm border rounded-lg overflow-x-auto max-h-[44rem]">
           <table className="w-full table-auto text-sm text-left">
             <thead className="bg-gray-50 text-gray-600 font-medium border-b">
               <tr>

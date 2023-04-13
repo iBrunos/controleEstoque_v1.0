@@ -127,7 +127,7 @@ export default function FormProducts() {
           value={product}
           placeholder="Produto"
           onChange={(e) => setProduct(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto "
+          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto focus:border-pink-500"
           id="input__product"
         />
         <input
@@ -135,25 +135,25 @@ export default function FormProducts() {
           value={price}
           placeholder="Preço"
           onChange={(e) => setPrice(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto"
+          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto focus:border-pink-500"
         />
         <input
           type="text"
           value={brand}
           placeholder="Marca"
           onChange={(e) => setBrand(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto"
+          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto focus:border-pink-500"
         />
         <input
           type="text"
           value={description}
           placeholder="Descrição"
           onChange={(e) => setDescription(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500"
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500 "
         />
 <button
     type="submit"
-    className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium"
+    className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium transition duration-200 hover:bg-pink-600"
 >
     {editingItem !== null ? "Salvar Produto" : "Adicionar Produto"}
 </button>
@@ -187,7 +187,7 @@ export default function FormProducts() {
         </h3>
       </div>
       <div className="bg-white mx-auto px-4 md:px-8">
-        <div className="mt-1 shadow-sm border rounded-lg overflow-x-auto">
+        <div className="mt-1 shadow-sm border rounded-lg overflow-x-auto max-h-[44rem]">
           <table className="w-full table-auto text-sm text-left">
             <thead className="bg-gray-50 text-gray-600 font-medium border-b">
               <tr>
