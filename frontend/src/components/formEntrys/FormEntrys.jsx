@@ -217,7 +217,7 @@ export default function FormProducts() {
             <thead className="bg-gray-50 text-gray-600 font-medium border-b">
               <tr>
                 <th className="py-3 px-6">Produto</th>
-                <th className="text-center py-3 px-6">Observação</th>
+                <th className="py-3 px-6">Observação</th>
                 <th className="py-3 px-6">Quantidade</th>
                 <th className="py-3 px-6">Funcionário</th>
                 <th className="py-3 px-6">Ações</th>

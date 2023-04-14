@@ -69,7 +69,7 @@ class Tables {
   }
   createUsers() {
     const sql =
-      "CREATE TABLE IF NOT EXISTS users (id int NOT NULL AUTO_INCREMENT, user varchar(30) NOT NULL, password varchar(64) NOT NULL, level int(1) NOT NULL, email text NOT NULL, phone text NOT NULL, PRIMARY KEY(id))";
+      "CREATE TABLE IF NOT EXISTS users (id int NOT NULL AUTO_INCREMENT, user varchar(30) NOT NULL, password varchar(64) NOT NULL, level varchar(30) NOT NULL, email text NOT NULL, phone text NOT NULL, PRIMARY KEY(id))";
 
     this.connection.query(sql, (erro) => {
       if (erro) {
@@ -91,7 +91,7 @@ class Tables {
     });
   }
   insertUsers() {
-    const sql = "REPLACE INTO users (id, user, password, level, email, phone) VALUES ('1', 'admin', '$2b$08$pZ7Cg1IOgCzSnw.yhmM2bueJ0bvepWL8oYFmNIE..wXQBvsWW0feO', '1', 'admin@gmail.com', '(71) 93999-8888')";
+    const sql = "REPLACE INTO users (id, user, password, level, email, phone) VALUES ('1', 'admin', '$2b$08$pZ7Cg1IOgCzSnw.yhmM2bueJ0bvepWL8oYFmNIE..wXQBvsWW0feO', 'Gerente', 'admin@gmail.com', '(71) 93999-8888')";
 
     this.connection.query(sql, (erro) => {
       if (erro) {

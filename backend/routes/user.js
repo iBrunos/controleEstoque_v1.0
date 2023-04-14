@@ -1,8 +1,9 @@
 module.exports = (app) => {
+  const { eAdmin } = require("../middleware/auth");
   const bcrypt = require('bcrypt');
   const connection = require("../connection/connection");
 
-    app.get('/user', (req, res) => {
+    app.get('/user', eAdmin, (req, res) => {
         const sql = 'SELECT * FROM users';
         connection.query(sql, (err, results) => {
           if (err) {
@@ -12,7 +13,7 @@ module.exports = (app) => {
           res.json(results);
         });
       });
-      app.delete('/user/:id', (req, res) => {
+      app.delete('/user/:id', eAdmin, (req, res) => {
         const id = req.params.id;
         const sql = `DELETE FROM users WHERE id = ?`;
       
@@ -22,7 +23,7 @@ module.exports = (app) => {
         });
       });
       
-      app.post('/user', async (req, res) => {
+      app.post('/user', eAdmin, async (req, res) => {
         const { user, password, level, email, phone } = req.body;
         // Hash da senha
         const hashedPassword = await bcrypt.hash(password, 8);
@@ -37,12 +38,13 @@ module.exports = (app) => {
       });
 
 
-      app.put('/user/:id', (req, res) => {
+      app.put('/user/:id', eAdmin, async(req, res) => {
         const id = req.params.id;
         const { user, password, level, email, phone} = req.body;
+        const hashedPassword = await bcrypt.hash(password, 8);
         const sql = `UPDATE users SET user = ?, password = ?, level = ?, email = ?, phone = ? WHERE id = ?`;
       
-        connection.query(sql, [user, password, level, email, phone, id], (error, results, fields) => {
+        connection.query(sql, [user, hashedPassword, level, email, phone, id], (error, results, fields) => {
           if (error) throw error;
           res.send(`Item with ID ${id} has been updated`);
         });

@@ -5,127 +5,94 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import unidecode from "unidecode";
 
-export default function FormProducts() {
+export default function FormUsers() {
   const [items, setItems] = useState([]);
-  const [items2, setItems2] = useState([]);
-  const [product, setProduct] = useState("");
-  const [observation, setObservation] = useState("");
-  const [inserted_by, setInserted_by] = useState("");
-  const [amount, setAmount] = useState("");
+  const [user, setUser] = useState("");
+  const [password, setPassword] = useState("");
+  const [level, setLevel] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [editingItem, setEditingItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-
+  
   useEffect(() => {
     fetchItems();
-    dropDown();
   }, []);
 
   const fetchItems = async () => {
     const token = localStorage.getItem('token');
-    // definir o cabeçalho `Authorization` com o token JWT
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
     try {
-      const response = await axios.get('http://localhost:3000/exit', config);
+      const response = await axios.get('http://localhost:3000/user', config);
       setItems(response.data);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const dropDown = async () => {
-    const token = localStorage.getItem('token');
-    // definir o cabeçalho `Authorization` com o token JWT
-    const config2 = {
-      headers: { Authorization: `Bearer ${token}` }
-    };
-    // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
-    try {
-      const response2 = await axios.get('http://localhost:3000/product', config2);
-      setItems2(response2.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
   const addItem = async (e) => {
     e.preventDefault();
-
-    const user = localStorage.getItem('user');
+    
     const token = localStorage.getItem('token');
-
-    const newItem = {
-      product,
-      observation,
-      amount,
-      inserted_by
-    };
-    newItem.inserted_by = user;
-    const response = await axios.post(
-      "http://localhost:3000/exit",
-      newItem,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-
+    
+    const newItem = { user, password, level, email, phone };
+    const response = await axios.post("http://localhost:3000/user", newItem, { headers: { Authorization: `Bearer ${token}` } });
     setItems([...items, response.data]);
-    setProduct("");
-    setObservation("");
-    setAmount("");
-    fetchItems();
+    setUser("");
+    setPassword("");
+    setLevel("");
+    setEmail("");
+    setPhone("");
   };
 
   const deleteItem = async (id) => {
     const token = localStorage.getItem('token');
     try {
-      await axios.delete(`http://localhost:3000/exit/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.delete(`http://localhost:3000/user/${id}`, { headers: { Authorization: `Bearer ${token}` } });
       setItems(items.filter((item) => item.id !== id));
     } catch (error) {
       console.error(error);
-    }
-  };
-
+    }};
 
   const editItem = async (id) => {
     const token = localStorage.getItem('token');
-
+  
     setEditingItem(id);
-    const response = await axios.get(`http://localhost:3000/exit/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+    const response = await axios.get(`http://localhost:3000/user/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     const item = response.data;
-    setProduct(item.product);
-    setObservation(item.observation);
-    setInserted_by(item.inserted_by);
-    setAmount(item.amount);
+    console.log(item);
+    setUser(item.user);
+    setPassword(item.password);
+    setLevel(item.level);
+    setEmail(item.email);
+    setPhone(item.phone);
+    setEditingItem(null);
+    fetchItems();
   };
 
   const updateItem = async (e) => {
     e.preventDefault();
-    const user = localStorage.getItem('user');
-    const newItem = {
-      product,
-      observation,
-      amount,
-      inserted_by
-    };
-    newItem.inserted_by = user;
+    const updatedItem = { user, password, level, email, phone };
     const token = localStorage.getItem('token');
 
     const response = await axios.put(
-      `http://localhost:3000/exit/${editingItem}`,
-      newItem,
+      `http://localhost:3000/user/${editingItem}`,
+      updatedItem,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     setItems(
       items.map((item) => (item.id === editingItem ? response.data : item))
     );
-    setProduct("");
-    setObservation("");
-    setAmount("");
-    setInserted_by("");
+    setUser("");
+    setPassword("");
+    setLevel("");
+    setEmail("");
+    setPhone("");
     setEditingItem(null);
     fetchItems();
-    dropDown();
-  };
+  }
 
   return (
     <>
@@ -134,7 +101,22 @@ export default function FormProducts() {
         onSubmit={editingItem !== null ? updateItem : addItem}
         className="flex flex-row mb-0 mt-1 bg-white border-b-gray-200 border-b pl-8 pt-1 pb-2 ml-0"
       >
-        <div className="relative w-80 mr-2 ">
+        <input
+          type="text"
+          value={user}
+          placeholder="Usuário"
+          onChange={(e) => setUser(e.target.value)}
+          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto focus:border-pink-500"
+          id="input__product"
+        />
+        <input
+          type="password"
+          value={password}
+          placeholder="Senha"
+          onChange={(e) => setPassword(e.target.value)}
+          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto focus:border-pink-500"
+        />
+        <div className="relative w-40 mr-2 text-pink-500">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="absolute top-0 bottom-0 w-6 h-6 my-auto text-pink-500 right-1"
@@ -149,41 +131,41 @@ export default function FormProducts() {
           </svg>
           <select
             className="w-full py-2  pl-2 pr-6 text-gray-500 border-gray-300 bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-pink-500 cursor-pointer"
-            value={product}
-            onChange={(e) => setProduct(e.target.value)}
-            required // adicionado o atributo required
+            value={level}
+            onChange={(e) => setLevel(e.target.value)}
+            required
           >
-            <option value="">Selecione um produto</option>
-            {items2.map((item2) => (
-              <option key={item2.id} className="hover:text-pink-500 hover:bg-pink-50" value={item2.product}>
-                {item2.product}
+              <option value="">Nível de Acesso</option>
+              <option  className="hover:text-pink-500 hover:bg-pink-50" >
+              Funcionário
               </option>
-            ))}
+              <option  className="hover:text-pink-500 hover:bg-pink-50" >
+              Gerente
+              </option>
           </select>
-
         </div>
-
+        
         <input
-          type="text"
-          value={observation}
-          placeholder="Observação"
-          onChange={(e) => setObservation(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[40rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
+          type="email"
+          value={email}
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[10rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
         />
         <input
-          type="number"
-          value={amount}
-          placeholder="Quantidade"
-          onChange={(e) => setAmount(e.target.value)}
+          type="text"
+          value={phone}
+          placeholder="Telefone"
+          onChange={(e) => setPhone(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-[10rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
         />
         <button
           type="submit"
           className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium hover:bg-pink-600"
         >
-          {editingItem !== null ? "Salvar Saída" : "Adicionar Saída"}
+          {editingItem !== null ? "Salvar Usuário" : "Adicionar Usuário"}
         </button>
-        <section className="flex items-center space-x-2 border rounded-md p-2 ml-40">
+        <section className="flex items-center space-x-2 border rounded-md p-2 ml-[23rem] focus:border-pink-500">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 flex-none text-gray-300"
@@ -199,7 +181,7 @@ export default function FormProducts() {
             />
           </svg>
           <input
-            className="outline-none appearance-none placeholder-gray-500 text-gray-500 w-64 focus:border-pink-500"
+            className="outline-none appearance-none placeholder-gray-500 text-gray-500 w-64"
             onChange={(e) => setSearchTerm(e.target.value)}
             type="text"
             placeholder="Pesquisar"
@@ -209,27 +191,31 @@ export default function FormProducts() {
       </form>
       <div className="p-0 m-2 text-center">
         <h3 className="text-gray-800 text-4xl font-bold text-center ">
-          SAÍDAS DE PRODUTOS
+        USUÁRIOS
         </h3>
       </div>
       <div className="bg-white mx-auto px-4 md:px-8">
-        <div className="mt-1 shadow-sm border rounded-lg overflow-x-auto max-h-[44rem]">
+        <div className="mt-0 shadow-sm border rounded-lg overflow-x-auto max-h-[44rem]">
           <table className="w-full table-auto text-sm text-left">
             <thead className="bg-gray-50 text-gray-600 font-medium border-b">
               <tr>
-                <th className="py-3 px-6">Produto</th>
-                <th className="py-3 px-6">Observação</th>
-                <th className="py-3 px-6">Quantidade</th>
-                <th className="py-3 px-6">Funcionário</th>
+                <th className="py-3 px-6">Usuário</th>
+                <th className="py-3 px-6">Senha</th>
+                <th className="py-3 px-6">Nível de Acesso</th>
+                <th className=" py-3 px-6">Email</th>
+                <th className="py-3 px-6">Telefone</th>
                 <th className="py-3 px-6">Ações</th>
               </tr>
             </thead>
+
             <tbody className="text-gray-600 divide-y">
               {items
                 .filter((item) => {
                   const searchTermUnidecoded = unidecode(searchTerm?.toLowerCase() || '');
-                  const itemUserUnidecoded = unidecode(item.product?.toLowerCase() || ''); // aqui foi adicionado o teste para item.product ser nulo ou indefinido
-                  if (searchTermUnidecoded === "") {
+                  const itemUserUnidecoded = unidecode(
+                    item.user?.toLowerCase() || ''
+                  );
+                  if (searchTerm === "") {
                     return item;
                   } else if (itemUserUnidecoded.includes(searchTermUnidecoded)) {
                     return item;
@@ -239,16 +225,19 @@ export default function FormProducts() {
                 .map((item) => (
                   <tr key={item.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {item.product}
+                      {item.user}
                     </td>
-                    <td className="px-6 py-4 whitespace-normal break-words w-[50rem]">
-                      {item.observation}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {item.password}
                     </td>
-                    <td className="px-6 py-4 whitespace-normal break-words">
-                      {item.amount}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {item.level}
+                    </td>
+                    <td className="px-6 py-4 whitespace-normal">
+                      {item.email}
                     </td>
                     <td className="px-8 py-4 whitespace-nowrap">
-                      {item.inserted_by}
+                      {item.phone}
                     </td>
                     <td className=" px-6 whitespace-nowrap">
                       <button

@@ -129,6 +129,7 @@ export default function FormProducts() {
           onChange={(e) => setProduct(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto focus:border-pink-500"
           id="input__product"
+          required
         />
         <input
           type="text"
@@ -142,6 +143,7 @@ export default function FormProducts() {
               event.preventDefault();
             }
           }}
+          required
           className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto focus:border-pink-500"
         />
         <input
@@ -201,7 +203,7 @@ export default function FormProducts() {
                 <th className="py-3 px-6">Produto</th>
                 <th className="py-3 px-6">Preço</th>
                 <th className="py-3 px-6">Marca</th>
-                <th className="text-center py-3 px-6">Descrição</th>
+                <th className="py-3 px-6">Descrição</th>
                 <th className="py-3 px-6">Funcionário</th>
                 <th className="py-3 px-6">Ações</th>
               </tr>

@@ -6,20 +6,20 @@ import Header from "../header/Header";
 export default function FormProducts() {
   const [items, setItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  
+
   useEffect(() => {
     fetchItems();
   }, []);
-  
+
   const fetchItems = async () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     // definir o cabeçalho `Authorization` com o token JWT
     const config = {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     };
     // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
     try {
-      const response = await axios.get('http://localhost:3000/stock', config);
+      const response = await axios.get("http://localhost:3000/stock", config);
       setItems(response.data);
     } catch (error) {
       console.error(error);
@@ -28,8 +28,8 @@ export default function FormProducts() {
   return (
     <>
       <Header />
-      <h3 className="text-gray-800 text-4xl font-bold text-center ">ESTOQUE</h3>
-      <section className="flex items-center space-x-2 border rounded-md p-2 ml-36 w-64">
+      <form className="flex flex-row mb-0 mt-1 bg-white border-b-gray-200 border-b pl-8 pt-1 pb-2 ml-0">
+        <section className="flex items-center space-x-2 border rounded-md p-2 ml-[93.7rem] ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 flex-none text-gray-300"
@@ -52,8 +52,14 @@ export default function FormProducts() {
             id="input__pesquisar"
           />
         </section>
-      <div className="bg-white mx-auto px-4 md:px-8">
-        <div className="mt-1 shadow-sm border rounded-lg overflow-x-auto max-h-[44rem]">
+      </form>
+      <div className="p-0 m-2 text-center">
+        <h3 className="text-gray-800 text-4xl font-bold text-center ">
+          ESTOQUE DE PRODUTOS
+        </h3>
+      </div>
+      <div className="bg-white mx-auto w-[116rem]">
+        <div className="mt-1 shadow-sm border rounded-lg overflow-x-auto max-h-[44rem] ">
           <table className="w-full table-auto text-sm text-left">
             <thead className="bg-gray-50 text-gray-600 font-medium border-b">
               <tr>
@@ -84,7 +90,7 @@ export default function FormProducts() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       {item.product}
                     </td>
-                    <td className="px-6 py-4 whitespace-normal break-words w-[50rem]">
+                    <td className="px-6 py-4 whitespace-normal break-words">
                       {item.quantity}
                     </td>
                   </tr>
