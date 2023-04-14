@@ -71,7 +71,6 @@ export default function FormProducts() {
     }
   };
 
-
   const editItem = async (id) => {
     const token = localStorage.getItem('token');
 

@@ -69,8 +69,6 @@ module.exports = (app) => {
     });
   });
   
-  
-  
   app.put('/product/:id', eAdmin, (req, res) => {
     const id = req.params.id;
     const { product, price, brand, description, inserted_by } = req.body;
