@@ -33,6 +33,14 @@ export default function FormProducts() {
       console.error(error);
     }
   };
+  
+  const formatPrice = (price) => {
+    if (!price.includes(",") && !price.endsWith(",") && !price.endsWith(".")) {
+      price = price.replace(".", ",");
+      price = price + ",00";
+    }
+    return price;
+  };
 
   const addItem = async (e) => {
     e.preventDefault();
@@ -42,7 +50,7 @@ export default function FormProducts() {
 
     const newItem = {
       product,
-      price,
+      price: formatPrice(price),
       brand,
       description,
       inserted_by
@@ -89,7 +97,7 @@ export default function FormProducts() {
     const user = localStorage.getItem('user');
     const updatedItem = {
       product,
-      price,
+      price: formatPrice(price),
       brand,
       description,
       inserted_by

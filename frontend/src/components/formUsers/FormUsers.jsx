@@ -5,6 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import unidecode from "unidecode";
 
+
 export default function FormProducts() {
   const [items, setItems] = useState([]);
   const [user, setUser] = useState("");
@@ -14,12 +15,11 @@ export default function FormProducts() {
   const [phone, setPhone] = useState("");
   const [editingItem, setEditingItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-
+  
+  
   useEffect(() => {
     fetchItems();
   }, []);
-
-
 
   const fetchItems = async () => {
     const token = localStorage.getItem('token');
@@ -61,6 +61,7 @@ export default function FormProducts() {
     setLevel("");
     setEmail("");
     setPhone("");
+    window.location.reload();
   };
 
   const deleteItem = async (id) => {
@@ -80,7 +81,7 @@ export default function FormProducts() {
     const response = await axios.get(`http://localhost:3000/user/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     const item = response.data;
     setUser(item.user);
-    setPassword(item.password);
+    setPassword("");
     setLevel(item.level);
     setEmail(item.email);
     setPhone(item.phone);
@@ -114,6 +115,7 @@ export default function FormProducts() {
     setPhone("");
     setEditingItem(null);
     fetchItems();
+    window.location.reload();
   };
 
   return (
@@ -130,44 +132,64 @@ export default function FormProducts() {
           onChange={(e) => setUser(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto focus:border-pink-500"
           id="input__product"
-          required
         />
         <input
           type="password"
           value={password}
           placeholder="Senha"
           onChange={(e) => setPassword(e.target.value)}
-          required
           className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto focus:border-pink-500"
         />
-        <input
-          type="text"
-          value={level}
-          placeholder="Nível de acesso"
-          onChange={(e) => setLevel(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto focus:border-pink-500"
-        />
+        <div className="relative w-40 mr-2 text-pink-500">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="absolute top-0 bottom-0 w-6 h-6 my-auto text-pink-500 right-1"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <select
+            className="w-full py-2  pl-2 pr-6 text-gray-500 border-gray-300 bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-pink-500 cursor-pointer"
+            value={level}
+            onChange={(e) => setLevel(e.target.value)}
+            required
+          >
+              <option value="">Nível de Acesso</option>
+              <option  className="hover:text-pink-500 hover:bg-pink-50" >
+              Funcionário
+              </option>
+              <option  className="hover:text-pink-500 hover:bg-pink-50" >
+              Gerente
+              </option>
+          </select>
+        </div>
+        
         <input
           type="email"
           value={email}
           placeholder="Email"
           onChange={(e) => setEmail(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500 "
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[10rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
         />
         <input
           type="text"
           value={phone}
           placeholder="Telefone"
           onChange={(e) => setPhone(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500 "
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[10rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
         />
         <button
           type="submit"
-          className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium transition duration-200 hover:bg-pink-600"
+          className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium hover:bg-pink-600"
         >
           {editingItem !== null ? "Salvar Usuário" : "Adicionar Usuário"}
         </button>
-        <section className="flex items-center space-x-2 border rounded-md p-2 ml-64">
+        <section className="flex items-center space-x-2 border rounded-md p-2 ml-[23rem] focus:border-pink-500">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 flex-none text-gray-300"
@@ -183,7 +205,7 @@ export default function FormProducts() {
             />
           </svg>
           <input
-            className="outline-none appearance-none placeholder-gray-500 text-gray-500 w-64 "
+            className="outline-none appearance-none placeholder-gray-500 text-gray-500 w-64"
             onChange={(e) => setSearchTerm(e.target.value)}
             type="text"
             placeholder="Pesquisar"
@@ -213,7 +235,7 @@ export default function FormProducts() {
               {items
                 .filter((item) => {
                   const searchTermUnidecoded = unidecode(searchTerm?.toLowerCase() || '');
-                  const itemUserUnidecoded = unidecode(item.product?.toLowerCase() || ''); // aqui foi adicionado o teste para item.product ser nulo ou indefinido
+                  const itemUserUnidecoded = unidecode(item.user?.toLowerCase() || ''); // aqui foi adicionado o teste para item.product ser nulo ou indefinido
                   if (searchTermUnidecoded === "") {
                     return item;
                   } else if (itemUserUnidecoded.includes(searchTermUnidecoded)) {
@@ -223,19 +245,19 @@ export default function FormProducts() {
                 })
                 .map((item) => (
                   <tr key={item.id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4">
                       {item.user}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4">
                       {item.password}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4">
                       {item.level}
                     </td>
-                    <td className="px-6 py-4 whitespace-normal break-words w-[50rem]">
+                    <td className="px-6 py-4 ">
                       {item.email}
                     </td>
-                    <td className="px-8 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 ">
                       {item.phone}
                     </td>
                     <td className=" px-6 whitespace-nowrap">

@@ -61,11 +61,11 @@ const ProfileDropDown = () => {
     };
   
     const navigateToRelatorios = () => {
-      navigate("/Relatórios");
+      navigate("/user/relatorios");
     };
   
     const navigateToUsuarios = () => {
-      navigate("/Usuários");
+      navigate("/user/usuarios");
     };
 
   return (
@@ -73,7 +73,7 @@ const ProfileDropDown = () => {
       <div className="flex items-center space-x-4 ml-1">
         <button
           ref={profileRef}
-          className="w-10 h-10 outline-none rounded-full ring-offset-2 ring-gray-200 ring-4 lg:focus:ring-green-400 ml-1"
+          className="w-10 h-10 outline-none rounded-full ring-offset-2 ring-gray-200 ring-4 lg:focus:ring-green-400 ml-1 z-40"
           onClick={() => setState(!state)}
         >
           <img
@@ -88,7 +88,7 @@ const ProfileDropDown = () => {
         </div>
       </div>
       <ul
-        className={`bg-white top-14 right-0 mt-20 space-y-5 lg:absolute lg:border lg:rounded-md lg:text-sm lg:w-52 lg:shadow-md lg:space-y-0 lg:mt-1 mr-40 z-30 ${
+        className={`bg-white top-[3.6rem] right-0 mt-20 space-y-5 lg:absolute lg:border lg:rounded-md lg:text-sm lg:w-52 lg:shadow-md lg:space-y-0 lg:mt-1 mr-44 z-30 ${
           state ? "" : "lg:hidden"
         }`}
       >
@@ -134,19 +134,19 @@ export default function Header() {
   
   const [menuState, setMenuState] = useState(false);
   const navigate = useNavigate();
-  const navigateToEstoque = () => navigate("/Estoque");
-  const navigateToProdutos = () => navigate("/Cadastro");
-  const navigateToEntradas = () => navigate("/Entradas");
-  const navigateToSaidas = () => navigate("/Saídas");
+  const navigateToEstoque = () => navigate("/user/estoque");
+  const navigateToProdutos = () => navigate("/user/cadastro");
+  const navigateToEntradas = () => navigate("/user/entradas");
+  const navigateToSaidas = () => navigate("/user/saidas");
  
   return (
     <>
       <nav className="bg-pink-500 border-b">
         <div className="flex items-center space-x-8 py-3 px-4 max-w-screen-2xl mx-auto md:px-8">
           <div className="flex-none lg:flex-initial">
-            <a href="Home" className="text-4xl font-bold text-white">
+            <h1 className="text-4xl font-bold text-white">
               HAPPY MAKEUP
-            </a>
+            </h1>
           </div>
           <div className="flex-1 flex items-center justify-between">
             <div
