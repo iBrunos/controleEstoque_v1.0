@@ -92,13 +92,13 @@ module.exports = (app) => {
   
 
   app.post('/exit', eAdmin, (req, res) => {
-    const { product, amount, observation, inserted_by } = req.body;
+    const { product, observation, amount, exitPrice, inserted_by } = req.body;
     const exitSql = 'INSERT INTO exits (product, observation, amount, exit_price, inserted_by) VALUES (?, ?, ?, ?, ?)';
     const stockSql = 'SELECT quantity FROM stock WHERE product = ?';
     const updateStockSql = 'UPDATE stock SET quantity = quantity - ? WHERE product = ?';
   
     // 1. Adicionar saída na tabela exits
-    connection.query(exitSql, [product, amount, observation, inserted_by], (err, exitResult) => {
+    connection.query(exitSql, [product, observation, amount, exitPrice, inserted_by], (err, exitResult) => {
       if (err) {
         console.error('Error inserting exit:', err);
         return res.status(500).json({ error: 'Error inserting exit' });
@@ -125,6 +125,7 @@ module.exports = (app) => {
             product,
             amount,
             observation,
+            exitPrice,
             inserted_by,
             newStockQuantity: newQuantity
           });
@@ -135,9 +136,9 @@ module.exports = (app) => {
   
   app.put('/exit/:id', eAdmin, (req, res) => {
     const id = req.params.id;
-    const { product, observation, amount, inserted_by } = req.body;
+    const { product, observation, amount, exitPrice, inserted_by } = req.body;
     const getExitSql = 'SELECT * FROM exits WHERE id = ?';
-    const updateExitSql = 'UPDATE exits SET product = ?, observation = ?, amount = ?, inserted_by = ? WHERE id = ?';
+    const updateExitSql = 'UPDATE exits SET product = ?, observation = ?, amount = ?, exit_price = ?, inserted_by = ? WHERE id = ?';
     const getStockSql = 'SELECT quantity FROM stock WHERE product = ?';
     const updateStockSql = 'UPDATE stock SET quantity = ? WHERE product = ?';
   
@@ -161,7 +162,7 @@ module.exports = (app) => {
         const product = exitResult[0].product;
   
         // 2. Atualizar saída
-        connection.query(updateExitSql, [product, observation, amount, inserted_by, id], (err, updateResult) => {
+        connection.query(updateExitSql, [product, observation, amount, exitPrice, inserted_by, id], (err, updateResult) => {
           if (err) {
             console.error('Error updating exit:', err);
             connection.rollback(() => {

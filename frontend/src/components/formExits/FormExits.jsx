@@ -12,12 +12,13 @@ export default function FormProducts() {
   const [observation, setObservation] = useState("");
   const [inserted_by, setInserted_by] = useState("");
   const [amount, setAmount] = useState("");
+  const [exitPrice, setExitPrice] = useState("");
   const [editingItem, setEditingItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const changePageTitle = (newTitle) => {
     document.title = newTitle;
   };
-  changePageTitle("Happy Makeup | Saídas");
+  changePageTitle("Happy Makeup | Entradas");
 
   useEffect(() => {
     fetchItems();
@@ -63,6 +64,7 @@ export default function FormProducts() {
       product,
       observation,
       amount,
+      exitPrice,
       inserted_by
     };
     newItem.inserted_by = user;
@@ -76,6 +78,7 @@ export default function FormProducts() {
     setProduct("");
     setObservation("");
     setAmount("");
+    setExitPrice("");
     fetchItems();
   };
 
@@ -98,25 +101,29 @@ export default function FormProducts() {
     const item = response.data;
     setProduct(item.product);
     setObservation(item.observation);
-    setInserted_by(item.inserted_by);
     setAmount(item.amount);
+    setExitPrice(item.exit_price);
+    setInserted_by(item.inserted_by);
   };
 
   const updateItem = async (e) => {
     e.preventDefault();
     const user = localStorage.getItem('user');
-    const newItem = {
+    const updatedItem = {
       product,
       observation,
       amount,
+      exitPrice,
       inserted_by
     };
-    newItem.inserted_by = user;
+    
+    updatedItem.inserted_by = user;
+    console.log(updatedItem)
     const token = localStorage.getItem('token');
 
     const response = await axios.put(
       `http://localhost:3000/exit/${editingItem}`,
-      newItem,
+      updatedItem,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     setItems(
@@ -125,12 +132,11 @@ export default function FormProducts() {
     setProduct("");
     setObservation("");
     setAmount("");
+    setExitPrice("");
     setInserted_by("");
     setEditingItem(null);
     fetchItems();
-    dropDown();
   };
-
   return (
     <>
       <Header />
@@ -165,6 +171,7 @@ export default function FormProducts() {
             ))}
           </select>
 
+
         </div>
 
         <input
@@ -172,7 +179,7 @@ export default function FormProducts() {
           value={observation}
           placeholder="Observação"
           onChange={(e) => setObservation(e.target.value)}
-          className="mr-2 border-gray-300 border rounded-md p-2 w-[40rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[30rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
         />
         <input
           type="number"
@@ -181,13 +188,20 @@ export default function FormProducts() {
           onChange={(e) => setAmount(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-[10rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
         />
+          <input
+          type="number"
+          value={exitPrice}
+          placeholder="Preço de Entrada"
+          onChange={(e) => setExitPrice(e.target.value)}
+          className="mr-2 border-gray-300 border rounded-md p-2 w-[10rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
+        />
         <button
           type="submit"
-          className="mr-16 border rounded-md  p-2 bg-pink-500 text-white font-medium hover:bg-pink-600"
+          className="mr-10 border rounded-md p-2 bg-pink-500 text-white font-medium hover:bg-pink-600"
         >
-          {editingItem !== null ? "Salvar Saída" : "Adicionar Saída"}
+          {editingItem !== null ? "Salvar Entrada" : "Adicionar Entrada"}
         </button>
-        <section className="flex items-center space-x-2 border rounded-md p-2 ml-40">
+        <section className="flex items-center space-x-2 border rounded-md p-2 ml-36 focus:border-pink-500">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 flex-none text-gray-300"
@@ -203,7 +217,7 @@ export default function FormProducts() {
             />
           </svg>
           <input
-            className="outline-none appearance-none placeholder-gray-500 text-gray-500 w-64 focus:border-pink-500"
+            className="outline-none appearance-none placeholder-gray-500 text-gray-500 w-64 "
             onChange={(e) => setSearchTerm(e.target.value)}
             type="text"
             placeholder="Pesquisar"
@@ -213,7 +227,7 @@ export default function FormProducts() {
       </form>
       <div className="p-0 m-2 text-center">
         <h3 className="text-gray-800 text-4xl font-bold text-center ">
-          SAÍDAS DE PRODUTOS
+          SAÍDA DE PRODUTOS
         </h3>
       </div>
       <div className="bg-white mx-auto px-4 md:px-8">
@@ -224,7 +238,10 @@ export default function FormProducts() {
                 <th className="py-3 px-6">Produto</th>
                 <th className="py-3 px-6">Observação</th>
                 <th className="py-3 px-6">Quantidade</th>
+                <th className="py-3 px-2">Preço de Saída</th>
                 <th className="py-3 px-6">Funcionário</th>
+                <th className="py-3 px-6">Criado</th>
+                <th className="py-3 px-6">Editado</th>
                 <th className="py-3 px-6">Ações</th>
               </tr>
             </thead>
@@ -245,14 +262,23 @@ export default function FormProducts() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       {item.product}
                     </td>
-                    <td className="px-6 py-4 whitespace-normal break-words w-[50rem]">
+                    <td className="px-6 py-4 whitespace-normal break-words w-[40rem]">
                       {item.observation}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words">
                       {item.amount}
                     </td>
+                    <td className="px-6 py-4 whitespace-normal break-words">
+                      {item.exit_price}
+                    </td>
                     <td className="px-8 py-4 whitespace-nowrap">
                       {item.inserted_by}
+                    </td>
+                    <td className="px-6 py-4 whitespace-normal break-words">
+                      {item.created_at}
+                    </td>
+                    <td className="px-6 py-4 whitespace-normal break-words">
+                      {item.updated_at}
                     </td>
                     <td className=" px-6 whitespace-nowrap">
                       <button
