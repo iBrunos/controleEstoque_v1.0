@@ -13,6 +13,10 @@ export default function Login() {
   changePageTitle("Happy Makeup | Login");
 
   useEffect(() => {
+    if (localStorage.getItem("checkError") === "true") {
+    window.alert("Você precisa fazer login para acessar essa página.\nCaso Esteja com algum erro, chame o suporte.");
+    localStorage.removeItem("checkError");
+    }
     const token = localStorage.getItem("token");
     if (token) {
       const decodedToken = jwt_decode(token);

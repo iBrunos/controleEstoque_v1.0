@@ -10,7 +10,7 @@ const PrivateRoute = () => {
     : true;
 
   const handleAlert = () => {
-    window.alert("Você precisa fazer login para acessar essa página.\nCaso Esteja com algum erro, chame o suporte.");
+    localStorage.setItem("checkError", "true");
   };
 
   return isAuthenticated && !isTokenExpired ? (

@@ -11,7 +11,7 @@ module.exports = (app) => {
     if (!user || !password) {
       return res.status(400).json({
         error: true,
-        message: "Usuário e senha são obrigatórios",
+        message: "Usuário e senha são obrigatórios.",
       });
     }
 
@@ -22,14 +22,14 @@ module.exports = (app) => {
         console.error(error);
         return res.json({
           error: true,
-          message: "Erro ao buscar usuário",
+          message: "Erro ao buscar usuário.",
         });
       }
 
       if (results.length === 0) {
         return res.json({
           error: true,
-          message: "Usuário ou senha incorreto",
+          message: "Usuário ou senha incorreto.",
         });
       }
 
@@ -40,7 +40,7 @@ module.exports = (app) => {
           console.error(error);
           return res.json({
             error: true,
-            message: "Erro ao comparar senha",
+            message: "Erro ao comparar senha.",
           });
         }
         var token = jwt.sign({ id: usuario.id }, "SEXO", {
@@ -51,11 +51,11 @@ module.exports = (app) => {
         if (result !== true) {
           return res.json({
             error: true,
-            message: "Usuário ou senha incorreto",
+            message: "Usuário ou senha incorreto.",
           });
         } else {
           return res.json({
-            message: "Login realizado com sucesso",
+            message: "Login realizado com sucesso.",
             token,
             id: usuario.id,
             user: usuario.user,
