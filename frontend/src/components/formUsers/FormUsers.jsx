@@ -5,7 +5,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import unidecode from "unidecode";
 
-
 export default function FormProducts() {
   const [items, setItems] = useState([]);
   const [user, setUser] = useState("");
@@ -15,21 +14,28 @@ export default function FormProducts() {
   const [phone, setPhone] = useState("");
   const [editingItem, setEditingItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  
-  
+  const changePageTitle = (newTitle) => {
+    document.title = newTitle;
+  };
+  changePageTitle("Happy Makeup | Usuários");
+  function censorText(text) {
+    const censoredText = "⚫".repeat(text.length);
+    return censoredText;
+  }
+
   useEffect(() => {
     fetchItems();
   }, []);
 
   const fetchItems = async () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     // definir o cabeçalho `Authorization` com o token JWT
     const config = {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     };
     // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
     try {
-      const response = await axios.get('http://localhost:3000/user', config);
+      const response = await axios.get("http://localhost:3000/user", config);
       setItems(response.data);
     } catch (error) {
       console.error(error);
@@ -39,21 +45,19 @@ export default function FormProducts() {
   const addItem = async (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     const newItem = {
       user,
       password,
       level,
       email,
-      phone
+      phone,
     };
 
-    const response = await axios.post(
-      "http://localhost:3000/user",
-      newItem,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    const response = await axios.post("http://localhost:3000/user", newItem, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
     setItems([...items, response.data]);
     setUser("");
@@ -65,9 +69,11 @@ export default function FormProducts() {
   };
 
   const deleteItem = async (id) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     try {
-      await axios.delete(`http://localhost:3000/user/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.delete(`http://localhost:3000/user/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setItems(items.filter((item) => item.id !== id));
     } catch (error) {
       console.error(error);
@@ -75,10 +81,12 @@ export default function FormProducts() {
   };
 
   const editItem = async (id) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     setEditingItem(id);
-    const response = await axios.get(`http://localhost:3000/user/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+    const response = await axios.get(`http://localhost:3000/user/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     const item = response.data;
     setUser(item.user);
     setPassword("");
@@ -95,10 +103,10 @@ export default function FormProducts() {
       password,
       level,
       email,
-      phone
+      phone,
     };
     updatedItem.inserted_by = user;
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     const response = await axios.put(
       `http://localhost:3000/user/${editingItem}`,
@@ -159,16 +167,16 @@ export default function FormProducts() {
             onChange={(e) => setLevel(e.target.value)}
             required
           >
-              <option value="">Nível de Acesso</option>
-              <option  className="hover:text-pink-500 hover:bg-pink-50" >
+            <option value="">Nível de Acesso</option>
+            <option className="hover:text-pink-500 hover:bg-pink-50">
               Funcionário
-              </option>
-              <option  className="hover:text-pink-500 hover:bg-pink-50" >
+            </option>
+            <option className="hover:text-pink-500 hover:bg-pink-50">
               Gerente
-              </option>
+            </option>
           </select>
         </div>
-        
+
         <input
           type="email"
           value={email}
@@ -234,32 +242,28 @@ export default function FormProducts() {
             <tbody className="text-gray-600 divide-y">
               {items
                 .filter((item) => {
-                  const searchTermUnidecoded = unidecode(searchTerm?.toLowerCase() || '');
-                  const itemUserUnidecoded = unidecode(item.user?.toLowerCase() || ''); // aqui foi adicionado o teste para item.product ser nulo ou indefinido
+                  const searchTermUnidecoded = unidecode(
+                    searchTerm?.toLowerCase() || ""
+                  );
+                  const itemUserUnidecoded = unidecode(
+                    item.user?.toLowerCase() || ""
+                  ); // aqui foi adicionado o teste para item.product ser nulo ou indefinido
                   if (searchTermUnidecoded === "") {
                     return item;
-                  } else if (itemUserUnidecoded.includes(searchTermUnidecoded)) {
+                  } else if (
+                    itemUserUnidecoded.includes(searchTermUnidecoded)
+                  ) {
                     return item;
                   }
                   return null;
                 })
                 .map((item) => (
                   <tr key={item.id}>
-                    <td className="px-6 py-4">
-                      {item.user}
-                    </td>
-                    <td className="px-6 py-4">
-                      {item.password}
-                    </td>
-                    <td className="px-6 py-4">
-                      {item.level}
-                    </td>
-                    <td className="px-6 py-4 ">
-                      {item.email}
-                    </td>
-                    <td className="px-6 py-4 ">
-                      {item.phone}
-                    </td>
+                    <td className="px-6 py-4">{item.user}</td>
+                    <td className="px-6 py-4 text-[0.5rem]">{censorText(item.password)}</td>
+                    <td className="px-6 py-4">{item.level}</td>
+                    <td className="px-6 py-4 ">{item.email}</td>
+                    <td className="px-6 py-4 ">{item.phone}</td>
                     <td className=" px-6 whitespace-nowrap">
                       <button
                         onClick={() => editItem(item.id)}

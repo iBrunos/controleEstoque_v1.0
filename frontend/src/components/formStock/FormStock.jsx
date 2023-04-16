@@ -6,6 +6,10 @@ import Header from "../header/Header";
 export default function FormProducts() {
   const [items, setItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const changePageTitle = (newTitle) => {
+    document.title = newTitle;
+  };
+  changePageTitle("Happy Makeup | Estoque");
 
   useEffect(() => {
     fetchItems();

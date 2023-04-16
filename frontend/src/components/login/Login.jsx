@@ -1,11 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import jwt_decode from "jwt-decode";
 export default function Login() {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
+  const changePageTitle = (newTitle) => {
+    document.title = newTitle;
+  };
+  changePageTitle("Happy Makeup | Login");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = jwt_decode(token);
+      const currentTime = Date.now() / 1000;
+
+      if (decodedToken.exp > currentTime) {
+        navigate("/user/estoque");
+      }
+    }
+  }, [navigate]);
 
   const handleRememberMe = () => {
     setRememberMe(!rememberMe);
@@ -37,10 +54,8 @@ export default function Login() {
       localStorage.setItem("email", data.email);
       localStorage.setItem("user", data.user);
       localStorage.setItem("userId", data.id);
-
       navigate("/user/estoque");
       // substitua '/nextpage' pelo caminho do formulário desejado
-
       window.location.reload();
     } else {
       setPassword("");
@@ -51,16 +66,25 @@ export default function Login() {
 
   return (
     <>
-      <section className="bg-pink-500 ">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <h1 className="flex items-center mb-6 text-5xl font-bold text-white ">
-            HAPPY MAKEUP
-          </h1>
-          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0  ">
-            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
-                FORM DE LOGIN
-              </h1>
+    <nav className="bg-pink-500">
+        <div className="flex items-center space-x-8 py-[1.3rem] px-4 max-w-screen-2xl mx-auto md:px-8 ml-48">
+          <div className="flex-none lg:flex-initial">
+            <h1 className="text-4xl font-bold text-white">
+              HAPPY MAKEUP
+            </h1>
+          </div>
+          </div>
+      </nav>
+      <section className="bg-pink-300">
+        <div className="flex flex-col items-center px-6 py-8 mx-auto h-[53.2rem] lg:py-0">
+          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-56 sm:max-w-md xl:p-0  ">
+            <div className="sm:p-8">
+            <p className=" text-4xl font-bold text-gray-900">
+            Bem vindo,
+            </p>
+            <p className=" text-2xl font-semibold text-gray-900 mt-1 mb-3">
+            Para continuar realize o login.
+            </p>
               <div className="flex flex-col">
                 <form onSubmit={login} className="space-y-4 md:space-y-6">
                   <input

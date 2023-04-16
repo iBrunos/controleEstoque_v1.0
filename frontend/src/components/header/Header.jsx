@@ -56,7 +56,10 @@ const ProfileDropDown = () => {
     }, []);
   
     const navigateToLogout = () => {
-      localStorage.clear();
+      localStorage.removeItem("token");
+      localStorage.removeItem("email");
+      localStorage.removeItem("user");
+      localStorage.removeItem("userId");
       navigate("/");
     };
   
@@ -73,7 +76,7 @@ const ProfileDropDown = () => {
       <div className="flex items-center space-x-4 ml-1">
         <button
           ref={profileRef}
-          className="w-10 h-10 outline-none rounded-full ring-offset-2 ring-gray-200 ring-4 lg:focus:ring-green-400 ml-1 z-40"
+          className="w-10 h-10 outline-none rounded-full ring-offset-2 ring-gray-200 ring-4 lg:focus:ring-green-400 z-40"
           onClick={() => setState(!state)}
         >
           <img
@@ -83,12 +86,12 @@ const ProfileDropDown = () => {
           />
         </button>
         <div className="">
-          <span className="block font-semibold text-white">{user}</span>
+          <span className="block font-semibold text-white m-0">{user}</span>
           <span className="block text-sm text-white">{email}</span>
         </div>
       </div>
       <ul
-        className={`bg-white top-[3.6rem] right-0 mt-20 space-y-5 lg:absolute lg:border lg:rounded-md lg:text-sm lg:w-52 lg:shadow-md lg:space-y-0 lg:mt-1 mr-44 z-30 ${
+        className={`bg-white lg:absolute lg:border lg:rounded-md lg:text-sm lg:w-52 lg:shadow-md mt-0 z-30 ${
           state ? "" : "lg:hidden"
         }`}
       >

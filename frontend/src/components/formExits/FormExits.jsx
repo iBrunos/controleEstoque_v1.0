@@ -14,6 +14,10 @@ export default function FormProducts() {
   const [amount, setAmount] = useState("");
   const [editingItem, setEditingItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const changePageTitle = (newTitle) => {
+    document.title = newTitle;
+  };
+  changePageTitle("Happy Makeup | Saídas");
 
   useEffect(() => {
     fetchItems();
