@@ -18,8 +18,8 @@ connection.connect((err) => {
 });
 
 consign()
+  .include('./routes/config.js')
   .include('routes')
-  .include('config.js')
   .into(app);
   
 // Criando as tabelas do banco

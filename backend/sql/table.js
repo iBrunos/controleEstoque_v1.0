@@ -35,7 +35,7 @@ class Tables {
       if (erro) {
         console.log(erro);
       } else {
-        console.log("Table stock was successfully created");
+        //console.log("Table stock was successfully created");
       }
     });
   }
