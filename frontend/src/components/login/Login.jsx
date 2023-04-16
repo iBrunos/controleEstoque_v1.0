@@ -53,7 +53,7 @@ export default function Login() {
     const response = await axios.post("http://localhost:3000/login", newItem);
     const data = response.data;
 
-    if (data.message === "Login realizado com sucesso") {
+    if (data.message === "Login realizado com sucesso.") {
       localStorage.setItem("token", data.token);
       localStorage.setItem("email", data.email);
       localStorage.setItem("user", data.user);

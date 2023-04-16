@@ -191,7 +191,7 @@ export default function FormProducts() {
           <input
           type="number"
           value={exitPrice}
-          placeholder="Preço de Entrada"
+          placeholder="Preço de Saída"
           onChange={(e) => setExitPrice(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-[10rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
         />
@@ -199,7 +199,7 @@ export default function FormProducts() {
           type="submit"
           className="mr-10 border rounded-md p-2 bg-pink-500 text-white font-medium hover:bg-pink-600"
         >
-          {editingItem !== null ? "Salvar Entrada" : "Adicionar Entrada"}
+          {editingItem !== null ? "Salvar Saída" : "Adicionar Saída"}
         </button>
         <section className="flex items-center space-x-2 border rounded-md p-2 ml-36 focus:border-pink-500">
           <svg

@@ -65,7 +65,6 @@ export default function FormProducts() {
     setLevel("");
     setEmail("");
     setPhone("");
-    window.location.reload();
   };
 
   const deleteItem = async (id) => {

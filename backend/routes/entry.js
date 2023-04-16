@@ -52,6 +52,16 @@ module.exports = (app) => {
           return;
         }
          
+      // 2. Excluir entrada
+      connection.query(deleteEntrySql, [id], (err, deleteResult) => {
+        if (err) {
+          console.error('Error deleting entry:', err);
+          connection.rollback(() => {
+            res.status(500).json({ error: 'Error deleting entry' });
+          });
+          return;
+        }
+
         const product = entryResult[0].product;
         const amount = entryResult[0].amount;
   
@@ -65,14 +75,6 @@ module.exports = (app) => {
             return;
           }
           
-          if (stockResult.length === 0) {
-            console.error('Product ${product} not found in stock');
-            connection.rollback(() => {
-              res.status(404).json({ error: 'Product ${product} not found in stock' });
-            });
-            return;
-          }
-
           const currentQuantity = stockResult[0].quantity || 0;
           const newQuantity = Math.max(0, currentQuantity - amount);
   
@@ -86,15 +88,7 @@ module.exports = (app) => {
               return;
             }
   
-            // 4. Excluir entrada
-            connection.query(deleteEntrySql, [id], (err, deleteResult) => {
-              if (err) {
-                console.error('Error deleting entry:', err);
-                connection.rollback(() => {
-                  res.status(500).json({ error: 'Error deleting entry' });
-                });
-                return;
-              }
+
   
               connection.commit(err => {
                 if (err) {

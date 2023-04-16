@@ -110,6 +110,7 @@ export default function FormProducts() {
     } catch (error) {
       console.error(error);
     }
+    window.location.reload();
   };
 
 
