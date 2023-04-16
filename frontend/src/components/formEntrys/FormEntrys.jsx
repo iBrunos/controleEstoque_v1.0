@@ -288,7 +288,7 @@ export default function FormProducts() {
                       {item.amount}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words">
-                      {item.entry_price}
+                    R$: {item.entry_price}
                     </td>
                     <td className="px-8 py-4 whitespace-nowrap">
                       {item.inserted_by}

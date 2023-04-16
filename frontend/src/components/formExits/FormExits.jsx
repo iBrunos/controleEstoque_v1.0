@@ -3,6 +3,7 @@ import axios from "axios";
 import Header from "../header/Header";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import moment from 'moment';
 import unidecode from "unidecode";
 
 export default function FormProducts() {
@@ -54,6 +55,23 @@ export default function FormProducts() {
       console.error(error);
     }
   };
+  function formatDateHours(dateString) {
+    const date = moment(dateString).format("DD/MM/YYYY [às] HH:mm");
+    return date
+    }
+
+    function formatDate(dateString) {
+      const date = moment(dateString).format('DD/MM/YYYY');
+      return date;
+    }
+
+    const formatPrice = (price) => {
+      if (!price.includes(",") && !price.endsWith(",") && !price.endsWith(".")) {
+        price = price.replace(".", ",");
+        price = price + ",00";
+      }
+      return price;
+    };
   const addItem = async (e) => {
     e.preventDefault();
 
@@ -64,7 +82,7 @@ export default function FormProducts() {
       product,
       observation,
       amount,
-      exitPrice,
+      exitPrice: formatPrice(exitPrice),
       inserted_by
     };
     newItem.inserted_by = user;
@@ -113,7 +131,7 @@ export default function FormProducts() {
       product,
       observation,
       amount,
-      exitPrice,
+      exitPrice: formatPrice(exitPrice),
       inserted_by
     };
     
@@ -269,16 +287,16 @@ export default function FormProducts() {
                       {item.amount}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words">
-                      {item.exit_price}
+                      R$: {item.exit_price}
                     </td>
                     <td className="px-8 py-4 whitespace-nowrap">
                       {item.inserted_by}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words">
-                      {item.created_at}
+                      {formatDate(item.created_at)}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words">
-                      {item.updated_at}
+                      {formatDateHours(item.updated_at)}
                     </td>
                     <td className=" px-6 whitespace-nowrap">
                       <button
