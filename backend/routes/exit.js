@@ -93,7 +93,7 @@ module.exports = (app) => {
 
   app.post('/exit', eAdmin, (req, res) => {
     const { product, amount, observation, inserted_by } = req.body;
-    const exitSql = 'INSERT INTO exits (product, amount, observation, inserted_by) VALUES (?, ?, ?, ?)';
+    const exitSql = 'INSERT INTO exits (product, observation, amount, exit_price, inserted_by) VALUES (?, ?, ?, ?, ?)';
     const stockSql = 'SELECT quantity FROM stock WHERE product = ?';
     const updateStockSql = 'UPDATE stock SET quantity = quantity - ? WHERE product = ?';
   

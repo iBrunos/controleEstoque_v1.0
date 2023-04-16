@@ -115,13 +115,13 @@ module.exports = (app) => {
   });
   
   app.post('/entry', eAdmin, (req, res) => {
-    const { product, observation, amount, inserted_by } = req.body;
-    const entrySql = 'INSERT INTO entrys (product, observation, amount, inserted_by) VALUES (?, ?, ?, ?)';
+    const { product, observation, amount, entryPrice, inserted_by } = req.body;
+    const entrySql = 'INSERT INTO entrys (product, observation, amount, entry_price, inserted_by) VALUES (?, ?, ?, ?, ?)';
     const stockSql = 'SELECT SUM(amount) AS quantity FROM entrys JOIN products ON entrys.product = products.product WHERE entrys.product = ?';
     const updateStockSql = 'UPDATE stock SET quantity = ? WHERE product = ?';
   
     // 1. Adicionar entrada na tabela entries
-    connection.query(entrySql, [product, observation,amount, inserted_by], (err, entryResult) => {
+    connection.query(entrySql, [product, observation,amount, entryPrice, inserted_by], (err, entryResult) => {
       if (err) {
         console.error('Error inserting entry:', err);
         return res.status(500).json({ error: 'Error inserting entry' });
@@ -157,13 +157,13 @@ module.exports = (app) => {
   
   app.put('/entry/:id', eAdmin, (req, res) => {
     const id = req.params.id;
-    const { product, observation, amount, inserted_by } = req.body;
-    const entrySql = 'UPDATE entrys SET product = ?, observation = ?, amount = ?, inserted_by = ? WHERE id = ?';
+    const { product, observation, amount, entryPrice, inserted_by  } = req.body;
+    const entrySql = 'UPDATE entrys SET product = ?, observation = ?, amount = ?, entry_price = ?, inserted_by = ? WHERE id = ?';
     const stockSql = 'SELECT SUM(amount) AS quantity FROM entrys WHERE product = ?';
     const updateStockSql = 'UPDATE stock SET quantity = ? WHERE product = ?';
   
     // 1. Atualizar entrada na tabela entries
-    connection.query(entrySql, [product, observation, amount, inserted_by, id], (err, entryResult) => {
+    connection.query(entrySql, [product, observation, amount, entryPrice, inserted_by, id], (err, entryResult) => {
       if (err) {
         console.error('Error updating entry:', err);
         return res.status(500).json({ error: 'Error updating entry' });
@@ -187,8 +187,9 @@ module.exports = (app) => {
           res.json({
             id,
             product,
-            amount,
             observation,
+            amount,
+            entryPrice,
             inserted_by,
             newStockQuantity: newQuantity
           });
