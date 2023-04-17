@@ -61,10 +61,6 @@ export default function FormProducts() {
   return date
   }
   
-  function formatDate(dateString) {
-    const date = moment(dateString).format('DD/MM/YYYY');
-    return date;
-  }
   
   const formatPrice = (price) => {
     if (!price.includes(",") && !price.endsWith(",") && !price.endsWith(".")) {
