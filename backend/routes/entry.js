@@ -35,13 +35,13 @@ module.exports = (app) => {
     const deleteEntrySql = 'DELETE FROM entrys WHERE id = ?';
     const getStockSql = 'SELECT quantity FROM stock WHERE product = ?';
     const updateStockSql = 'UPDATE stock SET quantity = ? WHERE product = ?';
-  
+
     connection.beginTransaction(err => {
       if (err) {
         console.error('Error starting transaction:', err);
         return res.status(500).json({ error: 'Error starting transaction' });
       }
-  
+
       // 1. Buscar product e amount da entrada que será excluída
       connection.query(getEntrySql, [id], (err, entryResult) => {
         if (err) {
@@ -51,45 +51,45 @@ module.exports = (app) => {
           });
           return;
         }
-         
-      // 2. Excluir entrada
-      connection.query(deleteEntrySql, [id], (err, deleteResult) => {
-        if (err) {
-          console.error('Error deleting entry:', err);
-          connection.rollback(() => {
-            res.status(500).json({ error: 'Error deleting entry' });
-          });
-          return;
-        }
 
-        const product = entryResult[0].product;
-        const amount = entryResult[0].amount;
-  
-        // 2. Subtrair amount da quantidade atual em stock
-        connection.query(getStockSql, [product], (err, stockResult) => {
+        // 2. Excluir entrada
+        connection.query(deleteEntrySql, [id], (err, deleteResult) => {
           if (err) {
-            console.error('Error getting stock quantity:', err);
+            console.error('Error deleting entry:', err);
             connection.rollback(() => {
-              res.status(500).json({ error: 'Error getting stock quantity' });
+              res.status(500).json({ error: 'Error deleting entry' });
             });
             return;
           }
-          
-          const currentQuantity = stockResult[0].quantity || 0;
-          const newQuantity = Math.max(0, currentQuantity - amount);
-  
-          // 3. Atualizar quantidade em stock
-          connection.query(updateStockSql, [newQuantity, product], (err, updateResult) => {
+
+          const product = entryResult[0].product;
+          const amount = entryResult[0].amount;
+
+          // 2. Subtrair amount da quantidade atual em stock
+          connection.query(getStockSql, [product], (err, stockResult) => {
             if (err) {
-              console.error('Error updating stock quantity:', err);
+              console.error('Error getting stock quantity:', err);
               connection.rollback(() => {
-                res.status(500).json({ error: 'Error updating stock quantity' });
+                res.status(500).json({ error: 'Error getting stock quantity' });
               });
               return;
             }
-  
 
-  
+            const currentQuantity = stockResult[0].quantity || 0;
+            const newQuantity = Math.max(0, currentQuantity - amount);
+
+            // 3. Atualizar quantidade em stock
+            connection.query(updateStockSql, [newQuantity, product], (err, updateResult) => {
+              if (err) {
+                console.error('Error updating stock quantity:', err);
+                connection.rollback(() => {
+                  res.status(500).json({ error: 'Error updating stock quantity' });
+                });
+                return;
+              }
+
+
+
               connection.commit(err => {
                 if (err) {
                   console.error('Error committing transaction:', err);
@@ -98,7 +98,7 @@ module.exports = (app) => {
                   });
                   return;
                 }
-  
+
                 res.send(`Item with ID ${id} has been deleted`);
               });
             });
@@ -107,35 +107,35 @@ module.exports = (app) => {
       });
     });
   });
-  
+
   app.post('/entry', eAdmin, (req, res) => {
     const { product, observation, amount, entryPrice, inserted_by } = req.body;
     const entrySql = 'INSERT INTO entrys (product, observation, amount, entry_price, inserted_by) VALUES (?, ?, ?, ?, ?)';
     const stockSql = 'SELECT SUM(amount) AS quantity FROM entrys JOIN products ON entrys.product = products.product WHERE entrys.product = ?';
     const updateStockSql = 'UPDATE stock SET quantity = ? WHERE product = ?';
-  
+
     // 1. Adicionar entrada na tabela entries
-    connection.query(entrySql, [product, observation,amount, entryPrice, inserted_by], (err, entryResult) => {
+    connection.query(entrySql, [product, observation, amount, entryPrice, inserted_by], (err, entryResult) => {
       if (err) {
         console.error('Error inserting entry:', err);
         return res.status(500).json({ error: 'Error inserting entry' });
       }
-  
+
       // 2. Atualizar quantidade na tabela stock
       connection.query(stockSql, [product], (err, stockResult) => {
         if (err) {
           console.error('Error getting stock quantity:', err);
           return res.status(500).json({ error: 'Error getting stock quantity' });
         }
-  
+
         const newQuantity = stockResult[0].quantity || 0;
-  
+
         connection.query(updateStockSql, [newQuantity, product], (err, updateResult) => {
           if (err) {
             console.error('Error updating stock quantity:', err);
             return res.status(500).json({ error: 'Error updating stock quantity' });
           }
-  
+
           res.json({
             id: entryResult.insertId,
             product,
@@ -148,48 +148,60 @@ module.exports = (app) => {
       });
     });
   });
-  
+
   app.put('/entry/:id', eAdmin, (req, res) => {
     const id = req.params.id;
-    const { product, observation, amount, entryPrice, inserted_by  } = req.body;
+    const { product, observation, amount, entryPrice, inserted_by } = req.body;
     const entrySql = 'UPDATE entrys SET product = ?, observation = ?, amount = ?, entry_price = ?, inserted_by = ? WHERE id = ?';
     const stockSql = 'SELECT SUM(amount) AS quantity FROM entrys WHERE product = ?';
     const updateStockSql = 'UPDATE stock SET quantity = ? WHERE product = ?';
-  
-    // 1. Atualizar entrada na tabela entries
-    connection.query(entrySql, [product, observation, amount, entryPrice, inserted_by, id], (err, entryResult) => {
-      if (err) {
-        console.error('Error updating entry:', err);
-        return res.status(500).json({ error: 'Error updating entry' });
+    const exitAmountSql = 'SELECT SUM(amount) AS total FROM exits WHERE product = ?';
+    let exitAmount;
+
+    // Pega valor de saidas do produto
+    connection.query(exitAmountSql, [product], (error, results) => {
+      if (error) {
+        throw error;
       }
-  
-      // 2. Atualizar quantidade na tabela stock
-      connection.query(stockSql, [product], (err, stockResult) => {
+      exitAmount = results[0].total;
+      console.log(exitAmount);
+
+      // 1. Atualizar entrada na tabela entries
+      connection.query(entrySql, [product, observation, amount, entryPrice, inserted_by, id], (err, entryResult) => {
         if (err) {
-          console.error('Error getting stock quantity:', err);
-          return res.status(500).json({ error: 'Error getting stock quantity' });
+          console.error('Error updating entry:', err);
+          return res.status(500).json({ error: 'Error updating entry' });
         }
-  
-        const newQuantity = stockResult[0].quantity || 0;
-  
-        connection.query(updateStockSql, [newQuantity, product], (err, updateResult) => {
+        // 2. Atualizar quantidade na tabela stock
+        connection.query(stockSql, [product], (err, stockResult) => {
           if (err) {
-            console.error('Error updating stock quantity:', err);
-            return res.status(500).json({ error: 'Error updating stock quantity' });
+            console.error('Error getting stock quantity:', err);
+            return res.status(500).json({ error: 'Error getting stock quantity' });
           }
-  
-          res.json({
-            id,
-            product,
-            observation,
-            amount,
-            entryPrice,
-            inserted_by,
-            newStockQuantity: newQuantity
+
+          const newQuantity = stockResult[0].quantity || 0;
+          let quantidade = newQuantity - exitAmount;
+
+          console.log("quantidade: " + quantidade)
+
+          connection.query(updateStockSql, [quantidade, product], (err, updateResult) => {
+            if (err) {
+              console.error('Error updating stock quantity:', err);
+              return res.status(500).json({ error: 'Error updating stock quantity' });
+            }
+
+            res.json({
+              id,
+              product,
+              observation,
+              amount,
+              entryPrice,
+              inserted_by,
+              newStockQuantity: newQuantity
+            });
           });
         });
       });
     });
-  });
-  ;
-}
+  })
+  }
