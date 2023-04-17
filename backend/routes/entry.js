@@ -164,7 +164,6 @@ module.exports = (app) => {
         throw error;
       }
       exitAmount = results[0].total;
-      console.log(exitAmount);
 
       // 1. Atualizar entrada na tabela entries
       connection.query(entrySql, [product, observation, amount, entryPrice, inserted_by, id], (err, entryResult) => {
@@ -182,7 +181,6 @@ module.exports = (app) => {
           const newQuantity = stockResult[0].quantity || 0;
           let quantidade = newQuantity - exitAmount;
 
-          console.log("quantidade: " + quantidade)
 
           connection.query(updateStockSql, [quantidade, product], (err, updateResult) => {
             if (err) {
