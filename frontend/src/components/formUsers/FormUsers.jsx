@@ -137,6 +137,7 @@ export default function FormProducts() {
           value={user}
           placeholder="Usuário"
           onChange={(e) => setUser(e.target.value)}
+          required
           className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto focus:border-pink-500"
           id="input__product"
         />
@@ -145,6 +146,7 @@ export default function FormProducts() {
           value={password}
           placeholder="Senha"
           onChange={(e) => setPassword(e.target.value)}
+          required
           className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto focus:border-pink-500"
         />
         <div className="relative w-40 mr-2 text-pink-500">

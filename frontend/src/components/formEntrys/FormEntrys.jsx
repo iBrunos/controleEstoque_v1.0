@@ -246,7 +246,7 @@ export default function FormProducts() {
       </form>
       <div className="p-0 m-2 text-center">
         <h3 className="text-gray-800 text-4xl font-bold text-center ">
-          ENTRADAS DE PRODUTOS
+          ENTRADA DE PRODUTOS
         </h3>
       </div>
       <div className="bg-white mx-auto px-4 md:px-8">
@@ -294,7 +294,7 @@ export default function FormProducts() {
                       {item.inserted_by}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words">
-                      {formatDate(item.created_at)}
+                      {formatDateHours(item.created_at)}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words">
                       {formatDateHours(item.updated_at)}

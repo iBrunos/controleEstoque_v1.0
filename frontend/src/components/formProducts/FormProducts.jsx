@@ -143,7 +143,7 @@ export default function FormProducts() {
           required
         />
         <input
-          type="text"
+          type="number"
           value={price}
           placeholder="Preço"
           onChange={(e) => setPrice(e.target.value)}
