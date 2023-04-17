@@ -3,7 +3,7 @@ import axios from "axios";
 import Header from "../header/Header";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import moment from 'moment';
+import moment from "moment";
 import unidecode from "unidecode";
 
 export default function FormProducts() {
@@ -27,14 +27,14 @@ export default function FormProducts() {
   }, []);
 
   const fetchItems = async () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     // definir o cabeçalho `Authorization` com o token JWT
     const config = {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     };
     // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
     try {
-      const response = await axios.get('http://localhost:3000/entry', config);
+      const response = await axios.get("http://localhost:3000/entry", config);
       setItems(response.data);
     } catch (error) {
       console.error(error);
@@ -42,53 +42,74 @@ export default function FormProducts() {
   };
 
   const dropDown = async () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     // definir o cabeçalho `Authorization` com o token JWT
     const config2 = {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     };
     // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
     try {
-      const response2 = await axios.get('http://localhost:3000/product', config2);
+      const response2 = await axios.get(
+        "http://localhost:3000/product",
+        config2
+      );
       setItems2(response2.data);
     } catch (error) {
       console.error(error);
     }
   };
-  
+
   function formatDateHours(dateString) {
-  const date = moment(dateString).format("DD/MM/YYYY [às] HH:mm");
-  return date
+    const date = moment(dateString).format("DD/MM/YYYY [às] HH:mm");
+    return date;
   }
-  
-  
+
   const formatPrice = (price) => {
-    if (!price.includes(",") && !price.endsWith(",") && !price.endsWith(".")) {
-      price = price.replace(".", ",");
-      price = price + ",00";
+    if (typeof price !== "string") {
+      price = price.toString();
     }
+  
+    // Substitui o ponto ou a vírgula pelo caractere de separador de decimais adequado
+    price = price.replace(/[.,]/g, ",");
+  
+    // Adiciona as casas decimais faltantes, se necessário
+    if (!price.includes(",")) {
+      price += ",00";
+    } else {
+      const decimalPart = price.split(",")[1];
+      if (decimalPart.length === 1) {
+        price += "0";
+      }
+    }
+  
     return price;
   };
-  
+
+  function transformStringToNumber(stringNumber) {
+    // Remove quaisquer espaços em branco antes ou depois da string
+    const cleanedString = stringNumber.trim();
+    // Converte a string em um número usando parseFloat()
+    const number = parseFloat(cleanedString.replace(",", "."));
+    return number;
+  }
+
   const addItem = async (e) => {
     e.preventDefault();
 
-    const user = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
+    const user = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
 
     const newItem = {
       product,
       observation,
       amount,
       entryPrice: formatPrice(entryPrice),
-      inserted_by
+      inserted_by,
     };
     newItem.inserted_by = user;
-    const response = await axios.post(
-      "http://localhost:3000/entry",
-      newItem,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    const response = await axios.post("http://localhost:3000/entry", newItem, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
     setItems([...items, response.data]);
     setProduct("");
@@ -99,9 +120,11 @@ export default function FormProducts() {
   };
 
   const deleteItem = async (id) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     try {
-      await axios.delete(`http://localhost:3000/entry/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.delete(`http://localhost:3000/entry/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setItems(items.filter((item) => item.id !== id));
     } catch (error) {
       console.error(error);
@@ -109,32 +132,33 @@ export default function FormProducts() {
     window.location.reload();
   };
 
-
   const editItem = async (id) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     setEditingItem(id);
-    const response = await axios.get(`http://localhost:3000/entry/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+    const response = await axios.get(`http://localhost:3000/entry/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     const item = response.data;
     setProduct(item.product);
     setObservation(item.observation);
     setAmount(item.amount);
-    setEntryPrice(item.entry_price);
+    setEntryPrice(transformStringToNumber(item.entry_price));
     setInserted_by(item.inserted_by);
   };
 
   const updateItem = async (e) => {
     e.preventDefault();
-    const user = localStorage.getItem('user');
+    const user = localStorage.getItem("user");
     const updatedItem = {
       product,
       observation,
       amount,
       entryPrice: formatPrice(entryPrice),
-      inserted_by
+      inserted_by,
     };
     updatedItem.inserted_by = user;
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     const response = await axios.put(
       `http://localhost:3000/entry/${editingItem}`,
@@ -180,13 +204,15 @@ export default function FormProducts() {
           >
             <option value="">Selecione um produto</option>
             {items2.map((item2) => (
-              <option key={item2.id} className="hover:text-pink-500 hover:bg-pink-50" value={item2.product}>
+              <option
+                key={item2.id}
+                className="hover:text-pink-500 hover:bg-pink-50"
+                value={item2.product}
+              >
                 {item2.product}
               </option>
             ))}
           </select>
-
-
         </div>
 
         <input
@@ -203,7 +229,7 @@ export default function FormProducts() {
           onChange={(e) => setAmount(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-[10rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
         />
-          <input
+        <input
           type="number"
           value={entryPrice}
           placeholder="Preço de Entrada"
@@ -263,11 +289,17 @@ export default function FormProducts() {
             <tbody className="text-gray-600 divide-y">
               {items
                 .filter((item) => {
-                  const searchTermUnidecoded = unidecode(searchTerm?.toLowerCase() || '');
-                  const itemUserUnidecoded = unidecode(item.product?.toLowerCase() || ''); // aqui foi adicionado o teste para item.product ser nulo ou indefinido
+                  const searchTermUnidecoded = unidecode(
+                    searchTerm?.toLowerCase() || ""
+                  );
+                  const itemUserUnidecoded = unidecode(
+                    item.product?.toLowerCase() || ""
+                  ); // aqui foi adicionado o teste para item.product ser nulo ou indefinido
                   if (searchTermUnidecoded === "") {
                     return item;
-                  } else if (itemUserUnidecoded.includes(searchTermUnidecoded)) {
+                  } else if (
+                    itemUserUnidecoded.includes(searchTermUnidecoded)
+                  ) {
                     return item;
                   }
                   return null;
@@ -284,7 +316,7 @@ export default function FormProducts() {
                       {item.amount}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words">
-                    R$: {item.entry_price}
+                      R$: {item.entry_price}
                     </td>
                     <td className="px-8 py-4 whitespace-nowrap">
                       {item.inserted_by}
@@ -298,16 +330,16 @@ export default function FormProducts() {
                     <td className=" px-6 whitespace-nowrap">
                       <button
                         onClick={() => editItem(item.id)}
-                        className="py-2 px-3 font-medium text-indigo-600 hover:text-indigo-500 duration-150 hover:bg-gray-50 rounded-lg"
+                        className="py-1 px-2 font-medium text-white duration-150 hover:bg-indigo-700 bg-indigo-600 rounded-lg mr-1"
                       >
-                        <EditIcon className="mr-2" />
+                        <EditIcon className="mr-1" />
                         Editar
                       </button>
                       <button
                         onClick={() => deleteItem(item.id)}
-                        className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg"
+                        className="py-1 leading-none px-2 font-medium text-white duration-150 bg-red-600 hover:bg-red-700 rounded-lg"
                       >
-                        <DeleteForeverIcon className="mr-2" />
+                        <DeleteForeverIcon className="mr-1" />
                         Deletar
                       </button>
                     </td>

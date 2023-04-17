@@ -39,12 +39,33 @@ export default function FormProducts() {
   };
   
   const formatPrice = (price) => {
-    if (!price.includes(",") && !price.endsWith(",") && !price.endsWith(".")) {
-      price = price.replace(".", ",");
-      price = price + ",00";
+    if (typeof price !== "string") {
+      price = price.toString();
     }
+  
+    // Substitui o ponto ou a vírgula pelo caractere de separador de decimais adequado
+    price = price.replace(/[.,]/g, ",");
+  
+    // Adiciona as casas decimais faltantes, se necessário
+    if (!price.includes(",")) {
+      price += ",00";
+    } else {
+      const decimalPart = price.split(",")[1];
+      if (decimalPart.length === 1) {
+        price += "0";
+      }
+    }
+  
     return price;
   };
+  
+  function transformStringToNumber(stringNumber) {
+    // Remove quaisquer espaços em branco antes ou depois da string
+    const cleanedString = stringNumber.trim();
+    // Converte a string em um número usando parseFloat()
+    const number = parseFloat(cleanedString.replace(",", "."));
+    return number;
+  }
 
   const addItem = async (e) => {
     e.preventDefault();
@@ -90,7 +111,7 @@ export default function FormProducts() {
     const response = await axios.get(`http://localhost:3000/product/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     const item = response.data;
     setProduct(item.product);
-    setPrice(item.price);
+    setPrice(transformStringToNumber(item.price));
     setBrand(item.brand);
     setDescription(item.description);
     setInserted_by(item.inserted_by);
@@ -251,16 +272,16 @@ export default function FormProducts() {
                     <td className=" px-6 whitespace-nowrap">
                       <button
                         onClick={() => editItem(item.id)}
-                        className="py-2 px-3 font-medium text-indigo-600 hover:text-indigo-500 duration-150 hover:bg-gray-50 rounded-lg"
+                        className="py-1 px-2 font-medium text-white duration-150 hover:bg-indigo-700 bg-indigo-600 rounded-lg mr-1"
                       >
-                        <EditIcon className="mr-2" />
+                        <EditIcon className="mr-1" />
                         Editar
                       </button>
                       <button
                         onClick={() => deleteItem(item.id)}
-                        className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg"
+                        className="py-1 leading-none px-2 font-medium text-white duration-150 bg-red-600 hover:bg-red-700 rounded-lg"
                       >
-                        <DeleteForeverIcon className="mr-2" />
+                        <DeleteForeverIcon className="mr-1" />
                         Deletar
                       </button>
                     </td>

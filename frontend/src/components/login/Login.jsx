@@ -79,7 +79,7 @@ export default function Login() {
           </div>
           </div>
       </nav>
-      <section className="bg-pink-300">
+      <section className="bg-pink-300 h-[100rem]">
         <div className="flex flex-col items-center px-6 py-8 mx-auto h-[53.2rem] lg:py-0">
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-56 sm:max-w-md xl:p-0  ">
             <div className="sm:p-8">

@@ -268,16 +268,16 @@ export default function FormProducts() {
                     <td className=" px-6 whitespace-nowrap">
                       <button
                         onClick={() => editItem(item.id)}
-                        className="py-2 px-3 font-medium text-indigo-600 hover:text-indigo-500 duration-150 hover:bg-gray-50 rounded-lg"
+                        className="py-1 px-2 font-medium text-white duration-150 hover:bg-indigo-700 bg-indigo-600 rounded-lg mr-1"
                       >
-                        <EditIcon className="mr-2" />
+                        <EditIcon className="mr-1" />
                         Editar
                       </button>
                       <button
                         onClick={() => deleteItem(item.id)}
-                        className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg"
+                        className="py-1 leading-none px-2 font-medium text-white duration-150 bg-red-600 hover:bg-red-700 rounded-lg"
                       >
-                        <DeleteForeverIcon className="mr-2" />
+                        <DeleteForeverIcon className="mr-1" />
                         Deletar
                       </button>
                     </td>

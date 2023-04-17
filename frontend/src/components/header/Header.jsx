@@ -91,7 +91,7 @@ const ProfileDropDown = () => {
         </div>
       </div>
       <ul
-        className={`bg-white lg:absolute lg:border lg:rounded-md lg:text-sm lg:w-52 lg:shadow-md mt-0 z-30 ${
+        className={`bg-white lg:absolute right-44 lg:border lg:rounded-md lg:text-sm lg:w-52 lg:shadow-md mt-0 z-30 ${
           state ? "" : "lg:hidden"
         }`}
       >
