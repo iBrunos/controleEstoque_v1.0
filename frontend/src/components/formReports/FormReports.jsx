@@ -13,6 +13,8 @@ export default function FormReports() {
   const [tipo, setTipo] = useState("todos");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [entryCount, setEntryCount] = useState(0);
+  const [exitCount, setExitCount] = useState(0);
 
   const changePageTitle = (newTitle) => {
     document.title = newTitle;
@@ -27,12 +29,50 @@ export default function FormReports() {
     setEndDate(null);
   }
   
-
   useEffect(() => {
     fetchItems();
     setTipo("todos");
     setUser("todos");
   }, []);
+
+  useEffect(() => {
+    const filteredEntries = itemsEntrys.filter((entry) => {
+      const searchTermMatches = unidecode(entry.product.toLowerCase()).includes(unidecode(searchTerm.toLowerCase()));
+      const typeMatches = tipo === "todos" || entry.type.toLowerCase() === tipo.toLowerCase();
+      const userMatches = user === "todos" || entry.user === user;
+      const dateMatches = (!startDate || moment(entry.created_at).isSameOrAfter(moment(startDate))) &&
+        (!endDate || moment(entry.created_at).isSameOrBefore(moment(endDate)));
+  
+      return searchTermMatches && typeMatches && userMatches && dateMatches;
+    });
+  
+    const totalEntryPrice = filteredEntries.reduce((accumulator, entry) => {
+      const entryPrice = parseFloat(entry.entry_price);
+      return accumulator + entryPrice;
+    }, 0);
+    
+    setEntryCount(totalEntryPrice);
+  }, [itemsEntrys, searchTerm, tipo, user, startDate, endDate]);
+
+  useEffect(() => {
+    const filteredEntries = itemsExits.filter((exit) => {
+      const searchTermMatches = unidecode(exit.product.toLowerCase()).includes(unidecode(searchTerm.toLowerCase()));
+      const typeMatches = tipo === "todos" || exit.type.toLowerCase() === tipo.toLowerCase();
+      const userMatches = user === "todos" || exit.user === user;
+      const dateMatches = (!startDate || moment(exit.created_at).isSameOrAfter(moment(startDate))) &&
+        (!endDate || moment(exit.created_at).isSameOrBefore(moment(endDate)));
+  
+      return searchTermMatches && typeMatches && userMatches && dateMatches;
+    });
+  
+    const totalExitPrice = filteredEntries.reduce((accumulator, exit) => {
+      const exitPrice = parseFloat(exit.exit_price);
+      return accumulator + exitPrice;
+    }, 0);
+    
+    setExitCount(totalExitPrice);
+  }, [itemsExits, searchTerm, tipo, user, startDate, endDate]);
+
 
   const fetchItems = async () => {
     const token = localStorage.getItem("token");
@@ -60,7 +100,24 @@ export default function FormReports() {
     <>
       <Header />
       <form className="flex flex-row mb-0 mt-1 bg-white border-b-gray-200 border-b pl-8 pt-1 pb-2 ml-0">
-
+      <div className="card">
+      <div className="card-body">
+        <h5 className="card-title">Entradas</h5>
+        <p className="card-text">{"R$: " + entryCount}</p>
+      </div>
+    </div>
+      <div className="card">
+      <div className="card-body">
+        <h5 className="card-title">Saídas</h5>
+        <p className="card-text">{"R$: " + exitCount}</p>
+      </div>
+    </div>
+    <div className="card">
+      <div className="card-body">
+        <h5 className="card-title">Lucro</h5>
+        <p className="card-text">{"R$: " + (exitCount - entryCount)}</p>
+      </div>
+    </div>
         <section className="flex items-center space-x-2 border rounded-md p-2 ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
