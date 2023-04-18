@@ -13,6 +13,7 @@ export default function FormReports() {
   };
   changePageTitle("Happy Makeup | Estoque");
 
+
   useEffect(() => {
     fetchItems();
   }, []);
@@ -36,17 +37,6 @@ export default function FormReports() {
   function formatDateHours(dateString) {
     const date = moment(dateString).format("DD/MM/YYYY [às] HH:mm");
     return date;
-  }
-  function removeDuplicates(items) {
-    const set = new Set();
-    return items.filter(item => {
-      if (set.has(item.id)) {
-        return false;
-      } else {
-        set.add(item.id);
-        return true;
-      }
-    });
   }
   return (
     <>
@@ -88,44 +78,46 @@ export default function FormReports() {
               <tr>
                 <th className="py-3 px-6">Produto</th>
                 <th className="py-3 px-6">Quantidade</th>
-                <th className="py-3 px-6">Preço</th>
                 <th className="py-3 px-6">Tipo</th>
+                <th className="py-3 px-6">Preço</th>
                 <th className="py-3 px-6">Funcionário</th>
                 <th className="py-3 px-6">Data Criação</th>
                 <th className="py-3 px-6">Data Modificação</th>
               </tr>
             </thead>
             <tbody className="text-gray-600 divide-y">
-            {removeDuplicates([...itemsEntrys, ...itemsExits])
+              {itemsEntrys
                 .filter((item) => {
                   const searchTermUnidecoded = unidecode(
                     searchTerm?.toLowerCase() || ""
                   );
                   const itemUserUnidecoded = unidecode(
                     item.product?.toLowerCase() || ""
-                  );
-                  return (
-                    searchTermUnidecoded === "" ||
+                  ); // aqui foi adicionado o teste para item.product ser nulo ou indefinido
+                  if (searchTermUnidecoded === "") {
+                    return item;
+                  } else if (
                     itemUserUnidecoded.includes(searchTermUnidecoded)
-                  );
+                  ) {
+                    return item;
+                  }
+                  return null;
                 })
                 .map((item) => (
                   <tr key={item.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {item.product}
                     </td>
-                    <td className="px-6 py-4 whitespace-normal break-words">
+                    <td className="px-6 py-4 whitespace-normal break-words w-[40rem]">
                       {item.amount}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words">
-                      {itemsExits.includes(item) ? "Saída" : "Entrada"}
+                      Entrada
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words">
-                      {itemsExits.includes(item)
-                        ? item.exit_price
-                        : item.entry_price}
+                      R$: {item.entry_price}
                     </td>
-                    <td className="px-6 py-4 whitespace-normal break-words">
+                    <td className="px-8 py-4 whitespace-nowrap">
                       {item.inserted_by}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words">
@@ -133,6 +125,54 @@ export default function FormReports() {
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words">
                       {formatDateHours(item.updated_at)}
+                    </td>
+                    <td className=" px-6 whitespace-nowrap">
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+            <tbody className="text-gray-600 divide-y">
+              {itemsExits
+                .filter((item) => {
+                  const searchTermUnidecoded = unidecode(
+                    searchTerm?.toLowerCase() || ""
+                  );
+                  const itemUserUnidecoded = unidecode(
+                    item.product?.toLowerCase() || ""
+                  ); // aqui foi adicionado o teste para item.product ser nulo ou indefinido
+                  if (searchTermUnidecoded === "") {
+                    return item;
+                  } else if (
+                    itemUserUnidecoded.includes(searchTermUnidecoded)
+                  ) {
+                    return item;
+                  }
+                  return null;
+                })
+                .map((item) => (
+                  <tr key={item.id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {item.product}
+                    </td>
+                    <td className="px-6 py-4 whitespace-normal break-words w-[40rem]">
+                      {item.amount}
+                    </td>
+                    <td className="px-6 py-4 whitespace-normal break-words">
+                      Saída
+                    </td>
+                    <td className="px-6 py-4 whitespace-normal break-words">
+                      R$: {item.exit_price}
+                    </td>
+                    <td className="px-8 py-4 whitespace-nowrap">
+                      {item.inserted_by}
+                    </td>
+                    <td className="px-6 py-4 whitespace-normal break-words">
+                      {formatDateHours(item.created_at)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-normal break-words">
+                      {formatDateHours(item.updated_at)}
+                    </td>
+                    <td className=" px-6 whitespace-nowrap">
                     </td>
                   </tr>
                 ))}
