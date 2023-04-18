@@ -235,6 +235,7 @@ export default function FormProducts() {
           placeholder="Quantidade"
           onChange={(e) => setAmount(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-[10rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
+          required
         />
         <input
           type="number"
@@ -242,6 +243,7 @@ export default function FormProducts() {
           placeholder="Preço de Saída"
           onChange={(e) => setExitPrice(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-[10rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500"
+          required
         />
         <button
           type="submit"

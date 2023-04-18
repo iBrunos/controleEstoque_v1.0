@@ -184,6 +184,7 @@ export default function FormProducts() {
           placeholder="Marca"
           onChange={(e) => setBrand(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-auto focus:border-pink-500"
+          required
         />
         <input
           type="text"
@@ -191,6 +192,7 @@ export default function FormProducts() {
           placeholder="Descrição"
           onChange={(e) => setDescription(e.target.value)}
           className="mr-2 border-gray-300 border rounded-md p-2 w-[25rem] outline-none appearance-none placeholder-gray-500 text-gray-500 focus:border-pink-500 "
+          
         />
         <button
           type="submit"
