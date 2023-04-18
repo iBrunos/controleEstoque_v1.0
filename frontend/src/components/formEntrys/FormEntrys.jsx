@@ -14,6 +14,7 @@ export default function FormProducts() {
   const [inserted_by, setInserted_by] = useState("");
   const [amount, setAmount] = useState("");
   const [entryPrice, setEntryPrice] = useState("");
+  const [type, setType] = useState("");
   const [editingItem, setEditingItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const changePageTitle = (newTitle) => {
@@ -105,8 +106,10 @@ export default function FormProducts() {
       amount,
       entryPrice: formatPrice(entryPrice),
       inserted_by,
+      type
     };
     newItem.inserted_by = user;
+    newItem.type = "Entrada";
     const response = await axios.post("http://localhost:3000/entry", newItem, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -116,6 +119,7 @@ export default function FormProducts() {
     setObservation("");
     setAmount("");
     setEntryPrice("");
+    setType("Entrada");
     fetchItems();
   };
 
@@ -156,8 +160,10 @@ export default function FormProducts() {
       amount,
       entryPrice: formatPrice(entryPrice),
       inserted_by,
+      type
     };
     updatedItem.inserted_by = user;
+    updatedItem.type = "Entrada";
     const token = localStorage.getItem("token");
 
     const response = await axios.put(
@@ -173,6 +179,7 @@ export default function FormProducts() {
     setAmount("");
     setEntryPrice("");
     setInserted_by("");
+    setType("Entrada");
     setEditingItem(null);
     fetchItems();
   };

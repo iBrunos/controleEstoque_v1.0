@@ -7,7 +7,11 @@ import moment from "moment";
 export default function FormReports() {
   const [itemsEntrys, setItemsEntrys] = useState([]);
   const [itemsExits, setItemsExits] = useState([]);
+  const [itemsUsers, setItemsUsers] = useState([]);
+  const [user, setUser] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [tipo, setTipo] = useState("todos");
+
   const changePageTitle = (newTitle) => {
     document.title = newTitle;
   };
@@ -16,6 +20,8 @@ export default function FormReports() {
 
   useEffect(() => {
     fetchItems();
+    setTipo("todos");
+    setUser("todos");
   }, []);
 
   const fetchItems = async () => {
@@ -28,8 +34,10 @@ export default function FormReports() {
     try {
       const responseEntry = await axios.get("http://localhost:3000/entry", config);
       const responseExit = await axios.get("http://localhost:3000/exit", config);
+      const responseUser = await axios.get("http://localhost:3000/user", config);
       setItemsEntrys(responseEntry.data);
       setItemsExits(responseExit.data);
+      setItemsUsers(responseUser.data);
     } catch (error) {
       console.error(error);
     }
@@ -42,7 +50,8 @@ export default function FormReports() {
     <>
       <Header />
       <form className="flex flex-row mb-0 mt-1 bg-white border-b-gray-200 border-b pl-8 pt-1 pb-2 ml-0">
-        <section className="flex items-center space-x-2 border rounded-md p-2 ml-[93.7rem] ">
+
+        <section className="flex items-center space-x-2 border rounded-md p-2 ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 flex-none text-gray-300"
@@ -64,7 +73,33 @@ export default function FormReports() {
             placeholder="Pesquisar"
             id="input__pesquisar"
           />
+
         </section>
+        <select className="ml-2 flex items-center space-x-2 border rounded-md p-2"
+          onChange={(e) => setTipo(e.target.value)}
+          value={tipo}
+        >
+          <option value="todos">Tipo</option>
+          <option value="Entrada">Entrada</option>
+          <option value="Saída">Saída</option>
+        </select>
+
+        <select className="ml-2 flex items-center space-x-2 border rounded-md p-2"
+          onChange={(e) => setUser(e.target.value)}
+          value={user}
+        >
+          <option value="todos">Funcionário</option>
+          {itemsUsers.map((users) => (
+            <option
+              key={users.id}
+              className="hover:text-pink-500 hover:bg-pink-50"
+              value={users.user}
+            >
+              {users.user}
+            </option>
+          ))}
+        </select>
+
       </form>
       <div className="p-0 m-2 text-center">
         <h3 className="text-gray-800 text-4xl font-bold text-center ">
@@ -95,13 +130,31 @@ export default function FormReports() {
                     item.product?.toLowerCase() || ""
                   ); // aqui foi adicionado o teste para item.product ser nulo ou indefinido
                   if (searchTermUnidecoded === "") {
-                    return item;
+                    return true;
                   } else if (
                     itemUserUnidecoded.includes(searchTermUnidecoded)
                   ) {
-                    return item;
+                    return true;
                   }
-                  return null;
+                  return false;
+                })
+                .filter((item) => {
+                  if (tipo === "todos" || !tipo) {
+                    return true;
+                  } else if (tipo === "Entrada" && item.type === "Entrada") {
+                    return true;
+                  } else if (tipo === "Saída" && item.type === "Saída") {
+                    return true;
+                  }
+                  return false;
+                })
+                .filter((item) => {
+                  if (user === "todos" || !user) {
+                    return true;
+                  } else if (user === item.inserted_by) {
+                    return true;
+                  }
+                  return false;
                 })
                 .map((item) => (
                   <tr key={item.id}>
@@ -112,7 +165,7 @@ export default function FormReports() {
                       {item.amount}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words">
-                      Entrada
+                      {item.type}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words">
                       R$: {item.entry_price}
@@ -141,13 +194,31 @@ export default function FormReports() {
                     item.product?.toLowerCase() || ""
                   ); // aqui foi adicionado o teste para item.product ser nulo ou indefinido
                   if (searchTermUnidecoded === "") {
-                    return item;
+                    return true;
                   } else if (
                     itemUserUnidecoded.includes(searchTermUnidecoded)
                   ) {
-                    return item;
+                    return true;
                   }
-                  return null;
+                  return false;
+                })
+                .filter((item) => {
+                  if (tipo === "todos" || !tipo) {
+                    return true;
+                  } else if (tipo === "Entrada" && item.type === "Entrada") {
+                    return true;
+                  } else if (tipo === "Saída" && item.type === "Saída") {
+                    return true;
+                  }
+                  return false;
+                })
+                .filter((item) => {
+                  if (user === "todos" || !user) {
+                    return true;
+                  } else if (user === item.inserted_by) {
+                    return true;
+                  }
+                  return false;
                 })
                 .map((item) => (
                   <tr key={item.id}>
@@ -158,7 +229,7 @@ export default function FormReports() {
                       {item.amount}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words">
-                      Saída
+                      {item.type}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words">
                       R$: {item.exit_price}

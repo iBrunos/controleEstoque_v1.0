@@ -42,7 +42,7 @@ class Tables {
   
   createEntrys() {
     const sql =
-    "CREATE TABLE IF NOT EXISTS entrys (id int NOT NULL AUTO_INCREMENT,product varchar(30) NOT NULL,observation text NOT NULL,amount int NOT NULL,entry_price VARCHAR(255) NOT NULL,inserted_by varchar(30) NOT NULL,created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,PRIMARY KEY(id))";
+    "CREATE TABLE IF NOT EXISTS entrys (id int NOT NULL AUTO_INCREMENT,product varchar(30) NOT NULL,observation text NOT NULL,amount int NOT NULL,entry_price VARCHAR(255) NOT NULL,inserted_by varchar(30) NOT NULL, type Varchar(15), created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,PRIMARY KEY(id))";
     
     this.connection.query(sql, (erro) => {
       if (erro) {
@@ -54,7 +54,7 @@ class Tables {
   }
   createExits() {
     const sql =
-    "CREATE TABLE IF NOT EXISTS exits (id int NOT NULL AUTO_INCREMENT,product varchar(30) NOT NULL,observation text NOT NULL,amount int NOT NULL,exit_price VARCHAR(255) NOT NULL,inserted_by varchar(30) NOT NULL,created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,PRIMARY KEY(id))";
+    "CREATE TABLE IF NOT EXISTS exits (id int NOT NULL AUTO_INCREMENT,product varchar(30) NOT NULL,observation text NOT NULL,amount int NOT NULL,exit_price VARCHAR(255) NOT NULL,inserted_by varchar(30) NOT NULL, type Varchar(15), created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,PRIMARY KEY(id))";
     
     this.connection.query(sql, (erro) => {
       if (erro) {
