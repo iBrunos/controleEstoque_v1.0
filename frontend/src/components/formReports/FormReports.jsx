@@ -11,6 +11,8 @@ export default function FormReports() {
   const [user, setUser] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [tipo, setTipo] = useState("todos");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const changePageTitle = (newTitle) => {
     document.title = newTitle;
@@ -99,6 +101,18 @@ export default function FormReports() {
             </option>
           ))}
         </select>
+        <input
+          className="ml-2 border rounded-md p-2"
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+        <input
+          className="ml-2 border rounded-md p-2"
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
 
       </form>
       <div className="p-0 m-2 text-center">
@@ -128,33 +142,18 @@ export default function FormReports() {
                   );
                   const itemUserUnidecoded = unidecode(
                     item.product?.toLowerCase() || ""
-                  ); // aqui foi adicionado o teste para item.product ser nulo ou indefinido
-                  if (searchTermUnidecoded === "") {
-                    return true;
-                  } else if (
-                    itemUserUnidecoded.includes(searchTermUnidecoded)
-                  ) {
-                    return true;
-                  }
-                  return false;
-                })
-                .filter((item) => {
-                  if (tipo === "todos" || !tipo) {
-                    return true;
-                  } else if (tipo === "Entrada" && item.type === "Entrada") {
-                    return true;
-                  } else if (tipo === "Saída" && item.type === "Saída") {
-                    return true;
-                  }
-                  return false;
-                })
-                .filter((item) => {
-                  if (user === "todos" || !user) {
-                    return true;
-                  } else if (user === item.inserted_by) {
-                    return true;
-                  }
-                  return false;
+                  );
+                  const itemDate = moment(item.created_at);
+                  return (
+                    (tipo === "todos" || tipo === item.type) &&
+                    (user === "todos" || user === item.user) &&
+                    (searchTermUnidecoded === "" ||
+                      itemUserUnidecoded.includes(searchTermUnidecoded)) &&
+                    (!startDate ||
+                      itemDate.isSameOrAfter(startDate, "day")) &&
+                    (!endDate ||
+                      itemDate.isSameOrBefore(endDate, "day"))
+                  );
                 })
                 .map((item) => (
                   <tr key={item.id}>
@@ -192,33 +191,18 @@ export default function FormReports() {
                   );
                   const itemUserUnidecoded = unidecode(
                     item.product?.toLowerCase() || ""
-                  ); // aqui foi adicionado o teste para item.product ser nulo ou indefinido
-                  if (searchTermUnidecoded === "") {
-                    return true;
-                  } else if (
-                    itemUserUnidecoded.includes(searchTermUnidecoded)
-                  ) {
-                    return true;
-                  }
-                  return false;
-                })
-                .filter((item) => {
-                  if (tipo === "todos" || !tipo) {
-                    return true;
-                  } else if (tipo === "Entrada" && item.type === "Entrada") {
-                    return true;
-                  } else if (tipo === "Saída" && item.type === "Saída") {
-                    return true;
-                  }
-                  return false;
-                })
-                .filter((item) => {
-                  if (user === "todos" || !user) {
-                    return true;
-                  } else if (user === item.inserted_by) {
-                    return true;
-                  }
-                  return false;
+                  );
+                  const itemDate = moment(item.created_at);
+                  return (
+                    (tipo === "todos" || tipo === item.type) &&
+                    (user === "todos" || user === item.user) &&
+                    (searchTermUnidecoded === "" ||
+                      itemUserUnidecoded.includes(searchTermUnidecoded)) &&
+                    (!startDate ||
+                      itemDate.isSameOrAfter(startDate, "day")) &&
+                    (!endDate ||
+                      itemDate.isSameOrBefore(endDate, "day"))
+                  );
                 })
                 .map((item) => (
                   <tr key={item.id}>
