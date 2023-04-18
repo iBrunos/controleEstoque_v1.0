@@ -19,6 +19,14 @@ export default function FormReports() {
   };
   changePageTitle("Happy Makeup | Estoque");
 
+  const handleClearFilters = () => {
+    setSearchTerm('');
+    setTipo('');
+    setUser('');
+    setStartDate(null);
+    setEndDate(null);
+  }
+  
 
   useEffect(() => {
     fetchItems();
@@ -113,6 +121,7 @@ export default function FormReports() {
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
         />
+        <button className = "ml-2 mr-10 border rounded-md p-2 bg-pink-500 text-white font-medium hover:bg-pink-600" onClick={handleClearFilters}>Limpar Filtros</button>
 
       </form>
       <div className="p-0 m-2 text-center">
