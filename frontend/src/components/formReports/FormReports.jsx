@@ -155,7 +155,7 @@ export default function FormReports() {
                   const itemDate = moment(item.created_at);
                   return (
                     (tipo === "todos" || tipo === item.type) &&
-                    (user === "todos" || user === item.user) &&
+                    (user === "todos" || user === item.inserted_by) &&
                     (searchTermUnidecoded === "" ||
                       itemUserUnidecoded.includes(searchTermUnidecoded)) &&
                     (!startDate ||
@@ -204,7 +204,7 @@ export default function FormReports() {
                   const itemDate = moment(item.created_at);
                   return (
                     (tipo === "todos" || tipo === item.type) &&
-                    (user === "todos" || user === item.user) &&
+                    (user === "todos" || user === item.inserted_by) &&
                     (searchTermUnidecoded === "" ||
                       itemUserUnidecoded.includes(searchTermUnidecoded)) &&
                     (!startDate ||
