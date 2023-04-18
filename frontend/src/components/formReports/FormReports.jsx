@@ -85,7 +85,7 @@ export default function FormReports() {
           />
 
         </section>
-        <select className="ml-2 flex items-center space-x-2 border rounded-md p-2"
+        <select className="ml-2 flex items-center space-x-2 border rounded-md p-2 text-gray-500"
           onChange={(e) => setTipo(e.target.value)}
           value={tipo}
         >
@@ -94,7 +94,7 @@ export default function FormReports() {
           <option value="Saída">Saída</option>
         </select>
 
-        <select className="ml-2 flex items-center space-x-2 border rounded-md p-2"
+        <select className="ml-2 flex items-center space-x-2 border rounded-md p-2 text-gray-500"
           onChange={(e) => setUser(e.target.value)}
           value={user}
         >
@@ -110,13 +110,14 @@ export default function FormReports() {
           ))}
         </select>
         <input
-          className="ml-2 border rounded-md p-2"
+          className="ml-2 border rounded-md p-2 text-gray-500"
           type="date"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
         />
+        <p className="p-2 ml-2">até</p>
         <input
-          className="ml-2 border rounded-md p-2"
+          className="ml-2 border rounded-md p-2 text-gray-500"
           type="date"
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
@@ -169,7 +170,7 @@ export default function FormReports() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       {item.product}
                     </td>
-                    <td className="px-6 py-4 whitespace-normal break-words w-[40rem]">
+                    <td className="px-6 py-4 whitespace-normal break-words">
                       {item.amount}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words">
@@ -218,7 +219,7 @@ export default function FormReports() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       {item.product}
                     </td>
-                    <td className="px-6 py-4 whitespace-normal break-words w-[40rem]">
+                    <td className="px-6 py-4 whitespace-normal break-words">
                       {item.amount}
                     </td>
                     <td className="px-6 py-4 whitespace-normal break-words">
