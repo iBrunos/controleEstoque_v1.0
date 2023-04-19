@@ -23,7 +23,7 @@ module.exports = {
         }
 
         try{
-            const decode = await promisify(jwt.verify)(token, "SEXO");
+            const decode = await promisify(jwt.verify)(token, "BVRIUCNTOOR");
             req.userId = decode.id;
             return next();
         }catch(err){

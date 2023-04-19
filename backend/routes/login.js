@@ -43,7 +43,7 @@ module.exports = (app) => {
             message: "Erro ao comparar senha.",
           });
         }
-        var token = jwt.sign({ id: usuario.id }, "SEXO", {
+        var token = jwt.sign({ id: usuario.id }, "BVRIUCNTOOR", {
           //expiresIn: 600, //10 min
           //expiresIn: 60 //1 min
           expiresIn: '7d' // 7 dia
