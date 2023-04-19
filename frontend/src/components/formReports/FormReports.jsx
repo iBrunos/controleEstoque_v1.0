@@ -45,7 +45,7 @@ export default function FormReports() {
       );
       const typeMatches =
         tipo === "todos" || entry.type.toLowerCase() === tipo.toLowerCase();
-      const userMatches = user === "todos" || entry.user === user;
+      const userMatches = user === "todos" || entry.inserted_by === user;
       const dateMatches =
         (!startDate ||
           moment(entry.created_at).isSameOrAfter(moment(startDate))) &&
@@ -69,7 +69,7 @@ export default function FormReports() {
       );
       const typeMatches =
         tipo === "todos" || exit.type.toLowerCase() === tipo.toLowerCase();
-      const userMatches = user === "todos" || exit.user === user;
+      const userMatches = user === "todos" || exit.inserted_by === user;
       const dateMatches =
         (!startDate ||
           moment(exit.created_at).isSameOrAfter(moment(startDate))) &&
@@ -206,7 +206,7 @@ export default function FormReports() {
                 Entradas
               </p>
               <p class="text-3xl font-bold text-red-700">
-              {"- R$: " + entryCount + ",00"}
+              {"R$: " + entryCount }
               </p>
             </div>
           </div>
@@ -221,7 +221,7 @@ export default function FormReports() {
                 Saídas
               </p>
               <p class="text-3xl font-bold text-green-700">
-              {"+R$: " + exitCount + ",00"}
+              {"R$: " + exitCount }
               </p>
             </div>
           </div>
@@ -236,7 +236,7 @@ export default function FormReports() {
                 Lucro
               </p>
               <p class="text-3xl font-bold text-grey-700">
-              {"R$: " + (exitCount - entryCount) + ",00"}
+              {"R$: " + (exitCount - entryCount)}
               </p>
             </div>
           </div>
