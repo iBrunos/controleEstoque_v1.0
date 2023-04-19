@@ -3,6 +3,9 @@ import axios from "axios";
 import unidecode from "unidecode";
 import Header from "../header/Header";
 import moment from "moment";
+import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
+import PaidIcon from '@mui/icons-material/Paid';
 
 export default function FormReports() {
   const [itemsEntrys, setItemsEntrys] = useState([]);
@@ -22,13 +25,13 @@ export default function FormReports() {
   changePageTitle("Happy Makeup | Estoque");
 
   const handleClearFilters = () => {
-    setSearchTerm('');
-    setTipo('');
-    setUser('');
+    setSearchTerm("");
+    setTipo("");
+    setUser("");
     setStartDate(null);
     setEndDate(null);
-  }
-  
+  };
+
   useEffect(() => {
     fetchItems();
     setTipo("todos");
@@ -37,42 +40,51 @@ export default function FormReports() {
 
   useEffect(() => {
     const filteredEntries = itemsEntrys.filter((entry) => {
-      const searchTermMatches = unidecode(entry.product.toLowerCase()).includes(unidecode(searchTerm.toLowerCase()));
-      const typeMatches = tipo === "todos" || entry.type.toLowerCase() === tipo.toLowerCase();
+      const searchTermMatches = unidecode(entry.product.toLowerCase()).includes(
+        unidecode(searchTerm.toLowerCase())
+      );
+      const typeMatches =
+        tipo === "todos" || entry.type.toLowerCase() === tipo.toLowerCase();
       const userMatches = user === "todos" || entry.user === user;
-      const dateMatches = (!startDate || moment(entry.created_at).isSameOrAfter(moment(startDate))) &&
+      const dateMatches =
+        (!startDate ||
+          moment(entry.created_at).isSameOrAfter(moment(startDate))) &&
         (!endDate || moment(entry.created_at).isSameOrBefore(moment(endDate)));
-  
+
       return searchTermMatches && typeMatches && userMatches && dateMatches;
     });
-  
+
     const totalEntryPrice = filteredEntries.reduce((accumulator, entry) => {
       const entryPrice = parseFloat(entry.entry_price);
       return accumulator + entryPrice;
     }, 0);
-    
+
     setEntryCount(totalEntryPrice);
   }, [itemsEntrys, searchTerm, tipo, user, startDate, endDate]);
 
   useEffect(() => {
     const filteredEntries = itemsExits.filter((exit) => {
-      const searchTermMatches = unidecode(exit.product.toLowerCase()).includes(unidecode(searchTerm.toLowerCase()));
-      const typeMatches = tipo === "todos" || exit.type.toLowerCase() === tipo.toLowerCase();
+      const searchTermMatches = unidecode(exit.product.toLowerCase()).includes(
+        unidecode(searchTerm.toLowerCase())
+      );
+      const typeMatches =
+        tipo === "todos" || exit.type.toLowerCase() === tipo.toLowerCase();
       const userMatches = user === "todos" || exit.user === user;
-      const dateMatches = (!startDate || moment(exit.created_at).isSameOrAfter(moment(startDate))) &&
+      const dateMatches =
+        (!startDate ||
+          moment(exit.created_at).isSameOrAfter(moment(startDate))) &&
         (!endDate || moment(exit.created_at).isSameOrBefore(moment(endDate)));
-  
+
       return searchTermMatches && typeMatches && userMatches && dateMatches;
     });
-  
+
     const totalExitPrice = filteredEntries.reduce((accumulator, exit) => {
       const exitPrice = parseFloat(exit.exit_price);
       return accumulator + exitPrice;
     }, 0);
-    
+
     setExitCount(totalExitPrice);
   }, [itemsExits, searchTerm, tipo, user, startDate, endDate]);
-
 
   const fetchItems = async () => {
     const token = localStorage.getItem("token");
@@ -82,9 +94,18 @@ export default function FormReports() {
     };
     // fazer uma solicitação HTTP GET para a rota protegida com o token JWT
     try {
-      const responseEntry = await axios.get("http://localhost:3000/entry", config);
-      const responseExit = await axios.get("http://localhost:3000/exit", config);
-      const responseUser = await axios.get("http://localhost:3000/user", config);
+      const responseEntry = await axios.get(
+        "http://localhost:3000/entry",
+        config
+      );
+      const responseExit = await axios.get(
+        "http://localhost:3000/exit",
+        config
+      );
+      const responseUser = await axios.get(
+        "http://localhost:3000/user",
+        config
+      );
       setItemsEntrys(responseEntry.data);
       setItemsExits(responseExit.data);
       setItemsUsers(responseUser.data);
@@ -100,24 +121,6 @@ export default function FormReports() {
     <>
       <Header />
       <form className="flex flex-row mb-0 mt-1 bg-white border-b-gray-200 border-b pl-8 pt-1 pb-2 ml-0">
-      <div className="card">
-      <div className="card-body">
-        <h5 className="card-title">Entradas</h5>
-        <p className="card-text">{"R$: " + entryCount}</p>
-      </div>
-    </div>
-      <div className="card">
-      <div className="card-body">
-        <h5 className="card-title">Saídas</h5>
-        <p className="card-text">{"R$: " + exitCount}</p>
-      </div>
-    </div>
-    <div className="card">
-      <div className="card-body">
-        <h5 className="card-title">Lucro</h5>
-        <p className="card-text">{"R$: " + (exitCount - entryCount)}</p>
-      </div>
-    </div>
         <section className="flex items-center space-x-2 border rounded-md p-2 ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -140,9 +143,9 @@ export default function FormReports() {
             placeholder="Pesquisar"
             id="input__pesquisar"
           />
-
         </section>
-        <select className="ml-2 flex items-center space-x-2 border rounded-md p-2 text-gray-500"
+        <select
+          className="ml-2 flex items-center space-x-2 border rounded-md p-2 text-gray-500"
           onChange={(e) => setTipo(e.target.value)}
           value={tipo}
         >
@@ -151,7 +154,8 @@ export default function FormReports() {
           <option value="Saída">Saída</option>
         </select>
 
-        <select className="ml-2 flex items-center space-x-2 border rounded-md p-2 text-gray-500"
+        <select
+          className="ml-2 flex items-center space-x-2 border rounded-md p-2 text-gray-500"
           onChange={(e) => setUser(e.target.value)}
           value={user}
         >
@@ -179,16 +183,67 @@ export default function FormReports() {
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
         />
-        <button className = "ml-2 mr-10 border rounded-md p-2 bg-pink-500 text-white font-medium hover:bg-pink-600" onClick={handleClearFilters}>Limpar Filtros</button>
-
+        <button
+          className="ml-2 mr-10 border rounded-md p-2 bg-pink-500 text-white font-medium hover:bg-pink-600"
+          onClick={handleClearFilters}
+        >
+          Limpar Filtros
+        </button>
       </form>
-      <div className="p-0 m-2 text-center">
+      <div className="p-0 m-2 mb-0 text-center">
         <h3 className="text-gray-800 text-4xl font-bold text-center ">
           RELÁTORIOS
         </h3>
       </div>
+      <div class="m-1 flex flex-row items-center justify-center">
+        <div class="min-w-0 rounded-lg shadow-xs overflow-hidden bg-white border-gray-200 border mr-4 ml-7 pr-16 pb-8">
+          <div class="p-4 flex items-center">
+            <div class="p-3 rounded-full text-red-500 dark:text-red-100 bg-red-100 dark:bg-red-500 mr-4">
+              <ContentPasteGoIcon></ContentPasteGoIcon>
+            </div>
+            <div>
+              <p class="mb-2 text-lg font-normal text-gray-500">
+                Entradas
+              </p>
+              <p class="text-3xl font-bold text-red-700">
+              {"- R$: " + entryCount + ",00"}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="min-w-0 rounded-lg shadow-xs overflow-hidden bg-white border-gray-200 border mr-4 ml-7 pr-16 pb-8">
+          <div class="p-4 flex items-center">
+            <div class="p-3 rounded-full text-green-500 dark:text-green-100 bg-green-100 dark:bg-green-500 mr-4">
+              <RequestQuoteIcon></RequestQuoteIcon>
+            </div>
+            <div>
+              <p class="mb-2 text-lg font-normal text-gray-500">
+                Saídas
+              </p>
+              <p class="text-3xl font-bold text-green-700">
+              {"+R$: " + exitCount + ",00"}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="min-w-0 rounded-lg shadow-xs overflow-hidden bg-white border-gray-200 border mr-4 ml-7 pr-16 pb-8">
+          <div class="p-4 flex items-center">
+            <div class="p-3 rounded-full text-blue-500 dark:text-blue-100 bg-blue-100 dark:bg-blue-500 mr-4">
+              <PaidIcon></PaidIcon>
+            </div>
+            <div>
+              <p class="mb-2 text-lg font-normal text-gray-500">
+                Lucro
+              </p>
+              <p class="text-3xl font-bold text-grey-700">
+              {"R$: " + (exitCount - entryCount) + ",00"}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="bg-white mx-auto w-[116rem]">
-        <div className="mt-1 shadow-sm border rounded-lg overflow-x-auto max-h-[44rem] ">
+        <div className="mt-1 shadow-sm border rounded-lg overflow-x-auto max-h-[39rem] ">
           <table className="w-full table-auto text-sm text-left">
             <thead className="bg-gray-50 text-gray-600 font-medium border-b">
               <tr>
@@ -216,10 +271,8 @@ export default function FormReports() {
                     (user === "todos" || user === item.inserted_by) &&
                     (searchTermUnidecoded === "" ||
                       itemUserUnidecoded.includes(searchTermUnidecoded)) &&
-                    (!startDate ||
-                      itemDate.isSameOrAfter(startDate, "day")) &&
-                    (!endDate ||
-                      itemDate.isSameOrBefore(endDate, "day"))
+                    (!startDate || itemDate.isSameOrAfter(startDate, "day")) &&
+                    (!endDate || itemDate.isSameOrBefore(endDate, "day"))
                   );
                 })
                 .map((item) => (
@@ -245,12 +298,11 @@ export default function FormReports() {
                     <td className="px-6 py-4 whitespace-normal break-words">
                       {formatDateHours(item.updated_at)}
                     </td>
-                    <td className=" px-6 whitespace-nowrap">
-                    </td>
+                    <td className=" px-6 whitespace-nowrap"></td>
                   </tr>
                 ))}
             </tbody>
-            <tbody className="text-gray-600 divide-y">
+            <tbody className="text-gray-600 divide-y border-t-[0.1rem] border-gray-200">
               {itemsExits
                 .filter((item) => {
                   const searchTermUnidecoded = unidecode(
@@ -265,10 +317,8 @@ export default function FormReports() {
                     (user === "todos" || user === item.inserted_by) &&
                     (searchTermUnidecoded === "" ||
                       itemUserUnidecoded.includes(searchTermUnidecoded)) &&
-                    (!startDate ||
-                      itemDate.isSameOrAfter(startDate, "day")) &&
-                    (!endDate ||
-                      itemDate.isSameOrBefore(endDate, "day"))
+                    (!startDate || itemDate.isSameOrAfter(startDate, "day")) &&
+                    (!endDate || itemDate.isSameOrBefore(endDate, "day"))
                   );
                 })
                 .map((item) => (
@@ -294,8 +344,7 @@ export default function FormReports() {
                     <td className="px-6 py-4 whitespace-normal break-words">
                       {formatDateHours(item.updated_at)}
                     </td>
-                    <td className=" px-6 whitespace-nowrap">
-                    </td>
+                    <td className=" px-6 whitespace-nowrap"></td>
                   </tr>
                 ))}
             </tbody>
