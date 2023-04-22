@@ -113,13 +113,23 @@ const ProfileDropDown = () => {
             </button>
           )}
 
-          <button
-            className="block text-gray-600  lg:p-2.5 hover:text-gray-900"
-            onClick={navigateToRelatorios}
-          >
-            <StickyNote2Icon className="mr-3" />
-            Relatórios
-          </button>
+          {isGerente ? (
+            <button
+              className="block text-gray-600  lg:p-2.5 hover:text-gray-900"
+              onClick={navigateToRelatorios}
+            >
+              <StickyNote2Icon className="mr-3" />
+              Relátorios
+            </button>
+          ) : (
+            <button
+              className="block text-gray-600  lg:p-2.5 opacity-75 cursor-not-allowed"
+            >
+              <StickyNote2Icon className="mr-3" />
+              Relátorios
+            </button>
+          )}
+
           <button
             className="block text-gray-600  lg:p-2.5 hover:text-gray-900"
             onClick={navigateToLogout}
